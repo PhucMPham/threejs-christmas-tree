@@ -22,20 +22,22 @@ Build a romantic Christmas gift: gesture-controlled 3D particle Christmas tree w
 |-------|--------|------------|---------|
 | Phase 1: Setup | Pending | 0% | Clone electronicminer repo, verify base project |
 | Phase 2: Auto-Resize Script | ✓ Complete | 100% | Created prepare-photos.sh, processed 5 photos |
-| Phase 3: Code Customization | Pending | 0% | Update CONFIG, hide upload button |
-| Phase 4: Testing & Polish | Pending | 0% | Test gestures, verify 60fps, final presentation |
+| Phase 3: Code Customization | ✓ Complete | 100% | CONFIG updates, preload images, hide upload, bloom tuning |
+| Phase 4: Testing & Polish | In Progress | 50% | Verify gesture detection, photo rendering, performance |
 
 #### Recent Progress (2025-12-25)
-- ✓ Created `scripts/prepare-photos.sh` script with macOS sips tool
-- ✓ Successfully processed 5 photos from `photos/` folder
-- ✓ All photos auto-rotated and resized to 1000px max
-- ✓ Output to `src/christmas-tree/images/` with quality 80
-- ✓ All validation checks passed
+- ✓ Phase 2: Created `scripts/prepare-photos.sh` and processed 5 photos
+- ✓ Phase 3: Completed code customization:
+  - CONFIG.preload.autoScanLocal = false (disabled local scanning)
+  - CONFIG.preload.images: Added 5 photo paths (photo1.jpg - photo5.jpg)
+  - loadPredefinedImages() refactored to load from CONFIG.preload.images array
+  - Upload buttons hidden (display: none) for cleaner UI
+  - Bloom effect tuned: threshold 0.85, strength 0.25 for clearer photo display
+  - Gold materials reduced metalness (0.6) and reflectivity for better photo visibility
 
 #### Next Steps
-1. Complete Phase 1: Project setup (clone + test base)
-2. Proceed to Phase 3: Code customization (CONFIG + hide upload)
-3. Phase 4: Full testing and final presentation
+1. Phase 4: Full testing (gesture detection, photo display, performance)
+2. Final presentation and validation
 
 #### Deliverables
 - Forked Three.js Christmas tree with MediaPipe gesture control

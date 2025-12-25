@@ -206,10 +206,27 @@ Verification checks:
 | API Reference | In Progress | - |
 | Troubleshooting | Planned | - |
 
+## Phase 3 Updates (2025-12-25)
+
+### Configuration Changes
+- `CONFIG.preload.autoScanLocal = false` - Disabled local file scanning
+- `CONFIG.preload.images[]` - Array of 5 predefined photo paths
+- Photo loading logic refactored in `loadPredefinedImages()`
+
+### UI/UX Changes
+- Upload buttons hidden (`.control-btn { display: none }`)
+- Cleaner interface for photo-focused presentation
+
+### Visual Tuning
+- Bloom effect: threshold 0.85, strength 0.25 (reduced for clarity)
+- Gold materials: metalness 0.6, roughness 0.4 (less reflective for photos)
+- Frame materials: metalness 0.6 for elegant appearance
+
 ## Maintenance Notes
 
-- **Last Update:** December 25, 2025
+- **Last Update:** December 25, 2025 (Phase 3)
 - **Code Stability:** Stable (production-ready)
 - **Technical Debt:** Minimal
 - **Test Coverage:** Manual testing only (automated tests planned)
 - **Review Frequency:** Regular (as code evolves)
+- **Next Phase:** Testing & Polish (Phase 4)

@@ -6,8 +6,11 @@ Standards and best practices for Three.js development in this project.
 
 ```
 /
-├── main.js              # Primary entry point, scene initialization
-├── index.html           # HTML template
+├── src/christmas-tree/
+│   ├── index.html       # Main application (Phase 3: gesture tree with photos)
+│   └── images/          # Preloaded photos (photo1.jpg - photo5.jpg)
+├── main.js              # Primary entry point, scene initialization (legacy)
+├── index.html           # Entry template (legacy)
 ├── vite.config.js       # Build configuration
 └── [future modules]/    # Scene components, utilities, etc.
 ```
@@ -119,3 +122,77 @@ Avoid:
 - `OrbitControls` with no damping (causes jerky motion)
 - Multiple `PerspectiveCamera` instances per scene
 - Hardcoded canvas dimensions (use `window.innerWidth`)
+
+---
+
+## Phase 3: Configuration & Customization
+
+### CONFIG Object Structure
+```javascript
+const CONFIG = {
+  colors: {
+    bg: 0x050d1a,
+    fog: 0x050d1a,
+    champagneGold: 0xffd966,
+    deepGreen: 0x03180a,
+    accentRed: 0x990000
+  },
+  particles: {
+    count: 1500,        // Decorative particles
+    dustCount: 2000,    // Dust effect particles
+    snowCount: 1000,    // Falling snow
+    treeHeight: 24,     // Tree model height
+    treeRadius: 8       // Tree base radius
+  },
+  camera: { z: 50 },
+  preload: {
+    autoScanLocal: false,           // Disabled for curated experience
+    scanCount: 0,
+    images: [
+      './images/photo1.jpg',
+      './images/photo2.jpg',
+      './images/photo3.jpg',
+      './images/photo4.jpg',
+      './images/photo5.jpg'
+    ]
+  }
+};
+```
+
+### Photo Loading Pattern
+```javascript
+function loadPredefinedImages() {
+  const loader = new THREE.TextureLoader();
+  if (CONFIG.preload.images && CONFIG.preload.images.length > 0) {
+    CONFIG.preload.images.forEach(imgPath => {
+      loader.load(imgPath, (t) => {
+        t.colorSpace = THREE.SRGBColorSpace;
+        addPhotoToScene(t);
+      }, undefined, (err) => {
+        console.warn('Failed to load image:', imgPath);
+      });
+    });
+  }
+}
+```
+
+### Material Tuning (Phase 3)
+- **Gold Boxes/Spheres**: metalness 0.8, roughness 0.2 (reflective)
+- **Gold Frames**: metalness 0.6, roughness 0.4 (less reflective for clarity)
+- **Photo Display**: Best with reduced bloom (strength 0.25)
+
+### Visual Effects Configuration
+```javascript
+// Bloom effect for Christmas glow
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(width, height),
+  1.5,      // Radius
+  0.4,      // Strength
+  0.85      // Threshold
+);
+```
+
+**Phase 3 Tuning:**
+- Threshold 0.85 (increased for clearer photos)
+- Strength 0.25 (reduced bloom on faces)
+- Radius 0.3 (subtle glow effect)
