@@ -4,14 +4,28 @@
   "description": "Three.js application with Vite",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"vite\" \"node server.js\"",
+    "dev:frontend": "vite",
+    "dev:backend": "node server.js",
     "build": "vite build",
-    "preview": "vite preview"
+    "start": "node server.js",
+    "preview": "vite preview",
+    "pm2": "pm2 start ecosystem.config.js"
   },
   "dependencies": {
-    "three": "^0.170.0"
+    "axios": "^1.13.2",
+    "better-sqlite3": "^12.5.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "file-type": "^21.1.1",
+    "multer": "^2.0.2",
+    "three": "^0.170.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "vite": "^6.0.0"
   }
 }

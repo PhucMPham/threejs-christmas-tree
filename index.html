@@ -1,16 +1,634 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive 3D visualization with Three.js">
-    <title>My first three.js app</title>
-    <style>
-      body { margin: 0; }
-      canvas { display: block; }
-    </style>
-  </head>
-  <body>
-    <script type="module" src="/main.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christmas Tree & Photos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: radial-gradient(circle at center, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      background-color: #050d1a;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* Tab Navigation */
+    .tabs {
+      display: flex;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    .tab {
+      padding: 18px 30px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab:hover { background: rgba(212, 175, 55, 0.1); }
+    .tab.active {
+      border-color: #d4af37;
+      color: #d4af37;
+      background: rgba(212, 175, 55, 0.1);
+    }
+    .tab i { font-size: 16px; }
+
+    /* Content Areas */
+    .content {
+      display: none;
+      height: 100vh;
+      padding-top: 60px;
+    }
+    .content.active { display: block; }
+    .content iframe {
+      width: 100%;
+      height: calc(100vh - 60px);
+      border: none;
+    }
+
+    /* Upload Section */
+    #upload-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .upload-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .upload-header h2 {
+      color: #d4af37;
+      font-size: 28px;
+      margin-bottom: 10px;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+    .upload-header p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+
+    /* Dropzone */
+    #dropzone {
+      border: 2px dashed rgba(212, 175, 55, 0.5);
+      border-radius: 12px;
+      padding: 50px 30px;
+      text-align: center;
+      margin: 20px 0;
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    #dropzone:hover, #dropzone.dragover {
+      border-color: #d4af37;
+      background: rgba(212, 175, 55, 0.1);
+    }
+    #dropzone i {
+      font-size: 48px;
+      color: #d4af37;
+      margin-bottom: 15px;
+    }
+    #dropzone p {
+      color: rgba(255, 255, 255, 0.8);
+      margin: 10px 0;
+    }
+    #dropzone .btn-select {
+      background: #d4af37;
+      color: #000;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 15px;
+      transition: all 0.3s;
+    }
+    #dropzone .btn-select:hover {
+      background: #e5c04b;
+      transform: translateY(-2px);
+    }
+
+    /* File Preview */
+    #preview-container {
+      margin: 25px 0;
+    }
+    #preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 15px;
+    }
+    .preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .preview-item .remove {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 24px;
+      height: 24px;
+      background: rgba(200, 0, 0, 0.8);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .preview-item .file-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 5px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      font-size: 10px;
+      color: rgba(255,255,255,0.8);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .status-bar .count {
+      font-size: 16px;
+    }
+    .status-bar .count span {
+      color: #d4af37;
+      font-weight: bold;
+    }
+    #uploadBtn {
+      background: #d4af37;
+      color: #000;
+      border: none;
+      padding: 12px 40px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    #uploadBtn:disabled {
+      background: rgba(212, 175, 55, 0.3);
+      cursor: not-allowed;
+    }
+    #uploadBtn:not(:disabled):hover {
+      background: #e5c04b;
+      transform: translateY(-2px);
+    }
+
+    /* Uploaded Gallery */
+    #gallery-section {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #gallery-section h3 {
+      color: #d4af37;
+      font-size: 18px;
+      margin-bottom: 20px;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid rgba(212, 175, 55, 0.3);
+      transition: all 0.3s;
+    }
+    .gallery-item:hover {
+      border-color: #d4af37;
+      transform: scale(1.02);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gallery-item .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 28px;
+      height: 28px;
+      background: rgba(200, 0, 0, 0.9);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gallery-item:hover .delete-btn { opacity: 1; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: rgba(20, 30, 40, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      max-width: 400px;
+    }
+    .modal-content i {
+      font-size: 48px;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+    .modal-content h3 {
+      color: #d4af37;
+      margin-bottom: 15px;
+    }
+    .modal-content p {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 25px;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    .modal-buttons button {
+      padding: 12px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: #d4af37;
+      color: #000;
+      border: none;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #d4af37;
+      border: 1px solid #d4af37;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(0, 0, 0, 0.3);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+  <!-- Tab Navigation -->
+  <div class="tabs">
+    <div class="tab active" data-tab="tree">
+      <i class="fas fa-tree"></i> Christmas Tree
+    </div>
+    <div class="tab" data-tab="upload">
+      <i class="fas fa-upload"></i> Upload Photos
+    </div>
+  </div>
+
+  <!-- Christmas Tree Content -->
+  <div id="tree" class="content active">
+    <iframe src="/src/christmas-tree/index.html" id="tree-iframe"></iframe>
+  </div>
+
+  <!-- Upload Content -->
+  <div id="upload" class="content">
+    <div id="upload-content">
+      <div class="upload-header">
+        <h2>Upload Your Photos</h2>
+        <p>Add your photos to the Christmas tree (max 10 photos, 32MB each)</p>
+      </div>
+
+      <!-- Dropzone -->
+      <div id="dropzone">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Drag & drop your photos here</p>
+        <p style="font-size: 12px; color: rgba(255,255,255,0.5);">or</p>
+        <button class="btn-select" onclick="document.getElementById('fileInput').click()">
+          Select Photos
+        </button>
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif,image/webp" multiple>
+      </div>
+
+      <!-- Preview -->
+      <div id="preview-container" style="display: none;">
+        <div id="preview"></div>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div class="count">
+          Photos: <span id="uploadedCount">0</span> / <span id="maxPhotos">10</span>
+        </div>
+        <button id="uploadBtn" disabled>Upload All</button>
+      </div>
+
+      <!-- Gallery of Uploaded Photos -->
+      <div id="gallery-section">
+        <h3><i class="fas fa-images"></i> Your Uploaded Photos</h3>
+        <div id="gallery">
+          <div class="empty-state">
+            <i class="fas fa-image"></i>
+            <p>No photos uploaded yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <i class="fas fa-check-circle"></i>
+      <h3>Photos Uploaded!</h3>
+      <p>Your photos have been added to the tree.</p>
+      <div class="modal-buttons">
+        <button class="btn-primary" onclick="viewTree()">View on Tree</button>
+        <button class="btn-secondary" onclick="closeModal()">Upload More</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let pendingFiles = [];
+    let uploadedPhotos = [];
+    let maxPhotos = 10;
+
+    // Elements
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const previewContainer = document.getElementById('preview-container');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadedCountEl = document.getElementById('uploadedCount');
+    const maxPhotosEl = document.getElementById('maxPhotos');
+    const gallery = document.getElementById('gallery');
+    const successModal = document.getElementById('successModal');
+
+    // Tab Switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('.tab, .content').forEach(el => el.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      };
+    });
+
+    // Load existing photos on page load
+    async function loadPhotos() {
+      try {
+        const res = await fetch('/api/upload/photos');
+        const data = await res.json();
+        uploadedPhotos = data.photos || [];
+        maxPhotos = data.max || 10;
+        maxPhotosEl.textContent = maxPhotos;
+        updateUploadedCount();
+        renderGallery();
+      } catch (err) {
+        console.error('Failed to load photos:', err);
+      }
+    }
+
+    function updateUploadedCount() {
+      uploadedCountEl.textContent = uploadedPhotos.length;
+    }
+
+    function renderGallery() {
+      if (uploadedPhotos.length === 0) {
+        gallery.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-image"></i>
+            <p>No photos uploaded yet</p>
+          </div>
+        `;
+        return;
+      }
+
+      gallery.innerHTML = uploadedPhotos.map(photo => `
+        <div class="gallery-item" data-id="${photo.id}">
+          <img src="${photo.display_url}" alt="Photo" loading="lazy">
+          <button class="delete-btn" onclick="deletePhoto(${photo.id})" title="Delete">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Drag & Drop
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover');
+    });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    // File Input
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+      const remaining = maxPhotos - uploadedPhotos.length;
+      const newFiles = Array.from(files)
+        .filter(f => f.type.startsWith('image/'))
+        .slice(0, remaining - pendingFiles.length);
+
+      pendingFiles = [...pendingFiles, ...newFiles].slice(0, remaining);
+      renderPreview();
+    }
+
+    function renderPreview() {
+      if (pendingFiles.length === 0) {
+        previewContainer.style.display = 'none';
+        uploadBtn.disabled = true;
+        return;
+      }
+
+      previewContainer.style.display = 'block';
+      uploadBtn.disabled = false;
+
+      preview.innerHTML = pendingFiles.map((file, i) => {
+        const url = URL.createObjectURL(file);
+        const size = (file.size / 1024 / 1024).toFixed(2);
+        return `
+          <div class="preview-item">
+            <img src="${url}" alt="${file.name}">
+            <button class="remove" onclick="removeFile(${i})">
+              <i class="fas fa-times"></i>
+            </button>
+            <div class="file-info">${size}MB</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function removeFile(index) {
+      pendingFiles.splice(index, 1);
+      renderPreview();
+    }
+
+    // Upload
+    uploadBtn.addEventListener('click', async () => {
+      if (pendingFiles.length === 0) return;
+
+      uploadBtn.disabled = true;
+      uploadBtn.innerHTML = '<span class="spinner"></span> Uploading...';
+
+      let successCount = 0;
+
+      for (const file of pendingFiles) {
+        const form = new FormData();
+        form.append('image', file);
+
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: form
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            successCount++;
+            uploadedPhotos.unshift({
+              id: data.data.id,
+              display_url: data.data.display_url
+            });
+          }
+        } catch (err) {
+          console.error('Upload failed:', err);
+        }
+      }
+
+      pendingFiles = [];
+      renderPreview();
+      updateUploadedCount();
+      renderGallery();
+
+      uploadBtn.innerHTML = 'Upload All';
+      uploadBtn.disabled = true;
+
+      if (successCount > 0) {
+        successModal.classList.add('active');
+      }
+    });
+
+    // Delete Photo
+    async function deletePhoto(id) {
+      if (!confirm('Delete this photo?')) return;
+
+      try {
+        const res = await fetch(`/api/upload/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+
+        if (data.success) {
+          uploadedPhotos = uploadedPhotos.filter(p => p.id !== id);
+          updateUploadedCount();
+          renderGallery();
+        }
+      } catch (err) {
+        console.error('Delete failed:', err);
+      }
+    }
+
+    // Modal Functions
+    function viewTree() {
+      closeModal();
+      document.querySelectorAll('.tab, .content').forEach(el => el.classList.remove('active'));
+      document.querySelector('[data-tab="tree"]').classList.add('active');
+      document.getElementById('tree').classList.add('active');
+      // Reload tree iframe to fetch new photos
+      document.getElementById('tree-iframe').src = document.getElementById('tree-iframe').src;
+    }
+
+    function closeModal() {
+      successModal.classList.remove('active');
+    }
+
+    // Initialize
+    loadPhotos();
+  </script>
+</body>
 </html>

@@ -79,3 +79,9 @@ src/christmas-tree/images/
 # Gemini CLI settings (symlink to .claude/.mcp.json)
 .gemini/settings.json
 .claude/settings.bak.json
+
+# SQLite database
+db/*.db
+
+# PM2 logs
+logs/

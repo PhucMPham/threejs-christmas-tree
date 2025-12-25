@@ -392,12 +392,18 @@
         };
 
         const STATE = {
-            mode: 'TREE', 
-            focusIndex: -1, 
+            mode: 'TREE',
+            focusIndex: -1,
             focusTarget: null,
             hand: { detected: false, x: 0, y: 0 },
             rotation: { x: 0, y: 0 },
+            rotationVelocity: { x: 0, y: 0 }, // For smooth inertia
             touch: { active: false, startX: 0, startY: 0, lastX: 0, lastY: 0 }
+        };
+
+        // Smooth lerp with exponential decay (frame-rate independent)
+        const smoothLerp = (current, target, lambda, dt) => {
+            return current + (target - current) * (1 - Math.exp(-lambda * dt));
         };
 
         let scene, camera, renderer, composer;
@@ -455,22 +461,39 @@
 // --> 
         function setupTouchAndClick() {
             const container = document.getElementById('canvas-container');
+            let lastMoveTime = 0;
+
             container.addEventListener('pointerdown', (e) => {
                 STATE.touch.active = true;
                 STATE.touch.startX = e.clientX;
                 STATE.touch.startY = e.clientY;
                 STATE.touch.lastX = e.clientX;
                 STATE.touch.lastY = e.clientY;
+                // Reset velocity on new touch
+                STATE.rotationVelocity.x = 0;
+                STATE.rotationVelocity.y = 0;
+                lastMoveTime = performance.now();
             });
             window.addEventListener('pointermove', (e) => {
                 if (!STATE.touch.active) return;
+                const now = performance.now();
+                const timeDelta = Math.max(1, now - lastMoveTime) / 1000;
                 const deltaX = e.clientX - STATE.touch.lastX;
                 const deltaY = e.clientY - STATE.touch.lastY;
-                STATE.rotation.y += deltaX * 0.005;
-                STATE.rotation.x += deltaY * 0.002;
+
+                // Smoother drag sensitivity
+                const sensitivity = 0.004;
+                STATE.rotation.y += deltaX * sensitivity;
+                STATE.rotation.x += deltaY * sensitivity * 0.5;
                 STATE.rotation.x = Math.max(-0.5, Math.min(0.5, STATE.rotation.x));
+
+                // Track velocity for inertia
+                STATE.rotationVelocity.y = (deltaX * sensitivity) / timeDelta * 0.1;
+                STATE.rotationVelocity.x = (deltaY * sensitivity * 0.5) / timeDelta * 0.1;
+
                 STATE.touch.lastX = e.clientX;
                 STATE.touch.lastY = e.clientY;
+                lastMoveTime = now;
             });
             window.addEventListener('pointerup', (e) => {
                 STATE.touch.active = false;
@@ -667,32 +690,41 @@
                         target = desiredWorldPos.applyMatrix4(invMatrix);
                     } else target = this.posScatter;
                 }
-                const lerpSpeed = (mode === 'FOCUS' && this.mesh === focusTargetMesh) ? 5.0 : 2.0; 
-                this.mesh.position.lerp(target, lerpSpeed * dt);
+                // Smoother position transitions with exponential decay
+                const posLambda = (mode === 'FOCUS' && this.mesh === focusTargetMesh) ? 4.0 : 1.5;
+                this.mesh.position.x = smoothLerp(this.mesh.position.x, target.x, posLambda, dt);
+                this.mesh.position.y = smoothLerp(this.mesh.position.y, target.y, posLambda, dt);
+                this.mesh.position.z = smoothLerp(this.mesh.position.z, target.z, posLambda, dt);
+
                 if (mode === 'SCATTER') {
                     this.mesh.rotation.x += this.spinSpeed.x * dt;
                     this.mesh.rotation.y += this.spinSpeed.y * dt;
-                    this.mesh.rotation.z += this.spinSpeed.z * dt; 
+                    this.mesh.rotation.z += this.spinSpeed.z * dt;
                 } else if (mode === 'TREE') {
                     if (this.type === 'PHOTO') {
                         this.mesh.lookAt(0, this.mesh.position.y, 0);
                         this.mesh.rotateY(Math.PI);
                     } else {
-                        this.mesh.rotation.x = THREE.MathUtils.lerp(this.mesh.rotation.x, 0, dt);
-                        this.mesh.rotation.z = THREE.MathUtils.lerp(this.mesh.rotation.z, 0, dt);
-                        this.mesh.rotation.y += 0.5 * dt; 
+                        // Smoother rotation reset
+                        this.mesh.rotation.x = smoothLerp(this.mesh.rotation.x, 0, 3.0, dt);
+                        this.mesh.rotation.z = smoothLerp(this.mesh.rotation.z, 0, 3.0, dt);
+                        this.mesh.rotation.y += 0.5 * dt;
                     }
                 }
-                if (mode === 'FOCUS' && this.mesh === focusTargetMesh) this.mesh.lookAt(camera.position); 
+                if (mode === 'FOCUS' && this.mesh === focusTargetMesh) this.mesh.lookAt(camera.position);
+
                 let s = this.baseScale;
                 if (this.isDust) {
                     s = this.baseScale * (0.8 + 0.4 * Math.sin(clock.elapsedTime * 4 + this.mesh.id));
-                    if (mode === 'TREE') s = 0; 
-                } else if (mode === 'SCATTER' && this.type === 'PHOTO') s = this.baseScale * 2.5; 
+                    if (mode === 'TREE') s = 0;
+                } else if (mode === 'SCATTER' && this.type === 'PHOTO') s = this.baseScale * 2.5;
                 else if (mode === 'FOCUS') {
-                    if (this.mesh === focusTargetMesh) s = 4.5; else s = this.baseScale * 0.8; 
+                    if (this.mesh === focusTargetMesh) s = 4.5; else s = this.baseScale * 0.8;
                 }
-                this.mesh.scale.lerp(new THREE.Vector3(s,s,s), 4*dt);
+                // Smoother scale transitions
+                const currentScale = this.mesh.scale.x;
+                const newScale = smoothLerp(currentScale, s, 3.0, dt);
+                this.mesh.scale.set(newScale, newScale, newScale);
             }
         }
 
@@ -812,9 +844,30 @@
 //   - @Description: 3D Christmas tree with AI Gestures + Touch + Traffic Analytics.
 //   - @Style: Luxury Dashboard UI (Hidden by default, toggle with 'S')
 // --> 
-        function loadPredefinedImages() {
+        async function loadPredefinedImages() {
             const loader = new THREE.TextureLoader();
-            // Load from predefined images array (wife's photos)
+
+            // First, try to load user's uploaded photos from API
+            try {
+                const response = await fetch('/api/upload/photos');
+                const data = await response.json();
+                if (data.photos && data.photos.length > 0) {
+                    console.log(`Loading ${data.photos.length} uploaded photos`);
+                    data.photos.forEach(photo => {
+                        loader.load(photo.display_url, (t) => {
+                            t.colorSpace = THREE.SRGBColorSpace;
+                            addPhotoToScene(t);
+                        }, undefined, (err) => {
+                            console.warn('Failed to load uploaded photo:', photo.display_url);
+                        });
+                    });
+                    return; // Don't load predefined if user has uploads
+                }
+            } catch (err) {
+                console.log('No uploaded photos, using defaults');
+            }
+
+            // Fallback: Load from predefined images array
             if (CONFIG.preload.images && CONFIG.preload.images.length > 0) {
                 CONFIG.preload.images.forEach(imgPath => {
                     loader.load(imgPath, (t) => {
@@ -824,16 +877,6 @@
                         console.warn('Failed to load image:', imgPath);
                     });
                 });
-            }
-            // Fallback: scan local images if enabled
-            if (CONFIG.preload.autoScanLocal) {
-                for (let i = 1; i <= CONFIG.preload.scanCount; i++) {
-                    const pathJpg = `./images/(${i}).jpg`;
-                    const pathPng = `./images/(${i}).png`;
-                    loader.load(pathJpg, (t) => { t.colorSpace = THREE.SRGBColorSpace; addPhotoToScene(t); }, undefined, () => {
-                             loader.load(pathPng, (t) => { t.colorSpace = THREE.SRGBColorSpace; addPhotoToScene(t); }, undefined, () => {} );
-                    });
-                }
             }
         }
 
@@ -951,27 +994,41 @@
 // --> 
         function animate() {
             requestAnimationFrame(animate);
-            const dt = clock.getDelta();
+            const dt = Math.min(clock.getDelta(), 0.05); // Cap dt for stability
+
+            let targetRotY = STATE.rotation.y;
+            let targetRotX = STATE.rotation.x;
+
             if (STATE.hand.detected) {
                 if (STATE.mode === 'SCATTER') {
-                    const targetRotY = STATE.hand.x * Math.PI * 0.9; 
-                    const targetRotX = STATE.hand.y * Math.PI * 0.25;
-                    STATE.rotation.y += (targetRotY - STATE.rotation.y) * 3.0 * dt;
-                    STATE.rotation.x += (targetRotX - STATE.rotation.x) * 3.0 * dt;
+                    targetRotY = STATE.hand.x * Math.PI * 0.9;
+                    targetRotX = STATE.hand.y * Math.PI * 0.25;
                 } else {
-                    STATE.rotation.y += 0.3 * dt;
+                    targetRotY = STATE.rotation.y + 0.3 * dt;
                 }
             } else if (STATE.touch.active) {
+                // Touch is handled in pointermove, just apply inertia damping
             } else {
-                if(STATE.mode === 'TREE') {
-                    STATE.rotation.y += 0.3 * dt;
-                    STATE.rotation.x += (0 - STATE.rotation.x) * 2.0 * dt;
+                // Apply smooth inertia decay when not touching
+                STATE.rotationVelocity.x *= Math.pow(0.95, dt * 60);
+                STATE.rotationVelocity.y *= Math.pow(0.95, dt * 60);
+
+                if (STATE.mode === 'TREE') {
+                    targetRotY = STATE.rotation.y + 0.3 * dt + STATE.rotationVelocity.y;
+                    targetRotX = 0;
                 } else {
-                    STATE.rotation.y += 0.1 * dt; 
+                    targetRotY = STATE.rotation.y + 0.1 * dt + STATE.rotationVelocity.y;
+                    targetRotX = STATE.rotation.x + STATE.rotationVelocity.x;
                 }
             }
+
+            // Smooth rotation transitions using exponential decay
+            STATE.rotation.y = smoothLerp(STATE.rotation.y, targetRotY, 8.0, dt);
+            STATE.rotation.x = smoothLerp(STATE.rotation.x, targetRotX, 6.0, dt);
+
             mainGroup.rotation.y = STATE.rotation.y;
             mainGroup.rotation.x = STATE.rotation.x;
+
             particleSystem.forEach(p => p.update(dt, STATE.mode, STATE.focusTarget));
             updateSnow();
             composer.render();
