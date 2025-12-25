@@ -1,5 +1,19 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import WebGL from 'three/addons/capabilities/WebGL.js';
+
+// WebGL 2 compatibility check
+if (!WebGL.isWebGL2Available()) {
+  document.body.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#1a1a2e;color:#fff;font-family:system-ui;text-align:center;">
+      <div>
+        <h1>WebGL 2 Not Supported</h1>
+        <p>Your browser doesn't support WebGL 2. Please update your browser.</p>
+      </div>
+    </div>
+  `;
+  throw new Error('WebGL 2 not available');
+}
 
 // Scene setup
 const scene = new THREE.Scene();
