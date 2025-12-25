@@ -71,6 +71,11 @@ __pycache__
 prompt.md
 ck.md
 
+# Personal photos (Christmas tree project)
+photos/
+clone_reference_video/
+src/christmas-tree/images/
+
 # Gemini CLI settings (symlink to .claude/.mcp.json)
 .gemini/settings.json
 .claude/settings.bak.json

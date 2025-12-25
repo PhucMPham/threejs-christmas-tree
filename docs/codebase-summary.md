@@ -19,6 +19,12 @@ Auto-generated comprehensive overview of the Three.js project codebase.
 | `vite.config.js` | 12 | Vite dev server, build output, sourcemap config | Active |
 | `package.json` | 17 | Dependencies (three@0.170.0, vite@6.0.0), npm scripts | Active |
 
+### Utility Scripts
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `scripts/prepare-photos.sh` | Photo resize & EXIF handling using macOS sips (1000px max, 85% quality) | Active |
+
 ### Configuration & Documentation
 
 | File | Purpose |
@@ -48,6 +54,11 @@ threejs/
 ├── vite.config.js       # Build config (12 LOC)
 ├── package.json         # Manifest (17 LOC)
 ├── CLAUDE.md            # Dev guidelines (46 LOC)
+├── scripts/             # Utility scripts
+│   └── prepare-photos.sh    # Photo resize & EXIF rotation (macOS)
+├── src/                 # Source files
+│   └── christmas-tree/
+│       └── images/      # Processed photos (photo1.jpg - photo5.jpg)
 ├── docs/                # Documentation
 │   ├── README.md
 │   ├── project-overview-pdr.md
@@ -56,7 +67,6 @@ threejs/
 │   └── codebase-summary.md
 ├── dist/                # Production build (generated)
 │   └── assets/
-├── public/              # Static assets (future)
 ├── plans/               # Planning & research
 │   ├── reports/
 │   └── templates/
