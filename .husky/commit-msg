@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Validate commit message follows conventional commit format
+# Format: type(scope?): subject
+# Example: feat(auth): add login functionality
+
+npx --no -- commitlint --edit "$1"
