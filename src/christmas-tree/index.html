@@ -191,6 +191,7 @@
             backdrop-filter: blur(4px);
         }
         .mode-btn:active { transform: scale(0.9); background: #d4af37; color: #000; }
+        .mode-btn.active { background: rgba(0, 255, 136, 0.3); border-color: #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.5); }
         
         /* Webcam feedback */
         #webcam-wrapper {
@@ -342,7 +343,7 @@
         
         <div class="controls-wrapper">
             <div class="btn-group">
-                <div class="control-btn" id="cam-btn">📷 Enable Gesture</div>
+                <!-- Gesture auto-enabled on page load -->
                 <!-- Upload buttons hidden - photos preloaded -->
                 <label class="control-btn" style="display:none">
                     Select Folder
@@ -361,6 +362,7 @@
             <div class="mode-btn" onclick="setMode('TREE')" title="Tree Mode">🎄</div>
             <div class="mode-btn" onclick="setMode('SCATTER')" title="Scatter Mode">✨</div>
             <div class="mode-btn" onclick="setMode('FOCUS_RANDOM')" title="Focus Mode">🔍</div>
+            <div class="mode-btn" id="aurora-btn" onclick="toggleAuroraTheme()" title="Toggle Aurora Theme">🌌</div>
         </div>
 
         <!-- 【美化版统计仪表盘】 -->
@@ -398,13 +400,39 @@
         import { initHandLandmarker, processHandGesture } from './gesture-detection.js';
 
         // --- 核心配置 ---
+        // Theme configurations: Classic and Cosmic Aurora
+        const THEMES = {
+            classic: {
+                bg: 0x000000,
+                fog: 0x000000,
+                champagneGold: 0xffd966,
+                deepGreen: 0x03180a,
+                accentRed: 0x990000,
+                bloom: { threshold: 0.85, strength: 0.25, radius: 0.3 },
+                particles: { glow: false, auroraSpeed: 0 }
+            },
+            aurora: {
+                bg: 0x0a0e27,
+                fog: 0x0a0e27,
+                champagneGold: 0x00ff88,  // Aurora green
+                deepGreen: 0xff00ff,       // Aurora magenta
+                accentRed: 0x00ffff,       // Cyan
+                bloom: { threshold: 0.6, strength: 1.2, radius: 0.5 },
+                particles: { glow: true, auroraSpeed: 1.0 }
+            }
+        };
+
+        let currentTheme = 'classic';  // Default to classic black theme
+        let auroraLights = [];
+        let bloomPass = null;  // Reference for bloom pass
+
         const CONFIG = {
             colors: {
                 bg: 0x000000,
                 fog: 0x000000,
-                champagneGold: 0xffd966, 
-                deepGreen: 0x03180a,     
-                accentRed: 0x990000,     
+                champagneGold: 0xffd966,
+                deepGreen: 0x03180a,
+                accentRed: 0x990000,
             },
             particles: {
                 count: 1000,
@@ -454,7 +482,7 @@
         let mouse = new THREE.Vector2();
         
         const debugInfo = document.getElementById('debug-info');
-        const camBtn = document.getElementById('cam-btn');
+        // camBtn removed - gesture auto-enabled on page load
         let isCameraRunning = false;
         let isGestureLoopRunning = false;
 
@@ -470,6 +498,84 @@
             }
         };
 
+        // Aurora theme toggle function - adds aurora lights without changing background
+        window.toggleAuroraTheme = () => {
+            currentTheme = currentTheme === 'classic' ? 'aurora' : 'classic';
+            const theme = THEMES[currentTheme];
+            const btn = document.getElementById('aurora-btn');
+
+            // Keep background BLACK - only change bloom for extra glow
+            // scene.background stays at 0x000000
+            // scene.fog stays at 0x000000
+
+            // Update bloom settings for stronger glow in aurora mode
+            if (composer && composer.passes[1]) {
+                const bloom = composer.passes[1];
+                bloom.threshold = theme.bloom.threshold;
+                bloom.strength = theme.bloom.strength;
+                bloom.radius = theme.bloom.radius;
+            }
+
+            // Toggle aurora lights (colored lights orbiting tree)
+            if (currentTheme === 'aurora') {
+                btn.classList.add('active');
+                btn.style.background = 'rgba(0, 255, 136, 0.3)';
+                btn.style.borderColor = '#00ff88';
+                createAuroraEffects();
+            } else {
+                btn.classList.remove('active');
+                btn.style.background = '';
+                btn.style.borderColor = '';
+                removeAuroraEffects();
+            }
+
+            console.log(`Theme switched to: ${currentTheme}`);
+        };
+
+        // Create aurora-specific lighting and effects
+        function createAuroraEffects() {
+            // Aurora colored point lights
+            const greenLight = new THREE.PointLight(0x00ff88, 2, 30);
+            greenLight.position.set(-10, 15, 5);
+            greenLight.name = 'auroraLight';
+            scene.add(greenLight);
+            auroraLights.push(greenLight);
+
+            const magentaLight = new THREE.PointLight(0xff00ff, 1.5, 25);
+            magentaLight.position.set(10, 10, -5);
+            magentaLight.name = 'auroraLight';
+            scene.add(magentaLight);
+            auroraLights.push(magentaLight);
+
+            const cyanLight = new THREE.PointLight(0x00ffff, 1.2, 20);
+            cyanLight.position.set(0, 20, 10);
+            cyanLight.name = 'auroraLight';
+            scene.add(cyanLight);
+            auroraLights.push(cyanLight);
+        }
+
+        function removeAuroraEffects() {
+            auroraLights.forEach(light => {
+                scene.remove(light);
+            });
+            auroraLights = [];
+        }
+
+        function updateAuroraLights(time) {
+            if (currentTheme !== 'aurora') return;
+
+            auroraLights.forEach((light, i) => {
+                // Animate light positions in aurora patterns
+                const offset = i * Math.PI * 0.66;
+                light.position.x = Math.sin(time * 0.3 + offset) * 15;
+                light.position.z = Math.cos(time * 0.2 + offset) * 10;
+
+                // Pulsing intensity
+                const intensity = 1.5 + Math.sin(time * 2 + offset) * 0.5;
+                light.intensity = intensity * (i === 0 ? 2 : i === 1 ? 1.5 : 1.2);
+            });
+        }
+
         async function init() {
             initThree();
             setupEnvironment();
@@ -483,10 +589,9 @@
             setupEvents();
             setupTouchAndClick();
 
-            // Set mobile-friendly UI text
+            // Set mobile-friendly hint text
             const isMobile = isMobileDevice();
             if (isMobile) {
-                camBtn.innerText = "📷 Tap for Gestures";
                 const hintEl = document.getElementById('gesture-hint');
                 if (hintEl) {
                     hintEl.innerText = "Swipe to rotate | Tap photo to view";
@@ -496,6 +601,11 @@
             const loader = document.getElementById('loader');
             loader.style.opacity = 0;
             setTimeout(() => loader.remove(), 800);
+
+            // Auto-enable gesture control on page load
+            setTimeout(() => {
+                initMediaPipe();
+            }, 1000);
 
             animate();
         }
@@ -940,8 +1050,6 @@
             const hints = getMobileGestureHints();
 
             // Update UI for initialization
-            camBtn.innerText = "Initializing...";
-            camBtn.classList.add('loading');
             debugInfo.innerText = isMobile ? "Setting up camera..." : "Loading AI models...";
 
             video = document.getElementById('webcam');
@@ -971,9 +1079,6 @@
 
                 // Update UI for success
                 debugInfo.innerText = isMobile ? "Show your hand!" : "Gesture Active: Show Hand";
-                camBtn.innerText = isMobile ? "Gestures ON" : "Gesture Active";
-                camBtn.classList.remove('loading');
-                camBtn.classList.add('active');
                 isCameraRunning = true;
 
                 // Show gesture guide on mobile
@@ -983,7 +1088,6 @@
 
             } catch(e) {
                 console.warn("Camera/Gesture error:", e);
-                camBtn.classList.remove('loading');
 
                 // Clean up partial resources
                 stopCamera(video);
@@ -1003,7 +1107,6 @@
 
                 debugInfo.innerText = msg;
                 showMsg(msg);
-                camBtn.innerText = isMobile ? "Tap to Retry" : "Retry Camera";
             }
         }
 // <!--
@@ -1088,7 +1191,7 @@
             });
             document.getElementById('file-input').addEventListener('change', handleImageUpload);
             document.getElementById('folder-input').addEventListener('change', handleImageUpload);
-            camBtn.addEventListener('click', () => { initMediaPipe(); });
+            // Gesture auto-enabled on page load, no button click needed
             window.addEventListener('keydown', (e) => {
                 const key = e.key.toLowerCase();
                 if (key === 'h') {
@@ -1151,6 +1254,7 @@
 
             particleSystem.forEach(p => p.update(dt, STATE.mode, STATE.focusTarget));
             updateSnow();
+            updateAuroraLights(clock.elapsedTime);
             composer.render();
         }
 // <!--
