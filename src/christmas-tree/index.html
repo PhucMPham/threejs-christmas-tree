@@ -1022,6 +1022,11 @@
 // --> 
         let lastVideoTime = -1;
         async function predictWebcam() {
+            // Ensure video has enough data before processing
+            if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+                requestAnimationFrame(predictWebcam);
+                return;
+            }
             if (video.currentTime !== lastVideoTime) {
                 lastVideoTime = video.currentTime;
                 if (handLandmarker) {

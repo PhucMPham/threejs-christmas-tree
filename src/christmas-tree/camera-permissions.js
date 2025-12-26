@@ -88,11 +88,15 @@ export async function requestCameraAccess(videoElement) {
 
     // Wait for video to be ready
     await new Promise((resolve, reject) => {
+      let timeoutId;
+      const cleanup = () => clearTimeout(timeoutId);
+
       videoElement.onloadedmetadata = () => {
+        cleanup();
         videoElement.play().then(resolve).catch(reject);
       };
-      videoElement.onerror = reject;
-      setTimeout(() => reject(new Error('Video load timeout')), 10000);
+      videoElement.onerror = (e) => { cleanup(); reject(e); };
+      timeoutId = setTimeout(() => reject(new Error('Video load timeout')), 10000);
     });
 
     return { stream, width: videoElement.videoWidth, height: videoElement.videoHeight };
