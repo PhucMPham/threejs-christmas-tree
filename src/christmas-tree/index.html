@@ -1187,6 +1187,15 @@
           }
         });
 
+        // Forward clicks to parent for reveal button functionality
+        document.addEventListener('click', () => {
+          if (window.parent !== window) {
+            try {
+              window.parent.postMessage({ type: 'IFRAME_CLICK' }, window.location.origin);
+            } catch (e) { /* parent not accessible */ }
+          }
+        });
+
         init();
     </script>
 </body>

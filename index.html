@@ -798,12 +798,10 @@
         } catch (e) { /* iframe not ready */ }
       }
 
-      // Auto-hide button after 2s when UI is hidden
+      // Hide button instantly when UI is hidden
       if (hidden) {
         clearTimeout(hideButtonTimeout);
-        hideButtonTimeout = setTimeout(() => {
-          hideUiControl.classList.add('ui-hidden');
-        }, 2000);
+        hideUiControl.classList.add('ui-hidden');
       } else {
         clearTimeout(hideButtonTimeout);
         hideUiControl.classList.remove('ui-hidden');
@@ -816,25 +814,17 @@
       toggleUiVisibility(!isUiHidden);
     });
 
-    // Show button on click anywhere when UI is hidden
+    // Unhide all UI on click anywhere when UI is hidden
     document.addEventListener('click', () => {
-      if (isUiHidden && hideUiControl.classList.contains('ui-hidden')) {
-        hideUiControl.classList.remove('ui-hidden');
-        clearTimeout(hideButtonTimeout);
-        hideButtonTimeout = setTimeout(() => {
-          hideUiControl.classList.add('ui-hidden');
-        }, 2000);
+      if (isUiHidden) {
+        toggleUiVisibility(false);
       }
     });
 
-    // Touch support for mobile
+    // Touch support for mobile - unhide all UI
     document.addEventListener('touchstart', () => {
-      if (isUiHidden && hideUiControl.classList.contains('ui-hidden')) {
-        hideUiControl.classList.remove('ui-hidden');
-        clearTimeout(hideButtonTimeout);
-        hideButtonTimeout = setTimeout(() => {
-          hideUiControl.classList.add('ui-hidden');
-        }, 2000);
+      if (isUiHidden) {
+        toggleUiVisibility(false);
       }
     }, { passive: true });
 
@@ -845,11 +835,17 @@
       }
     });
 
-    // Listen for H key from iframe (validate origin)
+    // Listen for messages from iframe (validate origin)
     window.addEventListener('message', (e) => {
       if (e.origin !== window.location.origin) return;
       if (e.data && e.data.type === 'TOGGLE_UI_FROM_IFRAME') {
         toggleUiVisibility(!isUiHidden);
+      }
+      // Handle iframe click - unhide all UI
+      if (e.data && e.data.type === 'IFRAME_CLICK') {
+        if (isUiHidden) {
+          toggleUiVisibility(false);
+        }
       }
     });
   </script>
