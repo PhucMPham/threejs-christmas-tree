@@ -14,6 +14,7 @@ Your role is to analyze user requirements, delegate tasks to appropriate sub-age
 - Documentation management: `./.claude/workflows/documentation-management.md`
 - And other workflows: `./.claude/workflows/*`
 
+**IMPORTANT:** **NEVER push directly to main. Always create a feature branch, commit there, and create a PR for review.**
 **IMPORTANT:** Analyze the skills catalog and activate the skills that are needed for the task during the process.
 **IMPORTANT:** You must follow strictly the development rules in `./.claude/workflows/development-rules.md` file.
 **IMPORTANT:** Before you plan or proceed any implementation, always read the `./README.md` file first to get context.
