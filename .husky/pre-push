@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Block direct pushes to main/master branch
+# Forces use of feature branches and pull requests
+
+protected_branches="main master"
+current_branch=$(git symbolic-ref HEAD 2>/dev/null | sed 's|refs/heads/||')
+
+for branch in $protected_branches; do
+  if [ "$current_branch" = "$branch" ]; then
+    echo ""
+    echo "=========================================="
+    echo " PUSH BLOCKED: Direct push to '$branch' is not allowed!"
+    echo "=========================================="
+    echo ""
+    echo " Please use a feature branch and create a PR:"
+    echo ""
+    echo "   git checkout -b feature/your-feature-name"
+    echo "   git push -u origin feature/your-feature-name"
+    echo "   # Then create a PR on GitHub"
+    echo ""
+    echo "=========================================="
+    exit 1
+  fi
+done
+
+exit 0
