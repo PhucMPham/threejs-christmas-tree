@@ -1107,10 +1107,12 @@
             window.addEventListener('keydown', (e) => {
                 const key = e.key.toLowerCase();
                 if (key === 'h') {
-                    const controls = document.querySelector('.controls-wrapper');
-                    if (controls) controls.classList.toggle('ui-hidden');
-                    const webcam = document.getElementById('webcam-wrapper');
-                    if(webcam) webcam.classList.toggle('ui-hidden');
+                    // Send to parent to toggle ALL UI (parent + iframe)
+                    if (window.parent !== window) {
+                        try {
+                            window.parent.postMessage({ type: 'TOGGLE_UI_FROM_IFRAME' }, window.location.origin);
+                        } catch (e) { /* parent not accessible */ }
+                    }
                 } else if (key === 's') {
                     // 【新增】Toggle stats visibility
                     const stats = document.getElementById('footer-stats');
@@ -1172,7 +1174,19 @@
 //   - @Date: 2025-12-08
 //   - @Description: 3D Christmas tree with AI Gestures + Touch + Traffic Analytics.
 //   - @Style: Luxury Dashboard UI (Hidden by default, toggle with 'S')
-// --> 
+// -->
+
+        // Parent window communication for hide UI feature (validate origin)
+        window.addEventListener('message', (e) => {
+          if (e.origin !== window.location.origin) return;
+          if (e.data?.type === 'TOGGLE_UI') {
+            const hide = e.data.hidden;
+            document.getElementById('ui-layer')?.classList.toggle('ui-hidden', hide);
+            document.getElementById('webcam-wrapper')?.classList.toggle('ui-hidden', hide);
+            document.getElementById('debug-info')?.classList.toggle('ui-hidden', hide);
+          }
+        });
+
         init();
     </script>
 </body>

@@ -400,6 +400,44 @@
       0% { transform: scale(1); opacity: 0.8; }
       100% { transform: scale(1.5); opacity: 0; }
     }
+
+    /* Hide UI Control Button */
+    #hideUiControl {
+      position: fixed;
+      bottom: 20px;
+      left: 80px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      color: #d4af37;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      transition: all 0.3s;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+    #hideUiControl:hover {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: #d4af37;
+      transform: scale(1.1);
+    }
+    #hideUiControl.active {
+      border-color: #d4af37;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+    .tabs.ui-hidden,
+    #audioControl.ui-hidden,
+    #hideUiControl.ui-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
   </style>
 </head>
 <body>
@@ -407,6 +445,11 @@
   <button id="audioControl" class="muted" title="Toggle Christmas Music">
     <span class="pulse"></span>
     <i class="fas fa-volume-mute" id="audioIcon"></i>
+  </button>
+
+  <!-- Hide UI Control Button -->
+  <button id="hideUiControl" title="Hide UI for Recording (H)">
+    <i class="fas fa-eye" id="hideIcon"></i>
   </button>
 
   <!-- Tab Navigation -->
@@ -728,6 +771,87 @@
         audioIcon.className = 'fas fa-volume-mute';
       });
     }
+
+    // Hide UI Control
+    const hideUiControl = document.getElementById('hideUiControl');
+    const hideIcon = document.getElementById('hideIcon');
+    const tabs = document.querySelector('.tabs');
+    let isUiHidden = false;
+    let hideButtonTimeout;
+
+    function toggleUiVisibility(hidden) {
+      isUiHidden = hidden;
+
+      // Toggle main page elements
+      tabs.classList.toggle('ui-hidden', hidden);
+      audioControl.classList.toggle('ui-hidden', hidden);
+
+      // Update button icon
+      hideIcon.className = hidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+      hideUiControl.classList.toggle('active', hidden);
+
+      // Send message to iframe (same origin)
+      const iframe = document.getElementById('tree-iframe');
+      if (iframe && iframe.contentWindow) {
+        try {
+          iframe.contentWindow.postMessage({ type: 'TOGGLE_UI', hidden }, window.location.origin);
+        } catch (e) { /* iframe not ready */ }
+      }
+
+      // Auto-hide button after 2s when UI is hidden
+      if (hidden) {
+        clearTimeout(hideButtonTimeout);
+        hideButtonTimeout = setTimeout(() => {
+          hideUiControl.classList.add('ui-hidden');
+        }, 2000);
+      } else {
+        clearTimeout(hideButtonTimeout);
+        hideUiControl.classList.remove('ui-hidden');
+      }
+    }
+
+    // Toggle on button click
+    hideUiControl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleUiVisibility(!isUiHidden);
+    });
+
+    // Show button on click anywhere when UI is hidden
+    document.addEventListener('click', () => {
+      if (isUiHidden && hideUiControl.classList.contains('ui-hidden')) {
+        hideUiControl.classList.remove('ui-hidden');
+        clearTimeout(hideButtonTimeout);
+        hideButtonTimeout = setTimeout(() => {
+          hideUiControl.classList.add('ui-hidden');
+        }, 2000);
+      }
+    });
+
+    // Touch support for mobile
+    document.addEventListener('touchstart', () => {
+      if (isUiHidden && hideUiControl.classList.contains('ui-hidden')) {
+        hideUiControl.classList.remove('ui-hidden');
+        clearTimeout(hideButtonTimeout);
+        hideButtonTimeout = setTimeout(() => {
+          hideUiControl.classList.add('ui-hidden');
+        }, 2000);
+      }
+    }, { passive: true });
+
+    // Keyboard shortcut: H key
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'h' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        toggleUiVisibility(!isUiHidden);
+      }
+    });
+
+    // Listen for H key from iframe (validate origin)
+    window.addEventListener('message', (e) => {
+      if (e.origin !== window.location.origin) return;
+      if (e.data && e.data.type === 'TOGGLE_UI_FROM_IFRAME') {
+        toggleUiVisibility(!isUiHidden);
+      }
+    });
   </script>
 </body>
 </html>

@@ -367,3 +367,115 @@ threejs/
 - Safari: Test `-webkit-backdrop-filter` prefix, autoplay policy
 - Mobile: Test audio with device mute button, volume control
 - Accessibility: Ensure button is keyboard-accessible, has title attribute
+
+## Hide UI Control for Recording
+
+### Purpose
+Enable clean recording of 3D content by hiding all UI elements (tabs, audio button) with auto-reveal on interaction.
+
+### Hide UI Button Implementation
+```html
+<!-- Hide UI button positioned next to audio control -->
+<button id="hideUiControl" title="Hide UI for Recording (H)">
+  <i class="fas fa-eye" id="hideIcon"></i>
+</button>
+```
+
+**Styling (lines 405-433 in index.html):**
+```css
+#hideUiControl {
+  position: fixed;
+  bottom: 20px;
+  left: 80px;          /* Right of audio control */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  transition: all 0.3s;
+  z-index: 200;
+}
+
+/* Active state when UI is hidden */
+#hideUiControl.active {
+  border-color: #d4af37;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+/* Hidden elements fade out */
+.tabs.ui-hidden,
+#audioControl.ui-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+```
+
+### Keyboard Shortcut
+**H key:** Toggle UI visibility from main page or iframe
+- Works from any tab (tree or upload)
+- Works within iframe with cross-window communication
+- Validated with origin check for security
+
+### Toggle Logic
+```javascript
+function toggleUiVisibility(hidden) {
+  isUiHidden = hidden;
+
+  // Hide/show UI elements
+  tabs.classList.toggle('ui-hidden', hidden);
+  audioControl.classList.toggle('ui-hidden', hidden);
+  hideIcon.className = hidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+  hideUiControl.classList.toggle('active', hidden);
+
+  // Send to iframe
+  iframe.contentWindow.postMessage({ type: 'TOGGLE_UI', hidden }, window.location.origin);
+
+  // Auto-hide button after 2s
+  if (hidden) {
+    hideButtonTimeout = setTimeout(() => {
+      hideUiControl.classList.add('ui-hidden');
+    }, 2000);
+  }
+}
+```
+
+### Interaction Handlers
+1. **Click Button:** Toggle visibility (prevent propagation)
+2. **H Key:** Keyboard shortcut for toggle
+3. **Document Click:** Reveal button when UI hidden
+4. **Touch:** Mobile support with passive listener
+5. **PostMessage:** Receive H key from iframe
+
+### Cross-Window Communication
+**Parent → Iframe:**
+```javascript
+iframe.contentWindow.postMessage({ type: 'TOGGLE_UI', hidden }, window.location.origin);
+```
+
+**Iframe → Parent (H key):**
+```javascript
+window.parent.postMessage({ type: 'TOGGLE_UI_FROM_IFRAME' }, window.location.origin);
+```
+
+**Security:**
+- Validates `e.origin === window.location.origin`
+- No sensitive data in messages
+- Same-origin policy enforced
+
+### User Experience
+- **Recording Ready:** H to hide all UI, clean canvas visible
+- **Auto-Reveal:** Button reappears after 2s of inactivity
+- **Responsive:** Works on desktop, tablet, mobile
+- **Accessible:** Button has title tooltip, keyboard accessible
+- **Icon Feedback:** Eye → Eye-slash visual state change
+
+### Testing Checklist
+- H key hides UI on main page
+- H key hides UI from iframe
+- Click/touch reveals button when UI hidden
+- Button auto-hides after 2s
+- Audio control hidden when UI hidden
+- Tabs hidden when UI hidden
+- Icon changes correctly (eye/eye-slash)
+- Origin validation prevents XSS

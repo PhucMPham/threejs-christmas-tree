@@ -445,9 +445,58 @@ Verification checks:
 - **Autoplay Handling**: Wrapped in try/catch to handle browser autoplay policies
 - **Error Handling**: Graceful degradation if audio fails to load or play
 
+## Phase 5 Updates - Hide UI for Recording Feature (2025-12-26)
+
+### Hide UI Control for Clean Recording
+**Feature:** Clean recording capability by hiding UI elements with auto-reveal on interaction
+
+**Main Page (`index.html`)**
+- **Hide UI Button** (lines 405-433): Fixed position at bottom-left (left: 80px), next to audio control
+  - Icon: Eye/Eye-slash toggle
+  - States: Active (glowing border) when UI is hidden
+  - Auto-hides after 2s with click/touch to reveal
+  - Keyboard shortcut: **H key**
+  - CSS classes: `.ui-hidden` (opacity: 0, pointer-events: none)
+
+- **UI Toggle Function** (`toggleUiVisibility`, lines 782-811)
+  - Hides: Tabs, audio button when UI is hidden
+  - Shows: Hide button glowing, reveals on any click/touch
+  - Sends `postMessage` to iframe with origin validation
+  - Auto-hide delay: 2000ms
+
+- **Interaction Handlers** (lines 813-854)
+  - Click handler: Toggle UI visibility, prevent propagation
+  - Document click listener: Show button on interaction when hidden
+  - Touch support: Passive listener for mobile (lines 831-839)
+  - Keyboard: H key toggle (lines 842-846)
+  - Message listener: Receives H key from iframe with origin check (lines 849-854)
+
+**Iframe (`src/christmas-tree/index.html`)**
+- **H Key Handler** (lines 1109-1115)
+  - Sends `postMessage` to parent with origin validation
+  - Type: `TOGGLE_UI_FROM_IFRAME`
+  - Trigger: H key press from within iframe
+  - Message Format: `{ type: 'TOGGLE_UI_FROM_IFRAME' }`
+
+- **PostMessage Listener** (lines 1182-1187)
+  - Listens for `TOGGLE_UI` messages from parent
+  - Applies `.ui-hidden` class to `#ui-layer` element
+  - Validates origin: `e.origin === window.location.origin`
+  - Syncs parent-iframe UI state bidirectionally
+
+**Cross-Origin Security**
+- Parent validation: `e.origin === window.location.origin`
+- Iframe validation: `window.location.origin` check before sending
+- No secrets exposed in messages
+
+**CSS Classes**
+- `.ui-hidden`: Applied to `.tabs`, `#audioControl`, `#hideUiControl`, `#ui-layer`
+- Effect: `opacity: 0 !important; pointer-events: none !important; transition: opacity 0.3s`
+- Maintains layout without flickering
+
 ## Maintenance Notes
 
-- **Last Update:** December 26, 2025 (PR#3 Audio Fixes + Phase 4 Error Handling)
+- **Last Update:** December 26, 2025 (Phase 5 Hide UI for Recording + PR#3 Audio Fixes + Phase 4 Error Handling)
 - **Code Stability:** Stable (production-ready with comprehensive error handling)
 - **Technical Debt:** Minimal (all known issues addressed)
 - **Test Coverage:** 52/52 tests passing, manual iOS/Android/Desktop testing
