@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Christmas Tree & Photos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Christmas Jingle Bell Background Music (local for security) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="./audio/jingle-bells.mp3" type="audio/mpeg">
+  </audio>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -349,9 +353,62 @@
     }
 
     input[type="file"] { display: none; }
+
+    /* Audio Control Button */
+    #audioControl {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      color: #d4af37;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      transition: all 0.3s;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+    #audioControl:hover {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: #d4af37;
+      transform: scale(1.1);
+    }
+    #audioControl.muted {
+      color: rgba(212, 175, 55, 0.4);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+    #audioControl .pulse {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid #d4af37;
+      animation: audioPulse 2s ease-out infinite;
+      opacity: 0;
+    }
+    #audioControl:not(.muted) .pulse {
+      opacity: 1;
+    }
+    @keyframes audioPulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
   </style>
 </head>
 <body>
+  <!-- Audio Control Button -->
+  <button id="audioControl" class="muted" title="Toggle Christmas Music">
+    <span class="pulse"></span>
+    <i class="fas fa-volume-mute" id="audioIcon"></i>
+  </button>
+
   <!-- Tab Navigation -->
   <div class="tabs">
     <div class="tab active" data-tab="tree">
@@ -629,6 +686,48 @@
 
     // Initialize
     loadPhotos();
+
+    // Audio Control
+    const bgMusic = document.getElementById('bgMusic');
+    const audioControl = document.getElementById('audioControl');
+    const audioIcon = document.getElementById('audioIcon');
+    let isMuted = true;
+
+    // Set volume BEFORE any play() call to prevent loud burst
+    bgMusic.volume = 0.3;
+
+    // Load saved audio preference
+    const savedMuted = localStorage.getItem('christmasMusicMuted');
+    if (savedMuted === 'false') {
+      isMuted = false;
+      audioControl.classList.remove('muted');
+      audioIcon.className = 'fas fa-volume-up';
+    }
+
+    // Toggle audio on button click
+    audioControl.addEventListener('click', () => {
+      isMuted = !isMuted;
+      if (isMuted) {
+        bgMusic.pause();
+        audioControl.classList.add('muted');
+        audioIcon.className = 'fas fa-volume-mute';
+      } else {
+        bgMusic.play().catch(err => console.log('Audio play failed:', err));
+        audioControl.classList.remove('muted');
+        audioIcon.className = 'fas fa-volume-up';
+      }
+      localStorage.setItem('christmasMusicMuted', isMuted);
+    });
+
+    // Try to auto-play if user previously enabled
+    if (!isMuted) {
+      bgMusic.play().catch(() => {
+        // Autoplay blocked - wait for user interaction
+        isMuted = true;
+        audioControl.classList.add('muted');
+        audioIcon.className = 'fas fa-volume-mute';
+      });
+    }
   </script>
 </body>
 </html>

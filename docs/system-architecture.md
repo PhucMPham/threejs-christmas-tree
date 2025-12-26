@@ -5,25 +5,21 @@ High-level architecture and component design for the Three.js application.
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────┐
-│      Browser Window (viewport)      │
-└─────────────────────────────────────┘
-              ↓
-┌─────────────────────────────────────┐
-│    WebGL Canvas (Three.js Render)   │
-└─────────────────────────────────────┘
-              ↓
 ┌──────────────────────────────────────────────────────┐
-│              Three.js Scene Graph                     │
+│           Browser Window (viewport)                  │
 ├──────────────────────────────────────────────────────┤
-│  ├─ Camera (PerspectiveCamera)                       │
-│  ├─ Mesh Objects (Box, future models)               │
-│  │  ├─ Geometry                                      │
-│  │  ├─ Material (MeshStandardMaterial)              │
-│  ├─ Lights                                          │
-│  │  ├─ AmbientLight (base illumination)            │
-│  │  └─ DirectionalLight (key light)                │
-│  └─ Controls (OrbitControls)                        │
+│  ├─ WebGL Canvas (Three.js Render)                  │
+│  │   └─ Three.js Scene Graph                        │
+│  │       ├─ Camera, Meshes, Lights, Controls       │
+│  │                                                   │
+│  ├─ Audio Subsystem (HTML5)                         │
+│  │   ├─ Audio Element (bgMusic, loop, preload)     │
+│  │   ├─ Audio Control Button (volume toggle)       │
+│  │   └─ localStorage (preference persistence)      │
+│  │                                                   │
+│  └─ UI Layer                                        │
+│      ├─ Tab Navigation                             │
+│      └─ Photo Upload Interface                     │
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -67,8 +63,19 @@ High-level architecture and component design for the Three.js application.
 - **Damping**: Enabled (smoothing factor: 0.05)
 - **Interaction**: Mouse drag to rotate, scroll to zoom
 
+### Audio Subsystem (PR#3)
+- **Source**: HTML5 `<audio>` element with local MP3 file
+- **File Location**: `./audio/jingle-bells.mp3`
+- **Volume**: Set to 0.3 (30%) before playback to prevent burst
+- **Looping**: Enabled (continuous background music)
+- **Preload**: Auto (load media on page initialization)
+- **Button Controls**: Fixed bottom-left toggle for play/pause
+- **State Persistence**: localStorage saves user mute preference
+- **Browser Compatibility**: Webkit prefix (`-webkit-backdrop-filter`) for Safari support
+
 ## Data Flow
 
+### 3D Rendering Pipeline
 ```
 User Input (Mouse/Scroll)
         ↓
@@ -83,6 +90,26 @@ User Input (Mouse/Scroll)
     Renderer.render(scene, camera)
         ↓
     WebGL Canvas Display
+```
+
+### Audio Control Pipeline (PR#3)
+```
+Page Load
+    ↓
+Check localStorage for preference
+    ↓
+If enabled → Autoplay with error handling
+If disabled → Keep muted (default)
+    ↓
+User clicks audio button
+    ↓
+Toggle play/pause state
+    ↓
+Update button icon & CSS class
+    ↓
+Save preference to localStorage
+    ↓
+Audio plays with volume = 0.3 (pre-set to prevent burst)
 ```
 
 ## Rendering Pipeline

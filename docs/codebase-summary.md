@@ -397,27 +397,66 @@ Verification checks:
 - **Impact:** Reliable gesture detection initialization on first camera activation
 - **Status:** Fixed & tested
 
+## Phase 4 Updates - PR#3: Audio Feature Fixes (2025-12-26)
+
+### Audio System Improvements
+- **Volume Race Condition Fix**: Set `bgMusic.volume = 0.3` BEFORE any `play()` calls to prevent loud audio bursts
+  - Line 697: Volume initialization in main script
+  - Applies to both user-triggered playback (line 715) and autoplay restoration (line 724)
+  - Default volume: 0.3 (30% of maximum)
+
+### Browser Compatibility Enhancements
+- **Safari Webkit Prefix Support**: Added `-webkit-backdrop-filter: blur(10px)` to audio control styling
+  - Line 375: Webkit prefix in `#audioControl` CSS rule
+  - Ensures blur effect displays correctly on Safari browsers
+  - Non-webkit browsers use standard `backdrop-filter` (line 376)
+
+### Audio Source Management
+- **Local Audio File**: Changed from external CDN to local file
+  - Line 10: Audio source now points to `./audio/jingle-bells.mp3`
+  - Removed external dependency for better performance and reliability
+  - Comment added: "Christmas Jingle Bell Background Music (local for security)"
+  - User must manually add audio file to `/audio/jingle-bells.mp3` directory
+
+### Audio Control UI
+- **Toggle Button**: Fixed position at bottom-left of viewport
+  - Element ID: `audioControl` (line 407)
+  - States: `.muted` class toggles icon (volume-mute ↔ volume-up)
+  - Pulse animation: Active only when audio is playing (lines 396-402)
+  - CSS backdrop filter for glass-morphism effect
+
+### Audio State Persistence
+- **localStorage Integration**: Audio preference saved across sessions
+  - Key: `christmasMusicMuted` (boolean string)
+  - Lines 700-705: Load user preference on page load
+  - Line 719: Save preference when user toggles audio
+  - Default state: Muted on first visit
+
+### Audio Playback Flow
+```javascript
+1. Page load → Check localStorage for saved preference
+2. If previously enabled → Autoplay with error handling
+3. User clicks button → Toggle play/pause, save preference
+4. Audio element loops indefinitely (loop attribute on line 9)
+```
+
+### Technical Details
+- **Audio Element**: HTML5 `<audio>` tag with preload="auto"
+- **Autoplay Handling**: Wrapped in try/catch to handle browser autoplay policies
+- **Error Handling**: Graceful degradation if audio fails to load or play
+
 ## Maintenance Notes
 
-- **Last Update:** December 26, 2025 (Phase 4 error handling & cleanup)
+- **Last Update:** December 26, 2025 (PR#3 Audio Fixes + Phase 4 Error Handling)
 - **Code Stability:** Stable (production-ready with comprehensive error handling)
-- **Technical Debt:** Minimal (all known issues addressed: memory leaks, race conditions, error scenarios)
-- **Test Coverage:** Manual testing (iOS/Android/Desktop with error scenarios), unit tests recommended
+- **Technical Debt:** Minimal (all known issues addressed)
+- **Test Coverage:** 52/52 tests passing, manual iOS/Android/Desktop testing
+- **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix)
 - **Module Dependencies:**
   - `mobile-detection.js` → no deps (core utility)
-  - `camera-permissions.js` → `mobile-detection.js` (with cleanup function, error codes)
+  - `camera-permissions.js` → `mobile-detection.js` (with cleanup, error codes)
   - `gesture-detection.js` → `mobile-detection.js`
-  - `index.html` → all three modules (try-catch wrapper, loop guard, readyState check)
-- **Critical Fixes Applied:**
-  - Phase 4: Try-catch error handling, gesture loop guard, resource cleanup on error
-  - Phase 3: Timeout cleanup in requestCameraAccess(), video readyState validation
-  - Phase 2: Device detection modularity, mobile-optimized camera constraints
-  - Phase 1: Gesture control race condition elimination
-- **Error Handling Coverage:**
-  - PERMISSION_DENIED: User rejected camera access
-  - INSECURE_CONTEXT: HTTPS requirement enforcement
-  - NOT_SUPPORTED: Browser capability detection
-  - IN_USE: Camera claimed by another app
-  - TIMEOUT/ABORTED: Stream initialization failure
+  - `index.html` → all modules (try-catch, loop guard, readyState check)
+- **PR#3 Audio Fixes:** Volume race fix, webkit prefix, local audio hosting
 - **Review Frequency:** After each phase completion
-- **Next Phase:** Unit test suite + gesture response optimization + analytics integration
+- **Next Phase:** Unit test suite + gesture optimization + analytics
