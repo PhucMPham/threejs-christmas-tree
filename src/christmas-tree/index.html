@@ -471,6 +471,7 @@
         const debugInfo = document.getElementById('debug-info');
         const camBtn = document.getElementById('cam-btn');
         let isCameraRunning = false;
+        let isGestureLoopRunning = false;
 
         // 全局暴露给HTML按钮调用
         window.setMode = (mode) => {
@@ -975,8 +976,11 @@
                 debugInfo.innerText = "Loading gesture AI...";
                 handLandmarker = await initHandLandmarker(FilesetResolver, HandLandmarker);
 
-                // Step 4: Start gesture detection (video already loaded)
-                predictWebcam(); // Call directly - video is ready from requestCameraAccess
+                // Step 4: Start gesture detection (only if not already running)
+                if (!isGestureLoopRunning) {
+                    isGestureLoopRunning = true;
+                    predictWebcam();
+                }
                 document.getElementById('webcam-wrapper').style.opacity = 1;
                 document.getElementById('webcam-wrapper').style.pointerEvents = 'auto';
 
@@ -995,6 +999,10 @@
             } catch(e) {
                 console.warn("Camera/Gesture error:", e);
                 camBtn.classList.remove('loading');
+
+                // Clean up partial resources
+                stopCamera(video);
+                handLandmarker = null;
 
                 // Handle specific error types
                 let msg = e.message || "Camera Error";
@@ -1022,6 +1030,9 @@
 // --> 
         let lastVideoTime = -1;
         async function predictWebcam() {
+            // Stop if gesture loop disabled
+            if (!isGestureLoopRunning) return;
+
             // Ensure video has enough data before processing
             if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
                 requestAnimationFrame(predictWebcam);
@@ -1030,8 +1041,12 @@
             if (video.currentTime !== lastVideoTime) {
                 lastVideoTime = video.currentTime;
                 if (handLandmarker) {
-                    const result = handLandmarker.detectForVideo(video, performance.now());
-                    processGestures(result);
+                    try {
+                        const result = handLandmarker.detectForVideo(video, performance.now());
+                        processGestures(result);
+                    } catch (err) {
+                        console.warn('Gesture detection error:', err);
+                    }
                 }
             }
             requestAnimationFrame(predictWebcam);

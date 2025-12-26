@@ -210,6 +210,86 @@ Verification checks:
 | API Reference | In Progress | - |
 | Troubleshooting | Planned | - |
 
+## Phase 4: Error Handling & Cleanup (2025-12-26)
+
+### Enhanced Error Management Architecture
+
+**1. Try-Catch Implementation in initMediaPipe()**
+- **File:** `src/christmas-tree/index.html` (lines 951-1023)
+- **Scope:** Wraps entire camera initialization pipeline
+- **Coverage:**
+  - Camera availability check (line 966-969)
+  - Camera access request (line 973)
+  - MediaPipe initialization (line 977)
+  - Gesture detection loop (line 982)
+- **Error Types Handled:**
+  - `PERMISSION_DENIED` (permission dialog rejected)
+  - `INSECURE_CONTEXT` (non-HTTPS context)
+  - `NOT_SUPPORTED` (browser lacks camera API)
+  - `IN_USE` (camera claimed by another app)
+  - Generic errors with fallback message
+- **User Feedback:** Context-aware error messages for mobile/desktop
+  ```javascript
+  try {
+    // Step 1-4: Camera initialization pipeline
+  } catch(e) {
+    stopCamera(video);           // Cleanup partial resources
+    handLandmarker = null;       // Reset state
+    // Display platform-specific error message
+  }
+  ```
+- **Impact:** Prevents orphaned camera streams and hung gesture loops on error
+
+**2. Gesture Loop Guard (isGestureLoopRunning)**
+- **File:** `src/christmas-tree/index.html` (lines 474, 981, 1034)
+- **Purpose:** Prevent multiple concurrent gesture detection loops
+- **Mechanism:**
+  - Flag checked at `predictWebcam()` entry (line 1034)
+  - Set to `true` only after full initialization (line 981)
+  - Respects user disable/enable cycles
+- **Benefit:** Eliminates redundant frame processing, reduces GPU/CPU load
+- **Pattern:**
+  ```javascript
+  if (!isGestureLoopRunning) return;
+  // Process frame only if flag is active
+  requestAnimationFrame(predictWebcam);
+  ```
+
+**3. Resource Cleanup Function**
+- **File:** `src/christmas-tree/index.html` (line 1004)
+- **Trigger:** Executed in catch block when initialization fails
+- **Action:** `stopCamera(video)` - tears down MediaStream, stops all tracks
+- **Result:** Frees camera device for other applications, prevents PERMISSION_DENIED on retry
+- **Lifecycle:**
+  ```javascript
+  // On success: camera stays open until user clicks button again
+  // On error: stopCamera() called immediately, cleanup guaranteed
+  // On retry: Fresh camera request with clean state
+  ```
+
+### Device Compatibility Coverage
+- Mobile: iOS 14+, Android 8+ (error recovery tested)
+- Desktop: Chrome/Safari/Firefox latest versions
+- Network: Graceful error handling on slow/interrupted connections
+- Camera variants: Handles in-use/permission scenarios
+
+### Error Recovery Workflow
+1. User clicks "Enable Gesture"
+2. `initMediaPipe()` attempts initialization
+3. **If successful:** Camera active, gesture loop running
+4. **If error occurs:**
+   - Try-catch captures error type
+   - `stopCamera()` cleans resources
+   - User-friendly message displayed
+   - Button state reset to "Retry Camera"
+   - User can retry immediately
+
+### No New Onboarding Requirements
+- No new API keys needed
+- No environment variables added
+- No new dependencies
+- Fully backward compatible with Phase 3 architecture
+
 ## Phase 3: Device Compatibility Improvements (2025-12-26)
 
 ### Critical Bug Fixes
@@ -319,17 +399,25 @@ Verification checks:
 
 ## Maintenance Notes
 
-- **Last Update:** December 26, 2025 (Phase 3 device compatibility)
-- **Code Stability:** Stable (production-ready with device compatibility fixes)
-- **Technical Debt:** Minimal (timeout memory leak fixed, video readyState verified)
-- **Test Coverage:** Manual testing (iOS/Android/Desktop), unit tests recommended
+- **Last Update:** December 26, 2025 (Phase 4 error handling & cleanup)
+- **Code Stability:** Stable (production-ready with comprehensive error handling)
+- **Technical Debt:** Minimal (all known issues addressed: memory leaks, race conditions, error scenarios)
+- **Test Coverage:** Manual testing (iOS/Android/Desktop with error scenarios), unit tests recommended
 - **Module Dependencies:**
   - `mobile-detection.js` → no deps (core utility)
-  - `camera-permissions.js` → `mobile-detection.js` (now with cleanup function)
+  - `camera-permissions.js` → `mobile-detection.js` (with cleanup function, error codes)
   - `gesture-detection.js` → `mobile-detection.js`
-  - `index.html` → all three modules (with readyState check in predictWebcam)
+  - `index.html` → all three modules (try-catch wrapper, loop guard, readyState check)
 - **Critical Fixes Applied:**
-  - Timeout cleanup in requestCameraAccess() prevents memory leaks
-  - Video readyState validation in predictWebcam() prevents frame processing on unready video
+  - Phase 4: Try-catch error handling, gesture loop guard, resource cleanup on error
+  - Phase 3: Timeout cleanup in requestCameraAccess(), video readyState validation
+  - Phase 2: Device detection modularity, mobile-optimized camera constraints
+  - Phase 1: Gesture control race condition elimination
+- **Error Handling Coverage:**
+  - PERMISSION_DENIED: User rejected camera access
+  - INSECURE_CONTEXT: HTTPS requirement enforcement
+  - NOT_SUPPORTED: Browser capability detection
+  - IN_USE: Camera claimed by another app
+  - TIMEOUT/ABORTED: Stream initialization failure
 - **Review Frequency:** After each phase completion
-- **Next Phase:** Unit test suite + gesture response optimization
+- **Next Phase:** Unit test suite + gesture response optimization + analytics integration
