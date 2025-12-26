@@ -7,7 +7,37 @@
 
 ## Active Projects
 
-### 1. PR1: Gesture Detection Fixes
+### 1. PR4: Fix Responsive Design Across Devices
+**Plan Path**: `/plans/251226-1601-fix-responsive-across-devices/`
+**Start Date**: 2025-12-26
+**Target Completion**: 2025-12-26
+**Status**: In Progress (Phase 1 Complete)
+
+#### Phase Breakdown
+
+| Phase | Status | Completion | Details |
+|-------|--------|------------|---------|
+| Phase 1: Viewport Safe Areas | ✓ Complete | 100% | viewport-fit=cover, CSS safe-area vars |
+| Phase 2: Tab Navigation | Pending | 0% | Responsive tab sizing and alignment |
+| Phase 3: Typography Scaling | Pending | 0% | Fluid typography with clamp() |
+| Phase 4: UI Layout & Positioning | Pending | 0% | Layout fixes and element positioning |
+
+#### Recent Progress (2025-12-26)
+- ✓ Phase 1: Viewport Safe Areas (14:30 UTC)
+  - Added viewport-fit=cover to both HTML files
+  - Added CSS custom properties for safe-area-insets
+  - Implemented iOS Safari 100dvh fix with dvh units
+  - Applied safe-area padding to christmas-tree UI layer
+  - Test status: Ready for Phase 2
+
+#### Next Steps
+1. Phase 2: Tab navigation responsive fixes
+2. Phase 3: Fluid typography implementation
+3. Phase 4: Final UI layout and positioning adjustments
+
+---
+
+### 2. PR1: Gesture Detection Fixes
 **Plan Path**: `/plans/251226-1002-pr1-gesture-fixes/`
 **Start Date**: 2025-12-26
 **Target Completion**: 2025-12-26
@@ -90,6 +120,13 @@ Build a romantic Christmas gift: gesture-controlled 3D particle Christmas tree w
 ## Changelog
 
 ### 2025-12-26
+- **PR4 Phase 1 Complete**: Viewport Safe Areas (14:30 UTC)
+  - Added viewport-fit=cover to both HTML files
+  - Implemented CSS custom properties for safe-area-insets (--safe-top, --safe-bottom, --safe-left, --safe-right)
+  - Added iOS Safari 100dvh fix with fallback to 100vh
+  - Applied safe-area padding to christmas-tree UI layer
+  - Status: Ready for Phase 2 (Tab Navigation)
+
 - **Black Background Update Complete**: Phase 01 DONE (13:46 UTC)
   - Scene background changed: 0x1a1a2e → 0x000000
   - Body CSS updated: radial-gradient → pure black
