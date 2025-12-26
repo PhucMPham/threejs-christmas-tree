@@ -321,8 +321,7 @@
             "imports": {
                 "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
                 "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-                "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/+esm",
-                "./camera-gesture-controller.js": "./camera-gesture-controller.js"
+                "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/+esm"
             }
         }
     </script>
@@ -409,16 +408,9 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
         import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
-        import {
-            isMobileDevice,
-            isIOSSafari,
-            checkCameraAvailability,
-            requestCameraAccess,
-            initHandLandmarker,
-            processHandGesture,
-            stopCamera,
-            getMobileGestureHints
-        } from './camera-gesture-controller.js';
+        import { isMobileDevice, getMobileGestureHints } from './mobile-detection.js';
+        import { checkCameraAvailability, requestCameraAccess, stopCamera } from './camera-permissions.js';
+        import { initHandLandmarker, processHandGesture } from './gesture-detection.js';
 
         // --- 核心配置 ---
         const CONFIG = {
