@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Christmas Tree & Photos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <!-- Christmas Jingle Bell Background Music -->
+  <!-- Christmas Jingle Bell Background Music (local for security) -->
   <audio id="bgMusic" loop preload="auto">
-    <source src="https://cdn.freesound.org/previews/456/456460_5121236-lq.mp3" type="audio/mpeg">
-    <source src="https://freepd.com/music/Jingle%20Bells.mp3" type="audio/mpeg">
+    <source src="./audio/jingle-bells.mp3" type="audio/mpeg">
   </audio>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -373,6 +372,7 @@
       justify-content: center;
       z-index: 200;
       transition: all 0.3s;
+      -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
     }
     #audioControl:hover {
@@ -693,6 +693,9 @@
     const audioIcon = document.getElementById('audioIcon');
     let isMuted = true;
 
+    // Set volume BEFORE any play() call to prevent loud burst
+    bgMusic.volume = 0.3;
+
     // Load saved audio preference
     const savedMuted = localStorage.getItem('christmasMusicMuted');
     if (savedMuted === 'false') {
@@ -725,9 +728,6 @@
         audioIcon.className = 'fas fa-volume-mute';
       });
     }
-
-    // Set audio volume
-    bgMusic.volume = 0.3;
   </script>
 </body>
 </html>

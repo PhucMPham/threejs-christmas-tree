@@ -196,3 +196,174 @@ const bloomPass = new UnrealBloomPass(
 - Threshold 0.85 (increased for clearer photos)
 - Strength 0.25 (reduced bloom on faces)
 - Radius 0.3 (subtle glow effect)
+
+---
+
+## Phase 4: Audio System Standards (PR#3)
+
+### HTML5 Audio Element Setup
+```html
+<!-- Audio element must include loop and preload attributes -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="./audio/jingle-bells.mp3" type="audio/mpeg">
+</audio>
+```
+
+**Key Points:**
+- Use `id="bgMusic"` for consistent JavaScript reference
+- `loop` attribute enables seamless looping
+- `preload="auto"` loads media on page init
+- Comment explains purpose and security benefit (local file)
+
+### Volume Control Pattern
+```javascript
+// CRITICAL: Set volume BEFORE calling play()
+// Prevents audio burst on first playback (race condition fix)
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.volume = 0.3;  // Set volume first (line must be at 697)
+
+// Then call play() with error handling
+bgMusic.play().catch(err => console.log('Audio play failed:', err));
+```
+
+**Why Volume-First?**
+- Browser race condition: volume may not apply if set after play()
+- Default volume = 0.3 (30%) provides pleasant background level
+- Prevents sudden loud burst that startles users
+- Must occur before any `play()` call (lines 697, 715, 724)
+
+### Audio State Management Pattern
+```javascript
+// 1. Load preference from localStorage
+const savedMuted = localStorage.getItem('christmasMusicMuted');
+let isMuted = savedMuted === 'false' ? false : true;
+
+// 2. Restore UI state
+if (!isMuted) {
+  audioControl.classList.remove('muted');
+  audioIcon.className = 'fas fa-volume-up';
+}
+
+// 3. Attempt autoplay with error handling
+if (!isMuted) {
+  bgMusic.play().catch(() => {
+    // Autoplay blocked - revert to muted state
+    isMuted = true;
+    audioControl.classList.add('muted');
+    audioIcon.className = 'fas fa-volume-mute';
+  });
+}
+
+// 4. Save preference after user interaction
+localStorage.setItem('christmasMusicMuted', isMuted);
+```
+
+**localStorage Key Points:**
+- Key name: `christmasMusicMuted` (boolean as string)
+- Default: `true` (muted on first visit)
+- User interaction updates this value
+- Persists across sessions
+
+### Audio Button UI Standards
+```html
+<!-- Audio control button with glassmorphism effect -->
+<button id="audioControl" class="muted" title="Toggle Christmas Music">
+  <span class="pulse"></span>
+  <i class="fas fa-volume-mute" id="audioIcon"></i>
+</button>
+```
+
+**CSS Requirements:**
+```css
+#audioControl {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+
+  /* CRITICAL: Webkit prefix for Safari support (line 375) */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  transition: all 0.3s;
+  z-index: 200;
+}
+
+/* Icon changes based on muted state */
+#audioControl.muted {
+  color: rgba(212, 175, 55, 0.4);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* Pulse animation visible only when playing */
+#audioControl:not(.muted) .pulse {
+  opacity: 1;
+  animation: audioPulse 2s ease-out infinite;
+}
+```
+
+**Safari Compatibility:**
+- Include `-webkit-backdrop-filter` prefix (line 375)
+- Standard `backdrop-filter` for modern browsers (line 376)
+- Ensures blur effect works across all browsers
+
+### Audio Event Handling
+```javascript
+// Toggle button click handler
+audioControl.addEventListener('click', () => {
+  isMuted = !isMuted;
+
+  if (isMuted) {
+    bgMusic.pause();
+    audioControl.classList.add('muted');
+    audioIcon.className = 'fas fa-volume-mute';
+  } else {
+    // Set volume again before play (defensive programming)
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch(err => console.log('Audio play failed:', err));
+    audioControl.classList.remove('muted');
+    audioIcon.className = 'fas fa-volume-up';
+  }
+
+  // Persist user preference
+  localStorage.setItem('christmasMusicMuted', isMuted);
+});
+```
+
+**Error Handling:**
+- Wrap `play()` in `.catch()` for browser autoplay policies
+- Log errors to console without blocking UI
+- Graceful degradation if audio unavailable
+
+### Audio Asset Structure
+```
+threejs/
+├── audio/                           # Audio assets directory
+│   └── jingle-bells.mp3            # Christmas background music (MP3 format)
+├── src/                            # Source code
+└── index.html                      # References audio via relative path
+```
+
+**Audio File Requirements:**
+- Format: MP3 (widely supported)
+- Path: Relative from project root (`./audio/jingle-bells.mp3`)
+- Loading: Via HTML5 `<audio>` element (no JavaScript decoder needed)
+- Duration: Looped (any length works)
+
+### Performance Considerations
+- Audio loading: Non-blocking (preload="auto")
+- Memory: Audio buffer cached by browser
+- CPU: Negligible impact (native codec decoding)
+- Network: MP3 compression reduces file size
+- Volume: Pre-set to 0.3 avoids processing delay
+
+### Browser Testing Checklist
+- Chrome/Chromium: Test autoplay, toggle, persistence
+- Firefox: Test backdrop-filter (fallback), audio playback
+- Safari: Test `-webkit-backdrop-filter` prefix, autoplay policy
+- Mobile: Test audio with device mute button, volume control
+- Accessibility: Ensure button is keyboard-accessible, has title attribute
