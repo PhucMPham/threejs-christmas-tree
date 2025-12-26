@@ -61,18 +61,24 @@
       left: 0;
       right: 0;
       z-index: 100;
+      padding-top: var(--safe-top);
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
     }
     .tab {
-      padding: 18px 30px;
+      padding: 14px 16px;
       cursor: pointer;
       border-bottom: 3px solid transparent;
       transition: all 0.3s;
-      font-size: 14px;
-      letter-spacing: 1px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      min-height: 48px;
+      flex: 1;
+      justify-content: center;
     }
     .tab:hover { background: rgba(212, 175, 55, 0.1); }
     .tab.active {
@@ -80,20 +86,33 @@
       color: #d4af37;
       background: rgba(212, 175, 55, 0.1);
     }
-    .tab i { font-size: 16px; }
+    .tab i { font-size: 14px; }
+
+    /* Tablet and up - restore larger tab styling */
+    @media (min-width: 768px) {
+      .tab {
+        padding: 18px 30px;
+        font-size: 14px;
+        letter-spacing: 1px;
+        gap: 8px;
+        flex: none;
+        justify-content: flex-start;
+      }
+      .tab i { font-size: 16px; }
+    }
 
     /* Content Areas */
     .content {
       display: none;
       height: 100vh;
       height: 100dvh; /* iOS Safari fix */
-      padding-top: 60px;
+      padding-top: calc(60px + var(--safe-top));
     }
     .content.active { display: block; }
     .content iframe {
       width: 100%;
-      height: calc(100vh - 60px);
-      height: calc(100dvh - 60px); /* iOS Safari fix */
+      height: calc(100vh - 60px - var(--safe-top));
+      height: calc(100dvh - 60px - var(--safe-top)); /* iOS Safari fix */
       border: none;
     }
 
