@@ -17,7 +17,7 @@ if (!WebGL.isWebGL2Available()) {
 
 // Scene setup
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1a1a2e);
+scene.background = new THREE.Color(0x000000);
 
 // Camera setup
 const camera = new THREE.PerspectiveCamera(

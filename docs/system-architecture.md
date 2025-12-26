@@ -27,7 +27,7 @@ High-level architecture and component design for the Three.js application.
 
 ### Scene
 - **Role**: Container for all 3D objects
-- **Color**: Dark background (0x1a1a2e)
+- **Color**: Pure black background (0x000000)
 - **Properties**: Manages lights, meshes, and spatial relationships
 
 ### Camera
