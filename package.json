@@ -10,7 +10,7 @@
     "build": "vite build",
     "start": "node server.js",
     "preview": "vite preview",
-    "pm2": "pm2 start ecosystem.config.js",
+    "pm2": "pm2 start ecosystem.config.cjs",
     "test": "vitest",
     "test:run": "vitest run",
     "test:cov": "vitest run --coverage"

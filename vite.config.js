@@ -18,8 +18,14 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html')
-      }
+        main: resolve(__dirname, 'index.html'),
+        tree: resolve(__dirname, 'src/christmas-tree/index.html')
+      },
+      external: [
+        'three',
+        /^three\/addons\//,
+        '@mediapipe/tasks-vision'
+      ]
     }
   }
 });
