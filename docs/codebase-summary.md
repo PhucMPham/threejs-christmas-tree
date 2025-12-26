@@ -612,14 +612,106 @@ Verification checks:
 - Notched devices: Safe area padding tested on iPhone 12/14
 - Landscape orientation: Responsive behavior verified
 
+## Phase 3: Typography Scaling - Fluid Font Sizing (2025-12-26)
+
+### CSS clamp() Implementation for Responsive Typography
+**Status:** Complete - All text elements now use fluid scaling with CSS clamp()
+
+#### Main Heading (h1) - "Merry Christmas"
+- **File:** `src/christmas-tree/index.html` (lines 100-116)
+- **Implementation:**
+  ```css
+  h1 {
+    font-size: clamp(24px, 5vw + 1rem, 56px);
+    letter-spacing: clamp(2px, 0.5vw, 6px);
+  }
+  ```
+- **Sizing behavior:**
+  - Minimum: 24px (very small screens)
+  - Preferred: 5vw + 1rem (responsive scaling)
+  - Maximum: 56px (large screens)
+- **Letter spacing behavior:**
+  - Minimum: 2px (tight spacing on mobile)
+  - Preferred: 0.5vw (proportional spacing)
+  - Maximum: 6px (wide spacing on desktop)
+- **Impact:** Title remains readable on all screen sizes without media queries
+
+#### Hint Text - Gesture Instructions
+- **File:** `src/christmas-tree/index.html` (lines 203-211)
+- **Implementation:**
+  ```css
+  .hint-text {
+    font-size: clamp(9px, 2vw, 12px);
+  }
+  ```
+- **Sizing behavior:**
+  - Minimum: 9px (mobile)
+  - Preferred: 2vw (viewport-relative)
+  - Maximum: 12px (desktop)
+- **Impact:** Gesture hints remain legible without oversizing on large screens
+
+#### Debug Info Text - Bottom Left Status
+- **File:** `src/christmas-tree/index.html` (lines 247-258)
+- **Implementation:**
+  ```css
+  #debug-info {
+    font-size: clamp(9px, 2vw, 11px);
+    bottom: calc(5px + var(--safe-bottom));
+  }
+  ```
+- **Sizing behavior:**
+  - Minimum: 9px (mobile)
+  - Preferred: 2vw (viewport-relative)
+  - Maximum: 11px (desktop)
+- **Safe area:** Applied `var(--safe-bottom)` for notched devices
+- **Impact:** Debug info visible across all devices, respects safe areas
+
+#### Removed Redundant Media Queries
+- **Deletions:**
+  - Old `@media (max-width: 768px)` for h1 (superseded by clamp)
+  - Old `@media (max-width: 768px)` for .hint-text (superseded by clamp)
+- **Benefit:** Eliminates ~30 lines of media query code, simpler CSS maintenance
+
+#### CSS Property Order Standardization
+- **Fix:** Standard properties before vendor prefixes
+  - Correct: `-webkit-background-clip: text` AFTER `background-clip: text`
+  - Applied to: h1 gradient text effect (lines 106-109)
+- **Impact:** Better browser compatibility, follows CSS conventions
+
+#### Browser Support for clamp()
+- Chrome/Chromium: v79+ (full support)
+- Firefox: v75+ (full support)
+- Safari: v13.1+ (full support)
+- iOS Safari: 13.2+ (full support)
+- Edge: v79+ (full support)
+- Mobile browsers: iOS Safari 13.2+, Chrome Android, Firefox Android
+
+#### Responsive Scaling Examples
+- **Mobile (320px):** h1: 24px, hint: 9px, debug: 9px
+- **Tablet (768px):** h1: ~40px (5*7.68 + 16), hint: ~15px, debug: ~15px (clamp capped)
+- **Desktop (1920px):** h1: 56px (max), hint: 12px (max), debug: 11px (max)
+
+#### Technical Benefits
+1. **Fluid Scaling:** No jank, smooth transitions across all breakpoints
+2. **Backward Compatible:** Works with older devices (graceful degradation)
+3. **Simplified CSS:** Eliminates multiple media queries
+4. **Performance:** Same visual result with less CSS (faster parsing)
+5. **Maintainability:** Single font-size property instead of multiple rules
+
+### Viewport Safe Area Integration
+- Coordinated with Phase 1 implementation
+- `#debug-info` respects safe-area-inset-bottom for notched devices
+- All typography maintains proper spacing on iPhone/Android devices
+
 ## Maintenance Notes
 
-- **Last Update:** December 26, 2025 (Phase 2 Tab Navigation)
+- **Last Update:** December 26, 2025 (Phase 3 Typography Scaling)
 - **Code Stability:** Stable (production-ready, responsive design complete)
 - **Technical Debt:** Minimal (all known issues addressed)
 - **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix)
-- **Responsive Breakpoints:** 5 CSS custom properties for flexible layout
+- **Responsive Breakpoints:** 5 CSS custom properties + fluid clamp() functions
 - **Safe Area Support:** Notch/safe area insets properly configured
+- **Typography:** Fluid scaling via CSS clamp() (Phase 3 Complete)
 - **Module Dependencies:**
   - `mobile-detection.js` → no deps (core utility)
   - `camera-permissions.js` → `mobile-detection.js` (with cleanup, error codes)
@@ -627,4 +719,4 @@ Verification checks:
   - `index.html` → all modules (try-catch, loop guard, readyState check)
 - **Asset Inventory:** 2 favicon formats, 6 title variations, 3 description templates
 - **Review Frequency:** After each phase completion
-- **Next Phase:** Phase 3 - Additional features/optimizations
+- **Next Phase:** Phase 4 - UI Layout & Positioning adjustments

@@ -96,18 +96,24 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* Typography */
-        h1 { 
-            color: #fceea7; font-size: 8vw; 
-            max-size: 56px; margin: 0; font-weight: 400; 
-            letter-spacing: 6px; 
-            text-shadow: 0 0 50px rgba(252, 238, 167, 0.6); 
+        h1 {
+            color: #fceea7;
+            font-size: clamp(24px, 5vw + 1rem, 56px);
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: clamp(2px, 0.5vw, 6px);
+            text-shadow: 0 0 50px rgba(252, 238, 167, 0.6);
             background: linear-gradient(to bottom, #fff, #eebb66);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-family: 'Cinzel', 'Times New Roman', serif;
-            opacity: 0.9; transition: opacity 0.5s ease;
-            text-align: center; pointer-events: none;
+            opacity: 0.9;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            pointer-events: none;
+            padding: 0 10px;
         }
-        @media (min-width: 768px) { h1 { font-size: 56px; } }
 
         /* Controls */
         .controls-wrapper {
@@ -192,15 +198,16 @@
             #mode-bar {
                 bottom: 20px;
             }
-            .hint-text {
-                font-size: 10px;
-            }
         }
 
         .hint-text {
-            color: rgba(212, 175, 55, 0.5); font-size: 9px;
-            letter-spacing: 1px; text-transform: uppercase;
-            text-align: right; margin-top: 5px; max-width: 200px;
+            color: rgba(212, 175, 55, 0.5);
+            font-size: clamp(9px, 2vw, 12px);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: right;
+            margin-top: 5px;
+            max-width: 200px;
         }
 
         input[type="file"] { display: none; }
@@ -238,10 +245,16 @@
         #webcam { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
 
         #debug-info {
-            position: absolute; bottom: 5px; left: 5px;
-            color: rgba(212, 175, 55, 0.6); font-size: 10px;
-            font-family: monospace; pointer-events: none; z-index: 51;
-            width: 100%; text-align: center;
+            position: absolute;
+            bottom: calc(5px + var(--safe-bottom));
+            left: 5px;
+            color: rgba(212, 175, 55, 0.6);
+            font-size: clamp(9px, 2vw, 11px);
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 51;
+            width: 100%;
+            text-align: center;
         }
         
         #msg-box {
