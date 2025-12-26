@@ -983,8 +983,8 @@
                 debugInfo.innerText = "Loading gesture AI...";
                 handLandmarker = await initHandLandmarker(FilesetResolver, HandLandmarker);
 
-                // Step 4: Start gesture detection
-                video.addEventListener("loadeddata", predictWebcam);
+                // Step 4: Start gesture detection (video already loaded)
+                predictWebcam(); // Call directly - video is ready from requestCameraAccess
                 document.getElementById('webcam-wrapper').style.opacity = 1;
                 document.getElementById('webcam-wrapper').style.pointerEvents = 'auto';
 

@@ -222,11 +222,20 @@ Verification checks:
 - Gold materials: metalness 0.6, roughness 0.4 (less reflective for photos)
 - Frame materials: metalness 0.6 for elegant appearance
 
+## Phase 1 Updates (2025-12-26)
+
+### Bug Fix: Gesture Control Race Condition
+- **File:** `src/christmas-tree/index.html` (line 987)
+- **Issue:** `loadeddata` event listener attached after video element already loaded, causing race condition where event fires before listener is ready
+- **Solution:** Changed from event listener pattern to direct `predictWebcam()` call immediately after `requestCameraAccess()` completes
+- **Impact:** Reliable gesture detection initialization on first camera activation
+- **Status:** Fixed & tested
+
 ## Maintenance Notes
 
-- **Last Update:** December 25, 2025 (Phase 3)
+- **Last Update:** December 26, 2025 (Phase 1 bug fix)
 - **Code Stability:** Stable (production-ready)
 - **Technical Debt:** Minimal
 - **Test Coverage:** Manual testing only (automated tests planned)
 - **Review Frequency:** Regular (as code evolves)
-- **Next Phase:** Testing & Polish (Phase 4)
+- **Next Phase:** Phase 2 gesture improvements
