@@ -513,7 +513,13 @@
         import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
         import { isMobileDevice, getMobileGestureHints } from './mobile-detection.js';
         import { checkCameraAvailability, requestCameraAccess, stopCamera } from './camera-permissions.js';
-        import { initHandLandmarker, processHandGesture } from './gesture-detection.js';
+        import {
+          initHandLandmarker,
+          processHandGesture,
+          countFingers,
+          getHandCenter,
+          getStableFingerCount
+        } from './gesture-detection.js';
         import { NewYearMode } from '../fireworks/new-year-mode.js';
 
         // --- 核心配置 ---
@@ -582,6 +588,13 @@
             touch: { active: false, startX: 0, startY: 0, lastX: 0, lastY: 0 }
         };
 
+        // Gesture state for New Year mode
+        const GESTURE_STATE = {
+          lastFingerCount: 5,
+          handLostTime: 0,
+          handLostThreshold: 0.5  // Seconds before clearing gesture state
+        };
+
         // Smooth lerp with exponential decay (frame-rate independent)
         const smoothLerp = (current, target, lambda, dt) => {
             return current + (target - current) * (1 - Math.exp(-lambda * dt));
@@ -620,6 +633,13 @@
         window.toggleNewYearMode = () => {
             if (newYearMode) {
                 newYearMode.toggle();
+
+                // Update debug hint when entering/exiting New Year mode
+                if (newYearMode.getIsActive()) {
+                  debugInfo.innerText = 'Show hand to control countdown';
+                } else {
+                  debugInfo.innerText = 'Drag to rotate • Tap photo to view';
+                }
             }
         };
 
@@ -1283,6 +1303,41 @@
             STATE.hand.x = gestureResult.handX;
             STATE.hand.y = gestureResult.handY;
 
+            // Handle gesture for New Year mode
+            if (newYearMode && newYearMode.getIsActive()) {
+              if (gestureResult.detected) {
+                // Count fingers
+                const fingerResult = countFingers(result.landmarks);
+                const stableCount = getStableFingerCount(fingerResult.count);
+
+                // Get hand position
+                const handPos = getHandCenter(result.landmarks);
+
+                // Update new year mode with gesture state
+                newYearMode.setGestureState(stableCount, handPos.x, handPos.y);
+
+                // Update debug info
+                debugInfo.innerText = `Fingers: ${stableCount} | Hold fist for finale`;
+
+                // Reset hand lost timer
+                GESTURE_STATE.handLostTime = 0;
+                GESTURE_STATE.lastFingerCount = stableCount;
+
+                return; // Skip normal gesture processing in New Year mode
+              } else {
+                // Hand not detected - track time for graceful degradation
+                GESTURE_STATE.handLostTime += 0.016; // ~60fps
+
+                if (GESTURE_STATE.handLostTime >= GESTURE_STATE.handLostThreshold) {
+                  // Hand lost for too long, clear gesture state
+                  newYearMode.clearGestureState();
+                  debugInfo.innerText = 'Show hand to control countdown';
+                }
+                return;
+              }
+            }
+
+            // Original gesture processing for tree mode
             if (!gestureResult.detected) {
                 return;
             }

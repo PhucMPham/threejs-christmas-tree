@@ -174,6 +174,12 @@ export class NewYearMode {
 
     // Reset spawn timer
     this.spawnTimer = 0;
+
+    // Reset gesture state
+    this.gestureMode = false;
+    this.fingerCount = 5;
+    this.fistHoldTime = 0;
+    this.gestureFinaleTriggered = false;
   }
 
   /**

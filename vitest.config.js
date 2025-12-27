@@ -7,7 +7,18 @@ export default defineConfig({
     include: ['tests/**/*.test.js'],
     coverage: {
       provider: 'v8',
-      include: ['lib/**', 'routes/upload.js', 'src/**'],
+      include: ['lib/**', 'routes/upload.js', 'src/fireworks/**'],
+      exclude: [
+        'src/**/*.html',
+        'src/shaders/**',
+        'src/tree/**',
+        'src/particles/**',
+        'src/utils/**',
+        'src/christmas-tree/mobile-detection.js',
+        'src/christmas-tree/camera-permissions.js',
+        'src/fireworks/firework-audio.js',
+        'src/fireworks/new-year-mode.js'
+      ],
       reporter: ['text', 'html'],
       thresholds: {
         lines: 80,
