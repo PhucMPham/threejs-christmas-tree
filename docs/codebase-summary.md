@@ -923,12 +923,77 @@ routes/upload.js
 - **Resource Cleanup:** No orphaned requests on error (proper error propagation)
 - **Stateless Sessions:** Rate limit keying by sessionId (supports horizontal scaling)
 
+## Phase 1: Frontend Upload Overhaul (2025-12-27)
+
+### Client-Side Upload Features
+**File:** `index.html` (Main upload UI & logic)
+
+#### Image Compression (Lines 12-15, 805-823)
+- Library: `browser-image-compression@2.0.2` (CDN from jsDelivr)
+- SRI hash verification enabled
+- Features:
+  - WebWorker-based (non-blocking compression)
+  - Auto-skip files <500KB
+  - Configurable: 2MB max, 1920px dimensions, 90% quality
+  - HEIC→JPEG conversion (iOS support)
+  - Fallback: Uses original on compression failure
+
+#### Parallel Upload Queue (Lines 736-803)
+- **UploadQueue class:** Manages concurrent uploads
+- Concurrency: 4 simultaneous uploads (configurable)
+- Methods:
+  - `add(file, index)` - Enqueue file for upload
+  - `process()` - Dequeue & process while slots available
+  - `uploadWithRetry(file, index, retries=3)` - Auto-retry with backoff
+  - `uploadFile(file, index)` - POST /api/upload
+
+#### Retry Mechanism (Lines 769-783)
+- Max retries: 3 attempts (1 initial + 2 retries)
+- Exponential backoff: 1s, 2s, 4s delays
+- Applies to all failures (network, server, timeout)
+- Manual retry via "Upload All" button
+
+#### Per-File Status Indicators (Lines 825-849)
+- Compressing: Blue, ⏳ Compressing...
+- Queued: Gray, ⏳ Queued
+- Uploading: Purple, ⬆️ Uploading...
+- Retrying: Yellow, 🔄 Retry N/3...
+- Done: Green, ✅ Done
+- Failed: Red, ❌ Failed
+
+#### Upload Flow (Lines 860-935)
+```
+1. Files selected → handleFiles() validation
+2. Render preview with status indicators
+3. User clicks "Upload All"
+4. Compress all files (parallel, async/await)
+5. Create queue (concurrency=4)
+6. Enqueue compressed files
+7. Process queue (4 at a time)
+8. Retry on error (1s, 2s, 4s delays)
+9. Render success/failure modal
+10. Update gallery with uploaded photos
+```
+
+### Upload UI Components (Lines 124-730)
+- Upload header: Title + description
+- Dropzone: Drag & drop + file picker button
+- Preview container: Grid of pending files with status
+- Status bar: Photo count + Upload button
+- Gallery section: Grid of uploaded photos with delete buttons
+- Success modal: Confirmation dialog with tree nav
+
+### CSS Styling (Lines 414-432)
+- `.file-status` - Overlay indicator
+- `.status-compressing/.queued/.uploading/.retrying/.done/.failed` - Color variants
+- Preview items: Aspect ratio 1:1, rounded corners, border overlay
+
 ## Maintenance Notes
 
-- **Last Update:** December 27, 2025 (Phase 2 Backend Reliability)
-- **Code Stability:** Stable (production-ready, responsive design complete)
+- **Last Update:** December 27, 2025 (Phase 1 Frontend Upload Overhaul)
+- **Code Stability:** Stable (production-ready, responsive design complete, upload pipeline tested)
 - **Technical Debt:** Minimal (all known issues addressed)
-- **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix)
+- **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix, SRI integrity hash)
 - **Responsive Breakpoints:** 5 CSS custom properties + fluid clamp() functions
 - **Safe Area Support:** Notch/safe area insets fully integrated (Phase 4 Complete)
 - **Typography:** Fluid scaling via CSS clamp() (Phase 3 Complete)
@@ -936,10 +1001,11 @@ routes/upload.js
   - `mobile-detection.js` → no deps (core utility)
   - `camera-permissions.js` → `mobile-detection.js` (with cleanup, error codes)
   - `gesture-detection.js` → `mobile-detection.js`
-  - `index.html` → all modules (try-catch, loop guard, readyState check)
+  - `index.html` → all modules (try-catch, loop guard, readyState check) + browser-image-compression CDN
 - **Backend Routes:**
   - `routes/upload.js` → Express, multer, axios, file-type (retry logic, dynamic timeout, error codes)
 - **Asset Inventory:** 2 favicon formats, 6 title variations, 3 description templates
 - **Review Frequency:** After each phase completion
 - **UI Controls:** 2 fixed controls (audio, hide) with safe-area-inset positioning + 48px touch targets
 - **Notched Device Support:** Full coverage for iPhone X/12/14 Pro and Android dynamic island
+- **Upload Features:** Client-side compression, parallel queue (4 concurrent), retry w/ backoff, per-file status

@@ -9,6 +9,11 @@
   <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png">
   <link rel="apple-touch-icon" href="/favicon.png">
 
+  <!-- Image compression library for faster uploads -->
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js"
+          integrity="sha384-vEqXxQiIwsHadv9Ch9qL2pG4AJtdjuln33PqsQPA6MPQadu/xkCPUQdQ4uujXQ0g"
+          crossorigin="anonymous"></script>
+
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-91M63JKGJ6"></script>
   <script>
@@ -406,6 +411,26 @@
 
     input[type="file"] { display: none; }
 
+    /* Upload Status Indicators */
+    .file-status {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      right: 4px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .status-done { background: rgba(34,197,94,0.9); }
+    .status-failed { background: rgba(239,68,68,0.9); }
+    .status-retrying { background: rgba(234,179,8,0.9); }
+    .status-compressing { background: rgba(59,130,246,0.9); }
+    .status-uploading { background: rgba(139,92,246,0.9); }
+    .status-queued { background: rgba(100,116,139,0.9); }
+
     /* Audio Control Button */
     #audioControl {
       position: fixed;
@@ -690,12 +715,13 @@
         const url = URL.createObjectURL(file);
         const size = (file.size / 1024 / 1024).toFixed(2);
         return `
-          <div class="preview-item">
+          <div class="preview-item" data-file-index="${i}">
             <img src="${url}" alt="${file.name}">
             <button class="remove" onclick="removeFile(${i})">
               <i class="fas fa-times"></i>
             </button>
             <div class="file-info">${size}MB</div>
+            <div class="file-status"></div>
           </div>
         `;
       }).join('');
@@ -706,47 +732,204 @@
       renderPreview();
     }
 
-    // Upload
-    uploadBtn.addEventListener('click', async () => {
-      if (pendingFiles.length === 0) return;
+    // Upload Queue with concurrency control
+    class UploadQueue {
+      constructor(concurrency = 4) {
+        this.concurrency = concurrency;
+        this.queue = [];
+        this.running = 0;
+        this.results = [];
+        this.onFileProgress = null;
+      }
 
-      uploadBtn.disabled = true;
-      uploadBtn.innerHTML = '<span class="spinner"></span> Uploading...';
+      async add(file, index) {
+        return new Promise((resolve) => {
+          this.queue.push({ file, index, resolve });
+          this.process();
+        });
+      }
 
-      let successCount = 0;
+      async process() {
+        while (this.running < this.concurrency && this.queue.length > 0) {
+          const { file, index, resolve } = this.queue.shift();
+          this.running++;
 
-      for (const file of pendingFiles) {
-        const form = new FormData();
-        form.append('image', file);
-
-        try {
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            body: form
-          });
-          const data = await res.json();
-
-          if (data.success) {
-            successCount++;
-            uploadedPhotos.unshift({
-              id: data.data.id,
-              display_url: data.data.display_url
+          this.uploadWithRetry(file, index)
+            .then(result => {
+              this.results.push(result);
+              resolve(result);
+            })
+            .finally(() => {
+              this.running--;
+              this.process();
             });
-          }
-        } catch (err) {
-          console.error('Upload failed:', err);
         }
       }
 
-      pendingFiles = [];
+      async uploadWithRetry(file, index, retries = 3) {
+        const delays = [1000, 2000, 4000]; // Exponential backoff
+
+        for (let attempt = 0; attempt <= retries; attempt++) {
+          try {
+            return await this.uploadFile(file, index);
+          } catch (err) {
+            if (attempt === retries) {
+              return { success: false, error: err.message, file, index };
+            }
+            await new Promise(r => setTimeout(r, delays[attempt]));
+            this.onFileProgress?.(index, 'retrying', attempt + 1);
+          }
+        }
+      }
+
+      async uploadFile(file, index) {
+        const form = new FormData();
+        form.append('image', file);
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: form
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error('Upload failed');
+        }
+
+        this.onFileProgress?.(index, 'done');
+        return { success: true, data: data.data, index };
+      }
+    }
+
+    // Compress image before upload
+    async function compressImage(file) {
+      // Skip if already small or non-compressible
+      if (file.size < 500 * 1024) return file; // < 500KB, skip
+
+      const options = {
+        maxSizeMB: 2,
+        maxWidthOrHeight: 1920,
+        initialQuality: 0.9,
+        useWebWorker: true,
+        fileType: 'image/jpeg' // HEIC→JPEG conversion
+      };
+
+      try {
+        return await imageCompression(file, options);
+      } catch (err) {
+        return file; // Fallback to original on compression failure
+      }
+    }
+
+    // Update file status in preview
+    function updateFileStatus(index, status, attempt) {
+      const preview = document.querySelector(`[data-file-index="${index}"]`);
+      if (!preview) return;
+
+      const statusEl = preview.querySelector('.file-status') ||
+        (() => {
+          const el = document.createElement('div');
+          el.className = 'file-status';
+          preview.appendChild(el);
+          return el;
+        })();
+
+      const statusMap = {
+        'compressing': '⏳ Compressing...',
+        'queued': '⏳ Queued',
+        'uploading': '⬆️ Uploading...',
+        'retrying': `🔄 Retry ${attempt}/3...`,
+        'done': '✅ Done',
+        'failed': '❌ Failed'
+      };
+
+      statusEl.textContent = statusMap[status] || status;
+      statusEl.className = `file-status status-${status}`;
+    }
+
+    // Show error for failed uploads
+    function showUploadError(failedCount, successCount) {
+      const msg = successCount > 0
+        ? `${successCount} uploaded, ${failedCount} failed. Tap "Upload All" to retry.`
+        : `${failedCount} upload(s) failed. Tap "Upload All" to retry.`;
+      alert(msg);
+    }
+
+    // Upload with compression and parallel queue
+    uploadBtn.addEventListener('click', async () => {
+      if (pendingFiles.length === 0) return;
+
+      const totalFiles = pendingFiles.length;
+      uploadBtn.disabled = true;
+
+      // Update UI to show compression status
+      uploadBtn.innerHTML = '<span class="spinner"></span> Compressing...';
+
+      // Compress all files first
+      const compressedFiles = await Promise.all(
+        pendingFiles.map(async (file, i) => {
+          updateFileStatus(i, 'compressing');
+          const compressed = await compressImage(file);
+          updateFileStatus(i, 'queued');
+          return compressed;
+        })
+      );
+
+      // Setup queue
+      const queue = new UploadQueue(4);
+      let completedCount = 0;
+
+      queue.onFileProgress = (index, status, attempt) => {
+        updateFileStatus(index, status, attempt);
+        if (status === 'done') {
+          completedCount++;
+          uploadBtn.innerHTML = `<span class="spinner"></span> Uploading ${completedCount}/${totalFiles}...`;
+        }
+      };
+
+      // Queue all uploads
+      uploadBtn.innerHTML = '<span class="spinner"></span> Uploading 0/' + totalFiles + '...';
+
+      const uploadPromises = compressedFiles.map((file, i) => {
+        updateFileStatus(i, 'uploading');
+        return queue.add(file, i);
+      });
+
+      const results = await Promise.allSettled(uploadPromises);
+
+      // Process results
+      let successCount = 0;
+      const failedIndices = [];
+
+      results.forEach((result, i) => {
+        if (result.status === 'fulfilled' && result.value.success) {
+          successCount++;
+          uploadedPhotos.unshift({
+            id: result.value.data.id,
+            display_url: result.value.data.display_url
+          });
+        } else {
+          failedIndices.push(i);
+        }
+      });
+
+      // Handle failures
+      if (failedIndices.length > 0) {
+        pendingFiles = failedIndices.map(i => pendingFiles[i]);
+        showUploadError(failedIndices.length, successCount);
+      } else {
+        pendingFiles = [];
+      }
+
       renderPreview();
       updateUploadedCount();
       renderGallery();
 
       uploadBtn.innerHTML = 'Upload All';
-      uploadBtn.disabled = true;
+      uploadBtn.disabled = pendingFiles.length === 0;
 
-      if (successCount > 0) {
+      if (successCount > 0 && failedIndices.length === 0) {
         successModal.classList.add('active');
       }
     });

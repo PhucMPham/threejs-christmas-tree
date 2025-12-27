@@ -304,6 +304,123 @@ routes/upload.js
 └── ../lib/db.js (data persistence)
 ```
 
+## Frontend Upload System Architecture (Phase 1: 2025-12-27)
+
+### Client-Side Image Compression Pipeline
+**Feature:** Automatic client-side compression before upload to reduce bandwidth and server load
+
+**Compression Library:** `browser-image-compression@2.0.2` (CDN: jsDelivr with SRI hash)
+- Location: `index.html` lines 12-15
+- Features:
+  - WebWorker support for non-blocking compression
+  - HEIC→JPEG conversion (iOS compatibility)
+  - Max file size: 2MB after compression
+  - Max dimensions: 1920×1920px
+  - Quality setting: 90% (high quality, small file size)
+  - Fallback: Returns original file if compression fails
+
+**Compression Flow:**
+```
+User selects files
+    ↓
+compressImage(file) called for each file
+    ↓
+Check: file < 500KB? Return original (skip compression)
+    ↓
+Configure options: maxSizeMB=2, maxWidth/Height=1920, quality=0.9
+    ↓
+Run compression in WebWorker (non-blocking)
+    ↓
+Return compressed file OR original on failure
+```
+
+### Parallel Upload Queue with Concurrency Control
+**Feature:** Upload multiple files simultaneously with controlled concurrency (max 4 concurrent)
+
+**Upload Queue Class:** Lines 736-803
+- Concurrency level: 4 (configurable)
+- Queue management: FIFO processing
+- Progress tracking: Per-file status indicators
+- Failure handling: Automatic detection + retry eligibility
+
+**Queue Architecture:**
+```
+Files enqueued → Internal queue array
+    ↓
+While (running < 4 AND queue.length > 0):
+    Dequeue file → Start upload with retry
+    running++ → Track active uploads
+    ↓
+    uploadWithRetry(file, index, 3 retries)
+        ↓
+        Try: uploadFile() → POST /api/upload
+        ↓
+        On error: Exponential backoff (1s, 2s, 4s)
+        ↓
+    running-- → Mark slot available
+    process() → Start next file
+```
+
+### Retry Mechanism with Exponential Backoff
+**Feature:** Automatic retry for failed uploads with increasing delays
+
+**Retry Logic:** Lines 769-783
+- Max attempts: 3 total (1 initial + 2 retries)
+- Backoff delays: [1000ms, 2000ms, 4000ms]
+- Applies to all upload failures (network, server, timeout)
+- User can manually retry via "Upload All" button
+
+**Retry Algorithm:**
+```javascript
+for attempt = 0 to 3:
+    try:
+        return uploadFile(file)  // Success → return
+    catch error:
+        if attempt === 3: return failure
+        delay = delays[attempt]   // 1s, 2s, 4s
+        await sleep(delay)
+        onProgress('retrying', attempt + 1)
+```
+
+### Per-File Status Indicators
+**Feature:** Real-time visual feedback for upload progress
+
+**Status Types:** Lines 825-849
+| Status | Display | Duration | Color | Icon |
+|--------|---------|----------|-------|------|
+| compressing | ⏳ Compressing... | 1-10s | Blue | - |
+| queued | ⏳ Queued | Until upload starts | Gray | - |
+| uploading | ⬆️ Uploading... | Variable | Purple | - |
+| retrying | 🔄 Retry 1/3... | 1-4s between attempts | Yellow | - |
+| done | ✅ Done | Persistent | Green | Checkmark |
+| failed | ❌ Failed | Persistent | Red | X |
+
+**HTML Structure:** Lines 414-432 (CSS styling)
+```html
+<div class="preview-item" data-file-index="0">
+  <img src="...">
+  <button class="remove">...</button>
+  <div class="file-info">2.5MB</div>
+  <div class="file-status status-uploading">⬆️ Uploading...</div>
+</div>
+```
+
+### HEIC to JPEG Conversion
+**Feature:** Automatic format conversion for iOS camera images
+
+**Implementation:** Lines 810-816 (compression options)
+```javascript
+const options = {
+  fileType: 'image/jpeg'  // Force JPEG output
+};
+```
+
+**Conversion Flow:**
+- Detects HEIC input (iOS original camera format)
+- Converts to JPEG during compression
+- Maintains ~90% quality for visual fidelity
+- Fallback: Returns original if conversion fails
+
 ## Future Enhancements
 
 1. Add skybox/environment mapping
@@ -311,5 +428,5 @@ routes/upload.js
 3. Add model loader for complex geometries
 4. Performance monitoring dashboard
 5. Mobile gesture support (pinch-to-zoom)
-6. Upload progress tracking (chunked uploads for >32MB)
-7. Image optimization pipeline (resize, compress, WEBP conversion)
+6. Chunked uploads for >32MB files
+7. Progressive image optimization (WebP, AVIF support)
