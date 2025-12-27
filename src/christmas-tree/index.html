@@ -70,9 +70,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: calc(40px + var(--safe-top)); /* Account for notch */
+            padding-top: calc(30px + var(--safe-top));
+            padding-left: var(--safe-left);
+            padding-right: var(--safe-right);
             box-sizing: border-box;
             transition: opacity 0.5s ease;
+        }
+
+        @media (min-width: 768px) {
+            #ui-layer {
+                padding-top: 40px;
+            }
         }
         
         .ui-hidden { opacity: 0 !important; pointer-events: none !important; }
@@ -117,11 +125,23 @@
 
         /* Controls */
         .controls-wrapper {
-            position: absolute; top: 100px; right: 20px;        
+            position: absolute;
+            top: calc(80px + var(--safe-top));
+            right: calc(15px + var(--safe-right));
             pointer-events: auto;
-            display: flex; flex-direction: column; align-items: flex-end;
-            gap: 10px; z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 20;
             transition: opacity 0.5s ease;
+        }
+
+        @media (min-width: 768px) {
+            .controls-wrapper {
+                top: 100px;
+                right: 20px;
+            }
         }
 /* <!--
   - @Project: Grand Luxury Tree - Christmas Edition (Touch & Gesture & Stats)
@@ -174,29 +194,29 @@
         /* Mobile-specific enhancements */
         @media (max-width: 768px) {
             .control-btn {
-                padding: 14px 24px;
-                font-size: 12px;
-                min-width: 140px;
-                min-height: 48px; /* Larger touch target */
+                padding: 12px 20px;
+                font-size: 11px;
+                min-width: 120px;
+                min-height: 48px;
             }
             .mode-btn {
-                width: 56px;
-                height: 56px;
-                font-size: 22px;
+                width: 48px;
+                height: 48px;
+                font-size: 18px;
             }
             #webcam-wrapper {
-                bottom: auto;
-                top: 70px;
-                left: 10px;
-                width: 100px;
-                height: 75px;
+                top: calc(120px + var(--safe-top));
+                left: calc(10px + var(--safe-left));
+                width: 90px;
+                height: 68px;
             }
             .controls-wrapper {
-                top: 70px;
-                right: 10px;
+                top: calc(60px + var(--safe-top));
+                right: calc(10px + var(--safe-right));
             }
             #mode-bar {
-                bottom: 20px;
+                bottom: calc(15px + var(--safe-bottom));
+                gap: 8px;
             }
         }
 
@@ -214,33 +234,77 @@
 
         /* Mode Buttons (Bottom) */
         #mode-bar {
-            position: absolute; bottom: 30px; left: 50%;
+            position: absolute;
+            bottom: calc(20px + var(--safe-bottom));
+            left: 50%;
             transform: translateX(-50%);
-            display: flex; gap: 15px;
-            z-index: 20; pointer-events: auto;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            pointer-events: auto;
+            padding: 0 10px;
+        }
+
+        @media (min-width: 768px) {
+            #mode-bar {
+                bottom: calc(30px + var(--safe-bottom));
+                gap: 15px;
+            }
         }
         .mode-btn {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: rgba(0,0,0,0.6);
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            min-height: 48px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid #d4af37;
-            color: #d4af37; font-size: 20px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.3s;
+            color: #d4af37;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
             backdrop-filter: blur(4px);
+        }
+
+        @media (min-width: 768px) {
+            .mode-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
         }
         .mode-btn:active { transform: scale(0.9); background: #d4af37; color: #000; }
         .mode-btn.active { background: rgba(0, 255, 136, 0.3); border-color: #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.5); }
         
         /* Webcam feedback */
         #webcam-wrapper {
-            position: absolute; bottom: 100px; left: 20px;         
-            width: 120px; height: 90px;
-            border: 1px solid rgba(212, 175, 55, 0.5); 
-            box-shadow: 0 0 20px rgba(0,0,0,0.9);
-            border-radius: 4px; overflow: hidden; 
-            opacity: 0; pointer-events: none;
-            z-index: 50; background: #000;
-            transition: opacity 0.5s ease; 
+            position: absolute;
+            top: calc(120px + var(--safe-top));
+            left: calc(10px + var(--safe-left));
+            width: 100px;
+            height: 75px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+            border-radius: 4px;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 50;
+            background: #000;
+            transition: opacity 0.5s ease;
+        }
+
+        @media (min-width: 768px) {
+            #webcam-wrapper {
+                top: auto;
+                bottom: 100px;
+                left: 20px;
+                width: 120px;
+                height: 90px;
+            }
         }
         #webcam { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
 
@@ -278,14 +342,13 @@
            ------------------------------------------- */
         #footer-stats {
             position: absolute;
-            bottom: 25px;
-            right: 25px;
+            bottom: calc(25px + var(--safe-bottom));
+            right: calc(15px + var(--safe-right));
             z-index: 40;
             pointer-events: auto;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            /* 整体磨砂玻璃面板效果 */
             background: rgba(8, 15, 25, 0.75);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -293,10 +356,8 @@
             border-radius: 12px;
             border: 1px solid rgba(212, 175, 55, 0.25);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            width: 200px; /* 固定宽度，确保整齐 */
+            width: min(200px, calc(100vw - 30px - var(--safe-left) - var(--safe-right)));
             transition: all 0.3s ease;
-            
-            /* 【修改】确保动画过渡自然 */
             opacity: 1;
             transform: translateY(0);
         }
