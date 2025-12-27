@@ -9,7 +9,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Merry Christmas - Interactive 3D Photo Tree</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png">
@@ -19,29 +19,68 @@
 
 
     <style>
-        /* 修改背景为深色渐变 */
-        body { 
-            margin: 0; 
-            overflow: hidden; 
+        /* CSS Custom Properties for Safe Areas & Breakpoints */
+        :root {
+            /* Safe area insets for notched devices */
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+
+            /* Responsive breakpoints - used in Phase 02-04 for media queries */
+            --breakpoint-xs: 320px;
+            --breakpoint-sm: 480px;
+            --breakpoint-md: 768px;
+            --breakpoint-lg: 1024px;
+            --breakpoint-xl: 1280px;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
             background: #000000;
-            background-color: #000000; 
-            font-family: 'Times New Roman', serif; 
-            touch-action: none; 
+            background-color: #000000;
+            font-family: 'Times New Roman', serif;
+            touch-action: none;
             user-select: none;
             -webkit-user-select: none;
         }
-        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; cursor: grab; }
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh; /* iOS Safari fix */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            cursor: grab;
+        }
         #canvas-container:active { cursor: grabbing; }
 
         /* UI Overlay */
         #ui-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 10; pointer-events: none;
-            display: flex; flex-direction: column; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh; /* iOS Safari fix */
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            padding-top: 40px;
+            padding-top: calc(30px + var(--safe-top));
+            padding-left: var(--safe-left);
+            padding-right: var(--safe-right);
             box-sizing: border-box;
             transition: opacity 0.5s ease;
+        }
+
+        @media (min-width: 768px) {
+            #ui-layer {
+                padding-top: 40px;
+            }
         }
         
         .ui-hidden { opacity: 0 !important; pointer-events: none !important; }
@@ -65,26 +104,44 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* Typography */
-        h1 { 
-            color: #fceea7; font-size: 8vw; 
-            max-size: 56px; margin: 0; font-weight: 400; 
-            letter-spacing: 6px; 
-            text-shadow: 0 0 50px rgba(252, 238, 167, 0.6); 
+        h1 {
+            color: #fceea7;
+            font-size: clamp(24px, 5vw + 1rem, 56px);
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: clamp(2px, 0.5vw, 6px);
+            text-shadow: 0 0 50px rgba(252, 238, 167, 0.6);
             background: linear-gradient(to bottom, #fff, #eebb66);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-family: 'Cinzel', 'Times New Roman', serif;
-            opacity: 0.9; transition: opacity 0.5s ease;
-            text-align: center; pointer-events: none;
+            opacity: 0.9;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            pointer-events: none;
+            padding: 0 10px;
         }
-        @media (min-width: 768px) { h1 { font-size: 56px; } }
 
         /* Controls */
         .controls-wrapper {
-            position: absolute; top: 100px; right: 20px;        
+            position: absolute;
+            top: calc(80px + var(--safe-top));
+            right: calc(15px + var(--safe-right));
             pointer-events: auto;
-            display: flex; flex-direction: column; align-items: flex-end;
-            gap: 10px; z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 20;
             transition: opacity 0.5s ease;
+        }
+
+        @media (min-width: 768px) {
+            .controls-wrapper {
+                top: 100px;
+                right: 20px;
+            }
         }
 /* <!--
   - @Project: Grand Luxury Tree - Christmas Edition (Touch & Gesture & Stats)
@@ -137,80 +194,131 @@
         /* Mobile-specific enhancements */
         @media (max-width: 768px) {
             .control-btn {
-                padding: 14px 24px;
-                font-size: 12px;
-                min-width: 140px;
-                min-height: 48px; /* Larger touch target */
+                padding: 12px 20px;
+                font-size: 11px;
+                min-width: 120px;
+                min-height: 48px;
             }
             .mode-btn {
-                width: 56px;
-                height: 56px;
-                font-size: 22px;
+                width: 48px;
+                height: 48px;
+                font-size: 18px;
             }
             #webcam-wrapper {
-                bottom: auto;
-                top: 70px;
-                left: 10px;
-                width: 100px;
-                height: 75px;
+                top: calc(120px + var(--safe-top));
+                left: calc(10px + var(--safe-left));
+                width: 90px;
+                height: 68px;
             }
             .controls-wrapper {
-                top: 70px;
-                right: 10px;
+                top: calc(60px + var(--safe-top));
+                right: calc(10px + var(--safe-right));
             }
             #mode-bar {
-                bottom: 20px;
-            }
-            .hint-text {
-                font-size: 10px;
+                bottom: calc(15px + var(--safe-bottom));
+                gap: 8px;
             }
         }
 
         .hint-text {
-            color: rgba(212, 175, 55, 0.5); font-size: 9px;
-            letter-spacing: 1px; text-transform: uppercase;
-            text-align: right; margin-top: 5px; max-width: 200px;
+            color: rgba(212, 175, 55, 0.5);
+            font-size: clamp(9px, 2vw, 12px);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: right;
+            margin-top: 5px;
+            max-width: 200px;
         }
 
         input[type="file"] { display: none; }
 
         /* Mode Buttons (Bottom) */
         #mode-bar {
-            position: absolute; bottom: 30px; left: 50%;
+            position: absolute;
+            bottom: calc(20px + var(--safe-bottom));
+            left: 50%;
             transform: translateX(-50%);
-            display: flex; gap: 15px;
-            z-index: 20; pointer-events: auto;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            pointer-events: auto;
+            padding: 0 10px;
+        }
+
+        @media (min-width: 768px) {
+            #mode-bar {
+                bottom: calc(30px + var(--safe-bottom));
+                gap: 15px;
+            }
         }
         .mode-btn {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: rgba(0,0,0,0.6);
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            min-height: 48px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid #d4af37;
-            color: #d4af37; font-size: 20px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.3s;
+            color: #d4af37;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
             backdrop-filter: blur(4px);
+        }
+
+        @media (min-width: 768px) {
+            .mode-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
         }
         .mode-btn:active { transform: scale(0.9); background: #d4af37; color: #000; }
         .mode-btn.active { background: rgba(0, 255, 136, 0.3); border-color: #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.5); }
         
         /* Webcam feedback */
         #webcam-wrapper {
-            position: absolute; bottom: 100px; left: 20px;         
-            width: 120px; height: 90px;
-            border: 1px solid rgba(212, 175, 55, 0.5); 
-            box-shadow: 0 0 20px rgba(0,0,0,0.9);
-            border-radius: 4px; overflow: hidden; 
-            opacity: 0; pointer-events: none;
-            z-index: 50; background: #000;
-            transition: opacity 0.5s ease; 
+            position: absolute;
+            top: calc(120px + var(--safe-top));
+            left: calc(10px + var(--safe-left));
+            width: 100px;
+            height: 75px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+            border-radius: 4px;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 50;
+            background: #000;
+            transition: opacity 0.5s ease;
+        }
+
+        @media (min-width: 768px) {
+            #webcam-wrapper {
+                top: auto;
+                bottom: 100px;
+                left: 20px;
+                width: 120px;
+                height: 90px;
+            }
         }
         #webcam { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
 
         #debug-info {
-            position: absolute; bottom: 5px; left: 5px;
-            color: rgba(212, 175, 55, 0.6); font-size: 10px;
-            font-family: monospace; pointer-events: none; z-index: 51;
-            width: 100%; text-align: center;
+            position: absolute;
+            bottom: calc(5px + var(--safe-bottom));
+            left: 5px;
+            color: rgba(212, 175, 55, 0.6);
+            font-size: clamp(9px, 2vw, 11px);
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 51;
+            width: 100%;
+            text-align: center;
         }
         
         #msg-box {
@@ -234,14 +342,13 @@
            ------------------------------------------- */
         #footer-stats {
             position: absolute;
-            bottom: 25px;
-            right: 25px;
+            bottom: calc(25px + var(--safe-bottom));
+            right: calc(15px + var(--safe-right));
             z-index: 40;
             pointer-events: auto;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            /* 整体磨砂玻璃面板效果 */
             background: rgba(8, 15, 25, 0.75);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -249,10 +356,8 @@
             border-radius: 12px;
             border: 1px solid rgba(212, 175, 55, 0.25);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            width: 200px; /* 固定宽度，确保整齐 */
+            width: min(200px, calc(100vw - 30px - var(--safe-left) - var(--safe-right)));
             transition: all 0.3s ease;
-            
-            /* 【修改】确保动画过渡自然 */
             opacity: 1;
             transform: translateY(0);
         }

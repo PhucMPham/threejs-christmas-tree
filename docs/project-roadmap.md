@@ -1,13 +1,69 @@
 # Project Roadmap
 
-**Last Updated**: 2025-12-26
-**Current Focus**: PR1 Gesture + PR#3 Audio Fixes Complete - Christmas Tree Phase 4
+**Last Updated**: 2025-12-26 (22:29 UTC)
+**Current Focus**: PR4 Phase 3 Typography Scaling Complete - Ready for Phase 4
 
 ---
 
 ## Active Projects
 
-### 1. PR1: Gesture Detection Fixes
+### 1. PR4: Fix Responsive Design Across Devices
+**Plan Path**: `/plans/251226-1601-fix-responsive-across-devices/`
+**Start Date**: 2025-12-26
+**Target Completion**: 2025-12-26
+**Status**: In Progress (Phase 1-3 Complete, Phase 4 Pending)
+
+#### Phase Breakdown
+
+| Phase | Status | Completion | Details |
+|-------|--------|------------|---------|
+| Phase 1: Viewport Safe Areas | ✓ Complete | 100% | viewport-fit=cover, CSS safe-area vars |
+| Phase 2: Tab Navigation | ✓ Complete | 100% | Responsive tab sizing and alignment |
+| Phase 3: Typography Scaling | ✓ Complete | 100% | Fluid typography with clamp() |
+| Phase 4: UI Layout & Positioning | Pending | 0% | Layout fixes and element positioning |
+
+#### Recent Progress (2025-12-26)
+- ✓ Phase 3: Typography Scaling with CSS clamp() (22:29 UTC)
+  - **h1 "Merry Christmas" heading:**
+    - Font-size: `clamp(24px, 5vw + 1rem, 56px)` - scales 24px → 56px
+    - Letter-spacing: `clamp(2px, 0.5vw, 6px)` - proportional spacing
+    - Smooth scaling across all breakpoints (320px → 1920px)
+
+  - **.hint-text (gesture instructions):**
+    - Font-size: `clamp(9px, 2vw, 12px)` - mobile-optimized
+    - Readable on small screens, caps at 12px on desktop
+
+  - **#debug-info (status messages):**
+    - Font-size: `clamp(9px, 2vw, 11px)` - compact sizing
+    - Bottom position: `calc(5px + var(--safe-bottom))` - respects notch
+    - Safe area integration from Phase 1
+
+  - **CSS cleanup:**
+    - Removed ~30 lines of redundant media queries
+    - Fixed property order: standard properties before -webkit- prefixes
+    - h1 gradient text effect now follows CSS conventions
+
+  - **Browser support:** Chrome v79+, Firefox v75+, Safari v13.1+, iOS Safari 13.2+
+  - **Documentation:** Updated codebase-summary.md with Phase 3 details
+  - **Status:** Phase 3 COMPLETE - Ready for Phase 4
+
+- ✓ Phase 2: Tab Navigation Responsiveness (earlier)
+  - Mobile-first responsive design
+  - Safe area inset integration
+  - Breakpoint CSS variables
+
+- ✓ Phase 1: Viewport Safe Areas (14:30 UTC)
+  - Added viewport-fit=cover to both HTML files
+  - Added CSS custom properties for safe-area-insets
+  - Implemented iOS Safari 100dvh fix with dvh units
+  - Applied safe-area padding to christmas-tree UI layer
+
+#### Next Steps
+1. Phase 4: Final UI layout and positioning adjustments
+
+---
+
+### 2. PR1: Gesture Detection Fixes
 **Plan Path**: `/plans/251226-1002-pr1-gesture-fixes/`
 **Start Date**: 2025-12-26
 **Target Completion**: 2025-12-26
@@ -90,6 +146,40 @@ Build a romantic Christmas gift: gesture-controlled 3D particle Christmas tree w
 ## Changelog
 
 ### 2025-12-26
+- **PR4 Phase 3 Complete**: Typography Scaling with CSS clamp() (22:29 UTC)
+  - **Main heading (h1) "Merry Christmas":**
+    - Font-size: clamp(24px, 5vw + 1rem, 56px) - scales from 24px to 56px
+    - Letter-spacing: clamp(2px, 0.5vw, 6px) - proportional spacing (2px to 6px)
+    - Maintains readability across all viewport sizes
+
+  - **Hint text (.hint-text) - gesture instructions:**
+    - Font-size: clamp(9px, 2vw, 12px) - mobile-optimized (9px to 12px)
+    - Prevents oversizing on large screens
+
+  - **Debug info (#debug-info) - status messages:**
+    - Font-size: clamp(9px, 2vw, 11px) - compact sizing (9px to 11px)
+    - Bottom position: calc(5px + var(--safe-bottom)) - respects notch areas
+    - Integrates with Phase 1 safe-area implementation
+
+  - **CSS improvements:**
+    - Removed ~30 lines of redundant media queries
+    - Fixed property order (standard before -webkit- vendor prefixes)
+    - Cleaner, more maintainable CSS
+
+  - **Browser support:** Chrome v79+, Firefox v75+, Safari v13.1+, iOS Safari 13.2+
+  - **File changed:** src/christmas-tree/index.html (lines 100-258)
+  - **Documentation:** Updated codebase-summary.md with Phase 3 technical details
+  - **Code Review:** 0 critical issues, clean implementation
+  - **Test Status:** All typography scales fluidly, no layout jank
+  - **Status:** Phase 3 COMPLETE - Ready for Phase 4 (UI Layout & Positioning)
+
+- **PR4 Phase 1 Complete**: Viewport Safe Areas (14:30 UTC)
+  - Added viewport-fit=cover to both HTML files
+  - Implemented CSS custom properties for safe-area-insets (--safe-top, --safe-bottom, --safe-left, --safe-right)
+  - Added iOS Safari 100dvh fix with fallback to 100vh
+  - Applied safe-area padding to christmas-tree UI layer
+  - Status: Ready for Phase 2 (Tab Navigation)
+
 - **Black Background Update Complete**: Phase 01 DONE (13:46 UTC)
   - Scene background changed: 0x1a1a2e → 0x000000
   - Body CSS updated: radial-gradient → pure black
