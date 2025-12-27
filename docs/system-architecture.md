@@ -67,7 +67,7 @@ High-level architecture and component design for the Three.js application.
 - **Damping**: Enabled (smoothing factor: 0.05)
 - **Interaction**: Mouse drag to rotate, scroll to zoom
 
-### Fireworks Particle System (NEW - Phase 1: 2025-12-27)
+### Fireworks Particle System (Phase 1: 2025-12-27)
 - **Type**: GPU-accelerated particle engine via THREE.Points
 - **Capacity**: 2,000 simultaneous particles
 - **Buffer Management**: 7 Float32Array buffers (positions, velocities, colors, sizes, ages, maxAges, types)
@@ -76,6 +76,19 @@ High-level architecture and component design for the Three.js application.
 - **Performance**: Single draw call, O(1) particle removal via swap-and-pop strategy
 - **Lifecycle**: spawn → update (gravity/damping) → cull (age-based) → dispose
 - **Memory**: Pre-allocated buffers (~352KB), no runtime allocation, validated zero memory leaks
+
+### Countdown Manager (Phase 3: 2025-12-27)
+- **Purpose**: 10-second countdown timer with rainbow neon "2025" text & finale trigger
+- **Components**:
+  - Rainbow HSL cycling neon material (2.5x emissive intensity, 0.8 metalness)
+  - 3D "2025" TextGeometry with bevel effect (size 3, height 0.5, bevel segments 3)
+  - Canvas-based countdown plane (256x256, golden glow effect)
+  - Bloom parameter switching (neon vs tree mode)
+- **Timer**: 10-second loop with 2s post-finale delay before reset
+- **State Machine**: isActive → countdownValue decrement → finaleTriggered → waitingAfterFinale → reset
+- **Callback**: setFinaleCallback(fn) fires at countdown=0 for New Year effect trigger
+- **Visibility**: Group-based show/hide for batch control
+- **Resource Management**: Proper Font/Texture/Material disposal on cleanup
 
 ### Audio Subsystem (PR#3)
 - **Source**: HTML5 `<audio>` element with local MP3 file
@@ -171,6 +184,41 @@ Handle results
     └─ Full success → Show success modal
     ↓
 Cleanup & reset UI
+```
+
+### New Year Countdown Pipeline (Phase 3)
+```
+Page initialization / User trigger
+    ↓
+CountdownManager.init()
+    ├─ FontLoader.load() → helvetiker font
+    ├─ createText2025() → TextGeometry mesh
+    └─ createCountdownPlane() → canvas texture plane
+    ↓
+countdown.start() called
+    ├─ Show group (visibility = true)
+    ├─ adjustBloomForNeon() → switch bloom to neon settings
+    └─ Reset state (countdownValue = 10, elapsed = 0)
+    ↓
+Animation loop: countdown.update(dt)
+    ├─ updateRainbowMaterial(dt) → rotate HSL hue continuously
+    ├─ Accumulate elapsed time
+    ├─ Every 1.0s:
+    │   ├─ Decrement countdownValue
+    │   ├─ renderCountdownValue() → update canvas texture
+    │   └─ If countdownValue === 0 → triggerFinale()
+    └─ After finale wait (2s) → resetCountdown()
+    ↓
+countdown.triggerFinale() called
+    ├─ Set finaleTriggered = true
+    ├─ Call onFinale() callback (New Year effect handler)
+    └─ Enter waitingAfterFinale state
+    ↓
+countdown.stop() / countdown.dispose()
+    ├─ Hide group (visibility = false)
+    ├─ restoreBloomForTree() → reset bloom to tree settings
+    ├─ Dispose geometry, materials, textures
+    └─ Clear all references
 ```
 
 ## Rendering Pipeline
@@ -656,14 +704,27 @@ Swap-and-pop algorithm:
 
 ## Future Enhancements
 
-1. Fireworks Phase 2: Audio-reactive triggering (sync sparklers to music beat)
-2. Trajectory trails: Add tail/ribbon effects to particles
-3. Collision detection: Particles bounce off geometry
-4. Wind/gravity fields: Per-region physics modulation
-5. Skybox/environment mapping
-6. Texture-based materials
-7. Model loader for complex geometries
-8. Performance monitoring dashboard
-9. Mobile gesture support (pinch-to-zoom)
-10. Chunked uploads for >32MB files
-11. Progressive image optimization (WebP, AVIF support)
+### Fireworks & Countdown (Phase 4+)
+1. Audio-reactive finale: Trigger finale on music beat detection
+2. Confetti burst: Spawn particles on countdown=0 callback
+3. Camera shake: Apply brief orbital disturbance on finale
+4. Trajectory trails: Add tail/ribbon effects to particles
+5. Collision detection: Particles bounce off geometry
+6. Wind/gravity fields: Per-region physics modulation
+7. Countdown sound effects: Beep at each second, finale fanfare
+
+### Visual & Rendering
+8. Skybox/environment mapping
+9. Texture-based materials
+10. Model loader for complex geometries
+11. Post-processing chains: Multiple bloom + tone mapping
+
+### Performance & Monitoring
+12. Performance monitoring dashboard (FPS, memory profiler)
+13. Particle system batching for multi-type scenes
+14. GPU instancing for large geometry counts
+
+### Mobile & Upload
+15. Mobile gesture support (pinch-to-zoom, swipe)
+16. Chunked uploads for >32MB files
+17. Progressive image optimization (WebP, AVIF support)

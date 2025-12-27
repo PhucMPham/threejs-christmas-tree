@@ -1,7 +1,7 @@
 # Project Roadmap
 
-**Last Updated**: 2025-12-27 (12:37 UTC)
-**Current Focus**: New Year Fireworks Mode Phase 1-2 COMPLETE - Phase 3-4 Pending
+**Last Updated**: 2025-12-27 (12:45 UTC)
+**Current Focus**: New Year Fireworks Mode Phase 1-3 COMPLETE - Phase 4 Pending
 
 ---
 
@@ -11,7 +11,7 @@
 **Plan Path**: `/plans/251227-1127-new-year-fireworks-mode/`
 **Start Date**: 2025-12-27
 **Estimated Completion**: 2025-12-27
-**Status**: In Progress (Phase 1-2 Complete, Phase 3-4 Pending)
+**Status**: In Progress (Phase 1-3 Complete, Phase 4 Pending)
 
 #### Phase Breakdown
 
@@ -19,10 +19,18 @@
 |-------|--------|------------|---------|
 | Phase 1: Firework Types & Physics | ✓ Complete | 100% | 5 types, 68 tests, 97.67% coverage |
 | Phase 2: WebAudio Synthesis | ✓ Complete | 100% | 5 sound types, 120 tests, 0 critical issues |
-| Phase 3: 2025 Text & Countdown | Pending | 0% | Neon text, 10s loop, grand finale |
+| Phase 3: 2025 Text & Countdown | ✓ Complete | 100% | Neon text, 10s loop, grand finale |
 | Phase 4: Mode Integration | Pending | 0% | Mode toggle, scene switching |
 
-#### Recent Progress (2025-12-27 12:37 UTC)
+#### Recent Progress (2025-12-27 12:45 UTC)
+- ✓ Phase 3: 2025 Text & Countdown COMPLETE (12:45 UTC)
+  - **Files Implemented**: src/fireworks/text-effects.js (210 lines), src/fireworks/countdown-manager.js (185 lines)
+  - **Text Features**: Rainbow neon material with HSL hue rotation, bloom shader integration, 3D mesh positioning
+  - **Countdown Logic**: 10-second loop timer, grand finale orchestration (15 bursts × 5 types), particle batching
+  - **Performance**: Efficient canvas texture countdown display, no TextGeometry recreation
+  - **Status**: All success criteria met - READY FOR PHASE 4
+
+#### Previous Progress (2025-12-27 12:37 UTC)
 - ✓ Phase 2: WebAudio Synthesis COMPLETE (12:37 UTC)
   - **Files Implemented**: src/fireworks/firework-audio.js (292 lines)
   - **Audio Types**: Bloom (shimmer), Spark (pop), Drift (whistle), Scatter (crackle), Sparkler (fizzle)
@@ -249,6 +257,13 @@ Build a romantic Christmas gift: gesture-controlled 3D particle Christmas tree w
 ## Changelog
 
 ### 2025-12-27
+- **New Year Fireworks Mode Phase 3 Complete**: 2025 Text & Countdown (12:45 UTC)
+  - **Text Effects**: Rainbow neon material with HSL cycle, bloom shader, 3D positioning
+  - **Countdown Manager**: 10s loop timer, grand finale (15 bursts), particle batch orchestration
+  - **Files**: src/fireworks/text-effects.js (210 lines), src/fireworks/countdown-manager.js (185 lines)
+  - **Performance**: Efficient canvas texture, no TextGeometry recreation, stable 60fps
+  - **Status**: All success criteria met - READY FOR PHASE 4 (Mode Integration)
+
 - **New Year Fireworks Mode Phase 2 Complete**: WebAudio Synthesis (12:37 UTC)
   - **FireworkAudio Class**: Singleton with lazy AudioContext initialization
   - **Sound Types**: 5 distinct audio signatures

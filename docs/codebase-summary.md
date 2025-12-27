@@ -68,7 +68,9 @@ threejs/
 │       ├── firework-system.js      # FireworkSystem class, physics engine (317 LOC)
 │       ├── firework-types.js       # 5 firework types, velocity generators (228 LOC)
 │       ├── firework-shaders.js     # GLSL vertex/fragment shaders (119 LOC)
-│       └── firework-audio.js       # WebAudio synthesis for 5 types, singleton pattern (292 LOC)
+│       ├── firework-audio.js       # WebAudio synthesis for 5 types, singleton pattern (292 LOC)
+│       ├── text-effects.js         # Rainbow neon material factory, countdown canvas (145 LOC)
+│       └── countdown-manager.js    # Timer logic, 2025 3D text, finale orchestration (332 LOC)
 ├── tests/               # Unit tests
 │   └── unit/
 │       └── fireworks.test.js       # Fireworks system & types tests (800 LOC)
@@ -1198,9 +1200,149 @@ Post-update:
 - Shader support: GLSL ES 100 (vec3, smoothstep, mix functions)
 - Float32Array: All modern browsers (IE11+, but not supported by app)
 
+## Phase 3: New Year Countdown Manager (2025-12-27)
+
+### Countdown Timer & Neon Text Implementation
+**Status:** Complete - Rainbow neon countdown interface with TextGeometry & canvas-based timer
+
+#### Text Effects Module (`text-effects.js`, 145 LOC)
+Provides rainbow HSL cycling neon materials and countdown canvas utilities:
+
+**1. Rainbow Neon Material Factory**
+- `createRainbowNeonMaterial()` - MeshStandardMaterial with emissive glow
+  - Settings: emissiveIntensity 2.5, metalness 0.8, roughness 0.2
+  - userData.hue for animation (0-1 cycle)
+  - Optimized for bloom pass visibility
+
+- `updateRainbowMaterial(material, dt, speed=0.1)` - Per-frame HSL hue cycling
+  - Rotates hue continuously (speed adjustable)
+  - Updates both color & emissive properties
+  - Smooth rainbow transition effect
+
+**2. Bloom Parameter Switching**
+- `adjustBloomForNeon(bloomPass)` - Neon-optimized settings
+  - Threshold: 0.5, Strength: 1.5, Radius: 0.6
+  - Maximizes glow visibility for bright text
+
+- `restoreBloomForTree(bloomPass)` - Restore tree mode settings
+  - Threshold: 0.7, Strength: 1.0, Radius: 0.4
+  - Pre-fireworacks bloom tuning
+
+**3. Countdown Canvas Material**
+- `createCountdownMaterial(canvasSize=256)` - Canvas-based 2D overlay
+  - Returns: {material, canvas, ctx, texture}
+  - MeshBasicMaterial with transparent flag
+  - DoubleSide rendering, no depth writes
+
+- `renderCountdownValue(ctx, value, texture)` - Canvas rendering with glow
+  - Golden color (#ffd700) with shadow blur (40px)
+  - Bold Arial font, 70% canvas size
+  - Multi-layer rendering for enhanced glow
+  - Marks texture for GPU update
+
+#### Countdown Manager Class (`countdown-manager.js`, 332 LOC)
+Orchestrates countdown timer, 2025 text, and finale trigger:
+
+**1. Initialization**
+- `async init()` - Font loading & element creation
+  - Loads helvetiker font via FontLoader
+  - Creates 3D "2025" TextGeometry with bevel
+  - Sets up countdown plane (256x256 canvas)
+  - Returns Promise for async flow
+
+**2. 2025 3D Text Rendering**
+- TextGeometry configuration:
+  - Size: 3 units, Height: 0.5 (beveled extrusion)
+  - Bevel: thickness 0.1, size 0.05, segments 3
+  - 12 curve segments for smooth text
+  - Centered via geometry.center()
+  - Positioned: Y = 18 (above countdown)
+
+- Rainbow neon material applied automatically
+- Positioned in GROUP for batch visibility control
+
+**3. Countdown Canvas Plane**
+- PlaneGeometry: 4x4 units (aspect 1:1)
+- Position: Y = 12 (below 2025 text)
+- Canvas texture (256x256) displays countdown value
+- Transparent background with golden number + glow
+
+**4. Timer State Machine**
+- `countdownStart: 10` - Loop duration (0-10 seconds)
+- `finaleWaitTime: 2` - Delay after reaching 0
+- States: isActive, finaleTriggered, waitingAfterFinale
+- Callback: onFinale() fires at countdown=0
+
+**5. Update Loop (`update(dt)`)**
+```
+Rainbow material animation (all time)
+  ↓
+If not active: return
+  ↓
+Accumulate elapsed time (dt)
+  ↓
+Every 1.0s: Decrement countdownValue, render to canvas
+  ↓
+At 0: Trigger finale callback
+  ↓
+After finale wait: Reset for next loop
+```
+
+**6. Public API**
+- `start()` - Begin countdown, adjust bloom for neon
+- `stop()` - Hide group, restore bloom for tree
+- `show() / hide()` - Visibility control
+- `isVisible()` - Check group.visible state
+- `setFinaleCallback(fn)` - Register finale trigger
+- `getValue()` - Get current countdown value
+- `dispose()` - Full resource cleanup
+
+**7. Configuration**
+```javascript
+CONFIG = {
+  textSize: 3,
+  textHeight: 0.5,
+  textYPosition: 18,
+  countdownPlaneSize: 4,
+  countdownYPosition: 12,
+  countdownStart: 10,
+  finaleWaitTime: 2,
+  fontPath: '/node_modules/three/examples/fonts/helvetiker_regular.typeface.json'
+}
+```
+
+#### Integration Pattern
+```javascript
+// In main Three.js scene
+const countdown = new CountdownManager(scene, bloomPass);
+await countdown.init();
+
+// Bind finale event (trigger confetti/new year effect)
+countdown.setFinaleCallback(() => {
+  triggerNewYearFinale();  // Custom handler
+});
+
+// In animation loop
+countdown.update(deltaTime);
+
+// Start when user triggers
+countdown.start();
+
+// Stop & cleanup
+countdown.dispose();
+```
+
+#### Technical Highlights
+- **HSL Color Space:** Native CSS HSL for smooth rainbow cycling (no manual RGB conversion)
+- **Canvas Overlay:** Real-time number rendering avoids geometry updates
+- **Group-Based Visibility:** Batch show/hide with single group.visible toggle
+- **Async Font Loading:** FontLoader promise ensures text creation only after load
+- **Bloom Switching:** Dynamically adjusts post-processing for visual context
+- **Resource Lifecycle:** Proper dispose() cleanup prevents WebGL leaks
+
 ## Maintenance Notes
 
-- **Last Update:** December 27, 2025 (Phase 2: WebAudio Synthesis for Fireworks)
+- **Last Update:** December 27, 2025 (Phase 3: Countdown Manager & Neon Text)
 - **Code Stability:** Stable (production-ready, responsive design complete, upload pipeline tested)
 - **Technical Debt:** Minimal (all known issues addressed)
 - **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix, SRI integrity hash)
