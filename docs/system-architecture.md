@@ -11,6 +11,10 @@ High-level architecture and component design for the Three.js application.
 │  ├─ WebGL Canvas (Three.js Render)                  │
 │  │   └─ Three.js Scene Graph                        │
 │  │       ├─ Camera, Meshes, Lights, Controls       │
+│  │       └─ Particle System (Fireworks) NEW         │
+│  │           ├─ Float32Array Buffers (2000 max)    │
+│  │           ├─ ShaderMaterial (5 types)           │
+│  │           └─ Points Mesh (GPU-accelerated)      │
 │  │                                                   │
 │  ├─ Audio Subsystem (HTML5)                         │
 │  │   ├─ Audio Element (bgMusic, loop, preload)     │
@@ -62,6 +66,79 @@ High-level architecture and component design for the Three.js application.
 - **Type**: OrbitControls
 - **Damping**: Enabled (smoothing factor: 0.05)
 - **Interaction**: Mouse drag to rotate, scroll to zoom
+
+### Fireworks Particle System (Phase 1: 2025-12-27)
+- **Type**: GPU-accelerated particle engine via THREE.Points
+- **Capacity**: 2,000 simultaneous particles
+- **Buffer Management**: 7 Float32Array buffers (positions, velocities, colors, sizes, ages, maxAges, types)
+- **Types**: 5 distinct behaviors (Bloom, Spark, Drift, Scatter, Sparkler) with unique physics
+- **Shaders**: Custom GLSL vertex/fragment for particle rendering with additive blending
+- **Performance**: Single draw call, O(1) particle removal via swap-and-pop strategy
+- **Lifecycle**: spawn → update (gravity/damping) → cull (age-based) → dispose
+- **Memory**: Pre-allocated buffers (~352KB), no runtime allocation, validated zero memory leaks
+
+### Countdown Manager (Phase 3: 2025-12-27)
+- **Purpose**: 10-second countdown timer with rainbow neon "2025" text & finale trigger
+- **Components**:
+  - Rainbow HSL cycling neon material (0.8 emissive intensity, 0.3 metalness)
+  - 3D "2025" TextGeometry with bevel effect (size 2, height 0.3, bevel segments 3)
+  - Canvas-based countdown plane (256x256, golden glow effect)
+  - Bloom parameter switching (neon vs tree mode)
+- **Timer**: 10-second loop with 2s post-finale delay before reset
+- **State Machine**: isActive → countdownValue decrement → finaleTriggered → waitingAfterFinale → reset
+- **Callback**: setFinaleCallback(fn) fires at countdown=0 for New Year effect trigger
+- **Visibility**: Group-based show/hide for batch control
+- **Resource Management**: Proper Font/Texture/Material disposal on cleanup
+
+### New Year Mode Orchestration Layer (Phase 4: 2025-12-27)
+- **Purpose**: Master controller for New Year fireworks mode - coordinates all sub-systems
+- **File**: `src/fireworks/new-year-mode.js`
+- **Key Responsibilities**:
+  - Mode state management (active/inactive with localStorage persistence)
+  - Component lifecycle coordination (fireworks, audio, countdown, UI button)
+  - Scene visibility toggling (hide Christmas tree & snow, show countdown elements)
+  - Bloom parameter management (switch between tree/fireworks post-processing presets)
+- **Components Managed**:
+  - FireworkSystem: Particle engine for effects
+  - FireworkAudio: WebAudio synthesis (lazy initialized on user interaction)
+  - CountdownManager: 10-second timer with 2025 text & finale callback
+  - UI Button: CSS .active class for visual feedback
+- **State Transitions**:
+  ```
+  [Inactive] --activate()--> [Active]
+    ├─ Hide mainGroup & snowSystem
+    ├─ Show countdown group
+    ├─ Switch bloom: threshold 0.85→0.5, strength 0.25→1.5, radius 0.3→0.6
+    ├─ Start countdown timer
+    └─ Save preference to localStorage
+
+  [Active] --deactivate()--> [Inactive]
+    ├─ Show mainGroup & snowSystem
+    ├─ Hide countdown group
+    ├─ Clear firework particles
+    ├─ Restore bloom: threshold 0.5→0.85, strength 1.5→0.25, radius 0.6→0.3
+    ├─ Stop countdown timer
+    └─ Save preference to localStorage
+  ```
+- **Interaction Patterns**:
+  - **Auto-Spawn**: Cycles through firework types every 1.5s (BLOOM→SPARK→DRIFT→SCATTER→SPARKLER)
+  - **Click-to-Spawn**: Converts screen coordinates to 3D world position via camera unprojection
+    - Raycasts from camera through screen point to 30 units distance
+    - Spawns firework at ray-cast position with type cycling
+  - **Finale Trigger**: CountdownManager calls onFinale callback at countdown=0
+    - Spawns 3 bursts of each firework type with 200ms stagger
+    - Creates 15 total particles across 5 types over 1 second
+- **Audio Integration**:
+  - Lazy initialization on first activation (user gesture required)
+  - Audio context resumed on each activate() for browser autoplay policy compliance
+  - Plays sound effect on each firework spawn (type-specific synthesis)
+- **Button State Management**:
+  - querySelector('#newyear-btn') added/removed .active class on toggle
+  - Provides visual feedback for mode state
+- **Preference Persistence**:
+  - Saves isActive state to localStorage['newYearModeEnabled']
+  - Checked on init but does NOT auto-activate (requires explicit user toggle)
+  - Graceful fallback if localStorage unavailable
 
 ### Audio Subsystem (PR#3)
 - **Source**: HTML5 `<audio>` element with local MP3 file
@@ -157,6 +234,41 @@ Handle results
     └─ Full success → Show success modal
     ↓
 Cleanup & reset UI
+```
+
+### New Year Countdown Pipeline (Phase 3)
+```
+Page initialization / User trigger
+    ↓
+CountdownManager.init()
+    ├─ FontLoader.load() → helvetiker font
+    ├─ createText2025() → TextGeometry mesh
+    └─ createCountdownPlane() → canvas texture plane
+    ↓
+countdown.start() called
+    ├─ Show group (visibility = true)
+    ├─ adjustBloomForNeon() → switch bloom to neon settings
+    └─ Reset state (countdownValue = 10, elapsed = 0)
+    ↓
+Animation loop: countdown.update(dt)
+    ├─ updateRainbowMaterial(dt) → rotate HSL hue continuously
+    ├─ Accumulate elapsed time
+    ├─ Every 1.0s:
+    │   ├─ Decrement countdownValue
+    │   ├─ renderCountdownValue() → update canvas texture
+    │   └─ If countdownValue === 0 → triggerFinale()
+    └─ After finale wait (2s) → resetCountdown()
+    ↓
+countdown.triggerFinale() called
+    ├─ Set finaleTriggered = true
+    ├─ Call onFinale() callback (New Year effect handler)
+    └─ Enter waitingAfterFinale state
+    ↓
+countdown.stop() / countdown.dispose()
+    ├─ Hide group (visibility = false)
+    ├─ restoreBloomForTree() → reset bloom to tree settings
+    ├─ Dispose geometry, materials, textures
+    └─ Clear all references
 ```
 
 ## Rendering Pipeline
@@ -468,12 +580,201 @@ const options = {
 - Maintains ~90% quality for visual fidelity
 - Fallback: Returns original if conversion fails
 
+## Fireworks System Technical Details (Phase 1: 2025-12-27)
+
+### Particle Lifecycle & Physics
+
+**Spawn Phase (spawn method):**
+```
+Input: origin (Vector3), type (enum 0-4, default random)
+  1. Allocate particle slots: COUNT = FIREWORK_TYPES[type].particles
+  2. Set positions: All particles at origin
+  3. Set velocities: type-specific distribution
+  4. Set colors: Random from type's palette
+  5. Set sizes: Random within type's size range
+  6. Set ages: 0 (birth)
+  7. Set maxAges: Random within type's duration range
+  8. Track burst metadata: startIndex, count, type, spawnTime
+  9. Return: success flag (false if insufficient capacity)
+```
+
+**Update Phase (update method, called per frame):**
+```
+For each active particle:
+  1. Apply gravity: velocities[i3+1] += config.gravity
+  2. Apply damping: velocities *= config.damping (air resistance)
+  3. Update position: positions += velocities
+  4. Age particle: ages[i] += deltaTime
+  5. Mark GPU buffers dirty: needsUpdate = true
+  6. Cull dead particles: age >= maxAge → remove
+```
+
+**Cull Phase (cullDeadParticles method, O(n) worst case):**
+```
+Swap-and-pop algorithm:
+  i = 0
+  while i < activeCount:
+    if ages[i] >= maxAges[i]:
+      swap(particle[i], particle[activeCount-1])
+      activeCount--
+    else:
+      i++
+```
+
+### Type-Specific Physics Parameters
+
+**Bloom Type (Firework-like burst):**
+- Velocity distribution: Fibonacci sphere (golden ratio angle per particle)
+- Jitter: 10% randomness on each axis
+- Speed variation: 80%-120% of base speed
+- Effect: Even spherical expansion with slight noise
+- Use case: Classic firework burst
+
+**Spark Type (Fast spreading):**
+- Velocity distribution: Spherical coordinates (theta 0-2π, phi 0-π)
+- Speed variation: 70%-130% of base speed
+- Effect: Random omnidirectional high-speed particles
+- Use case: Fast crackling sparks
+
+**Drift Type (Floating ascending):**
+- Velocity distribution: Horizontal bias with slight upward tendency
+- Horizontal component: 80%-120% of base speed
+- Vertical component: 20%-50% of base speed (always positive y)
+- Effect: Particles float horizontally while gently rising
+- Use case: Floating ember/dust effect
+
+**Scatter Type (Chaotic random):**
+- Velocity distribution: Completely random in all directions
+- Speed variation: 50%-150% of base speed
+- Effect: Chaotic unpredictable trajectories
+- Use case: Explosive dispersal pattern
+
+**Sparkler Type (Continuous fizzle):**
+- Velocity distribution: Mostly upward with minimal spread
+- Vertical component: 50%-100% of base speed (always positive)
+- Horizontal spread: Small radius around vertical axis
+- Effect: Thin upward stream with slight wobble
+- Use case: Sparkler stick effect
+
+### GPU Rendering Pipeline
+
+**Vertex Shader (Standard Fireworks):**
+- Input: position, size, age, maxAge, type, color
+- Calculations:
+  - Life ratio: vLife = 1 - (age / maxAge)
+  - Point size: baseSize * vLife * pixelRatio * (100 / -mvPosition.z)
+  - Min size clamp: max(size, 1.0) to prevent disappearance
+- Output: gl_Position, gl_PointSize, vLife, vColor, vType
+
+**Fragment Shader (Standard Fireworks):**
+- Input: gl_PointCoord (0-1 on point quad), vLife, vColor
+- Calculations:
+  - Distance from center: dist = length(gl_PointCoord - 0.5)
+  - Discard pixels: if dist > 0.5
+  - Soft edge: alpha = smoothstep(0.5, 0.0, dist) * vLife
+  - Glow boost: color + 0.3 * vLife (additive)
+- Output: gl_FragColor (color, alpha)
+
+**Sparkler Vertex Shader (Animation):**
+- Additional: Noise-based flicker via hash(age * 100 + uTime)
+- Size modulation: size * (0.5 + noise * 0.5) * vLife
+- Effect: Sparkling size variation independent of physics
+
+**Sparkler Fragment Shader (Glow):**
+- Hot core effect: mix(white, color, dist * 2.0)
+- Sparkle intensity: radialGradient * (0.7 + noise * 0.3)
+- Result: Warm glowing center fading to color edge
+
+### Buffer Attributes & Updates
+
+**GPU Buffer Attributes (7 total):**
+| Attribute | Type | Size | Updates | Purpose |
+|-----------|------|------|---------|---------|
+| position | vec3 | 3 * 2000 | Every frame | Particle locations |
+| color | vec3 | 3 * 2000 | Every frame | RGB color per particle |
+| size | float | 1 * 2000 | Every frame | Point size scaling |
+| age | float | 1 * 2000 | Every frame | Current age |
+| maxAge | float | 1 * 2000 | Spawn only | Lifespan per particle |
+| type | float | 1 * 2000 | Spawn only | Type enum (0-4) |
+| (normal) | none | - | - | Not used (depthWrite=false) |
+
+**Update Strategy:**
+- Mark all attributes dirty every frame via needsUpdate = true
+- THREE.js syncs to GPU in next render call
+- Draw range optimized: setDrawRange(0, activeCount)
+
+### Performance Optimization Techniques
+
+1. **Pre-allocated Buffers:** Float32Array created at construction, reused forever
+2. **Swap-and-pop Removal:** O(1) particle culling, no array copying
+3. **Single Draw Call:** All particles rendered in one glDrawArrays
+4. **Additive Blending:** Eliminates Z-sort requirement
+5. **Frustum Culling Disabled:** Particles can spawn anywhere in view
+6. **Burst Tracking:** Limited to 20 active bursts (LRU cleanup)
+7. **No Dynamic Allocation:** Zero GC pressure during runtime
+8. **PixelRatio Limiting:** Max 2x to prevent massive points on retina
+
+### Memory Footprint
+
+**Per-Particle Data (continuous arrays):**
+- Positions: 3 floats = 12 bytes
+- Velocities: 3 floats = 12 bytes (CPU-side, not GPU)
+- Colors: 3 floats = 12 bytes
+- Sizes: 1 float = 4 bytes
+- Ages: 1 float = 4 bytes
+- MaxAges: 1 float = 4 bytes
+- Types: 1 float = 4 bytes
+- **Subtotal: 52 bytes/particle**
+
+**For 2000 particles:**
+- All buffers: 2000 * 52 = 104KB (CPU)
+- GPU buffers: ~200KB (vec3/float storage)
+- Materials & geometry: ~48KB
+- **Total: ~352KB**
+
+### Integration with Scene
+
+**Scene Graph Position:**
+- FireworkSystem creates THREE.Points mesh
+- Added to scene via scene.add(this.points)
+- Name: 'fireworkSystem' (for debugging)
+- Layer: Default layer, renders with main pass
+
+**Rendering Order:**
+1. Clear canvas
+2. Render opaque meshes (camera, lighting applied)
+3. Render transparent: Fireworks (additive blending, last)
+4. Display result
+
+**Z-Depth Handling:**
+- depthWrite: false prevents depth buffer updates
+- Particles don't occlude each other
+- Additive blending: Last particle always adds to what's below
+- Result: Natural light accumulation
+
 ## Future Enhancements
 
-1. Add skybox/environment mapping
-2. Implement texture-based materials
-3. Add model loader for complex geometries
-4. Performance monitoring dashboard
-5. Mobile gesture support (pinch-to-zoom)
-6. Chunked uploads for >32MB files
-7. Progressive image optimization (WebP, AVIF support)
+### Fireworks & Countdown (Phase 4+)
+1. Audio-reactive finale: Trigger finale on music beat detection
+2. Confetti burst: Spawn particles on countdown=0 callback
+3. Camera shake: Apply brief orbital disturbance on finale
+4. Trajectory trails: Add tail/ribbon effects to particles
+5. Collision detection: Particles bounce off geometry
+6. Wind/gravity fields: Per-region physics modulation
+7. Countdown sound effects: Beep at each second, finale fanfare
+
+### Visual & Rendering
+8. Skybox/environment mapping
+9. Texture-based materials
+10. Model loader for complex geometries
+11. Post-processing chains: Multiple bloom + tone mapping
+
+### Performance & Monitoring
+12. Performance monitoring dashboard (FPS, memory profiler)
+13. Particle system batching for multi-type scenes
+14. GPU instancing for large geometry counts
+
+### Mobile & Upload
+15. Mobile gesture support (pinch-to-zoom, swipe)
+16. Chunked uploads for >32MB files
+17. Progressive image optimization (WebP, AVIF support)

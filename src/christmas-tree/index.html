@@ -478,6 +478,7 @@
             <div class="mode-btn" onclick="setMode('SCATTER')" title="Scatter Mode">✨</div>
             <div class="mode-btn" onclick="setMode('FOCUS_RANDOM')" title="Focus Mode">🔍</div>
             <div class="mode-btn" id="aurora-btn" onclick="toggleAuroraTheme()" title="Toggle Aurora Theme">🌌</div>
+            <div class="mode-btn" id="newyear-btn" onclick="toggleNewYearMode()" title="New Year Mode (N)">🎆</div>
         </div>
 
         <!-- 【美化版统计仪表盘】 -->
@@ -513,6 +514,7 @@
         import { isMobileDevice, getMobileGestureHints } from './mobile-detection.js';
         import { checkCameraAvailability, requestCameraAccess, stopCamera } from './camera-permissions.js';
         import { initHandLandmarker, processHandGesture } from './gesture-detection.js';
+        import { NewYearMode } from '../fireworks/new-year-mode.js';
 
         // --- 核心配置 ---
         // Theme configurations: Classic and Cosmic Aurora
@@ -586,8 +588,9 @@
         };
 
         let scene, camera, renderer, composer;
-        let mainGroup; 
+        let mainGroup;
         let clock = new THREE.Clock();
+        let newYearMode = null;
         let particleSystem = []; 
         let photoMeshGroup = new THREE.Group();
         let handLandmarker, video;
@@ -610,6 +613,13 @@
             } else {
                 STATE.mode = mode;
                 if (mode === 'TREE') STATE.focusTarget = null;
+            }
+        };
+
+        // New Year mode toggle function
+        window.toggleNewYearMode = () => {
+            if (newYearMode) {
+                newYearMode.toggle();
             }
         };
 
@@ -704,6 +714,10 @@
             setupEvents();
             setupTouchAndClick();
 
+            // Initialize New Year mode after postprocessing (needs bloomPass, snowSystem)
+            newYearMode = new NewYearMode(scene, camera, mainGroup, composer.passes[1], snowSystem);
+            await newYearMode.init();
+
             // Set mobile-friendly hint text
             const isMobile = isMobileDevice();
             if (isMobile) {
@@ -786,6 +800,12 @@
                     const particle = particleSystem.find(p => p.mesh === obj && p.type === 'PHOTO');
                     if (particle) { clickedPhoto = particle; break; }
                 }
+                // Handle New Year mode click - spawn firework
+                if (newYearMode && newYearMode.getIsActive()) {
+                    newYearMode.spawnAtScreenPosition(e.clientX, e.clientY);
+                    return;
+                }
+
                 if (clickedPhoto) {
                     STATE.mode = 'FOCUS';
                     STATE.focusTarget = clickedPhoto.mesh;
@@ -1320,6 +1340,11 @@
                     // 【新增】Toggle stats visibility
                     const stats = document.getElementById('footer-stats');
                     if (stats) stats.classList.toggle('ui-hidden');
+                } else if (key === 'n') {
+                    // Toggle New Year mode
+                    if (newYearMode) {
+                        newYearMode.toggle();
+                    }
                 }
             });
         }
@@ -1370,6 +1395,12 @@
             particleSystem.forEach(p => p.update(dt, STATE.mode, STATE.focusTarget));
             updateSnow();
             updateAuroraLights(clock.elapsedTime);
+
+            // Update New Year mode (fireworks, countdown)
+            if (newYearMode) {
+                newYearMode.update(dt);
+            }
+
             composer.render();
         }
 // <!--
