@@ -1615,14 +1615,44 @@ clearGestureState()
 - Gesture methods optional (only called when hand detected)
 - Backward compatible with timer-only countdown mode
 
+### Index.html Gesture Integration Points (Phase 4)
+**File:** `src/christmas-tree/index.html` (lines 513-1350)
+**Changes:** Gesture API imports and state management for NewYearMode
+
+**1. Module Imports (Lines 513-523)**
+- Added imports: `countFingers`, `getHandCenter`, `getStableFingerCount`
+- Enables finger counting and hand position tracking
+- Complements existing `processHandGesture()` for gesture detection
+
+**2. Gesture State Object (Lines 586-594)**
+```javascript
+const GESTURE_STATE = {
+  lastFingerCount: 5,           // Previous finger count
+  handLostTime: 0,              // Elapsed time since hand lost
+  handLostThreshold: 0.5        // 500ms before clearing gesture state
+};
+```
+
+**3. New Year Mode UI Hints (Lines 633-641)**
+- Dynamically updates debug info when toggling modes
+- Shows "Show hand to control countdown" in NewYearMode
+- Shows "Drag to rotate • Tap photo to view" in normal mode
+- Provides user-friendly mode-specific guidance
+
+**4. Gesture Processing Integration (Lines 1303-1350)**
+- Extracts finger count from gesture detection
+- Passes coordinates to NewYearMode.setGestureState()
+- Tracks hand loss with timeout (0.5s before clearGestureState)
+- Maintains backward compatibility with tree rotation controls
+
 ### Coverage Configuration Fix (vitest.config.js)
 **File:** `vitest.config.js` (lines 8-21)
 **Change:** Updated coverage exclusion list for accuracy
 - **From:** Broad `src/**` inclusion with hardcoded exclusions
-- **To:** Narrowed include paths + specific browser-API exclusions
-- **New excludes:** Mobile detection, camera permissions, audio synthesis, new-year-mode
-- **Rationale:** Excludes browser-specific modules that can't be unit tested in Node environment
-- **Impact:** Coverage reports now accurately reflect testable code (FireworkSystem, types, shaders, tests)
+- **To:** Narrowed include paths (lib/, routes/, src/fireworks/) + specific browser-API exclusions
+- **Exclusions:** Mobile detection, camera permissions, audio synthesis, new-year-mode
+- **Rationale:** Browser-specific modules can't be unit tested in Node environment
+- **Impact:** Coverage reports now accurately reflect testable code (FireworkSystem, types, shaders)
 
 ## Maintenance Notes
 
