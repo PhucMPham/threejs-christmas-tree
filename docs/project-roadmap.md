@@ -1,13 +1,38 @@
 # Project Roadmap
 
-**Last Updated**: 2025-12-27 (12:45 UTC)
-**Current Focus**: New Year Fireworks Mode Phase 1-3 COMPLETE - Phase 4 Pending
+**Last Updated**: 2025-12-27 (14:29 UTC)
+**Current Focus**: New Year Fireworks Mode Phase 1-3 COMPLETE - Phase 4 Pending; Gesture Finger Countdown Phase 1 COMPLETE
 
 ---
 
 ## Active Projects
 
-### 0. New Year Fireworks Mode
+### 0. Gesture Finger Countdown
+**Plan Path**: `/plans/251227-1351-gesture-finger-countdown/`
+**Start Date**: 2025-12-27
+**Estimated Completion**: 2025-12-27
+**Status**: In Progress (Phase 1 Complete)
+
+#### Phase Breakdown
+
+| Phase | Status | Completion | Details |
+|-------|--------|------------|---------|
+| Phase 1: Finger Counting Algorithm | ✓ Complete | 100% | countFingers(), getHandCenter(), hysteresis |
+| Phase 2: Tension Effect System | Pending | 0% | Particle compression toward hand |
+| Phase 3: Countdown Integration | Pending | 0% | Display finger count, track 0-finger hold |
+| Phase 4: Main Integration & Polish | Pending | 0% | Wire gesture detection to new-year-mode |
+
+#### Recent Progress (2025-12-27 14:29 UTC)
+- ✓ Phase 1: Finger Counting Algorithm COMPLETE (14:29 UTC)
+  - **Files Implemented**: src/christmas-tree/gesture-detection.js
+  - **Functions**: countFingers() (0-5 detection), getHandCenter() (position tracking), getStableFingerCount() (hysteresis)
+  - **Features**: MediaPipe hand landmarks analysis, confidence scoring, 100ms hysteresis to prevent flickering
+  - **Testing**: 13/13 tests passed
+  - **Status**: All success criteria met - READY FOR PHASE 2
+
+---
+
+### 1. New Year Fireworks Mode
 **Plan Path**: `/plans/251227-1127-new-year-fireworks-mode/`
 **Start Date**: 2025-12-27
 **Estimated Completion**: 2025-12-27
@@ -257,6 +282,16 @@ Build a romantic Christmas gift: gesture-controlled 3D particle Christmas tree w
 ## Changelog
 
 ### 2025-12-27
+- **Gesture Finger Countdown Phase 1 Complete**: Finger Counting Algorithm (14:29 UTC)
+  - **Functions Implemented**: countFingers(), getHandCenter(), getStableFingerCount()
+  - **MediaPipe Integration**: Analyzes hand landmarks to detect 0-5 extended fingers
+  - **Hysteresis System**: 100ms debounce prevents finger count flickering
+  - **Position Tracking**: Normalized palm center (-1 to 1 range) for hand positioning
+  - **Confidence Scoring**: Calculates detection confidence based on hand size
+  - **Files**: src/christmas-tree/gesture-detection.js
+  - **Testing**: 13/13 tests passed, all success criteria validated
+  - **Status**: Ready for Phase 2 (Tension Effect System)
+
 - **New Year Fireworks Mode Phase 3 Complete**: 2025 Text & Countdown (12:45 UTC)
   - **Text Effects**: Rainbow neon material with HSL cycle, bloom shader, 3D positioning
   - **Countdown Manager**: 10s loop timer, grand finale (15 bursts), particle batch orchestration

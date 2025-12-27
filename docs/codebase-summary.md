@@ -417,8 +417,8 @@ Verification checks:
   - Comprehensive error handling with error codes
 - Error codes: `INSECURE_CONTEXT`, `NOT_SUPPORTED`, `NO_CAMERA`, `PERMISSION_DENIED`, `IN_USE`, `OVERCONSTRAINED`, `ABORTED`, `UNKNOWN`
 
-**3. `gesture-detection.js` (110 LOC)**
-- Exports: `initHandLandmarker()`, `processHandGesture()`
+**3. `gesture-detection.js` (199 LOC)**
+- Exports: `initHandLandmarker()`, `processHandGesture()`, `countFingers()`, `getHandCenter()`, `getStableFingerCount()`
 - Dependencies: `mobile-detection.js`
 - Features:
   - MediaPipe HandLandmarker initialization with GPU/CPU fallback
@@ -426,6 +426,9 @@ Verification checks:
   - Gesture types: `FIST` (closed), `OPEN` (spread), `PINCH` (thumb-index close)
   - Hand position tracking (normalized -1 to 1)
   - Noise filtering (hand size threshold)
+  - **NEW (Phase 1):** Finger counting (0-5 extended fingers) with confidence metric
+  - **NEW (Phase 1):** Hand center position calculation (palm average)
+  - **NEW (Phase 1):** Hysteresis-based stable finger count (100ms debounce) to prevent flickering
 
 #### Refactored index.html Integration
 - **Deletions:** `camera-gesture-controller.js` removed
@@ -1340,9 +1343,65 @@ countdown.dispose();
 - **Bloom Switching:** Dynamically adjusts post-processing for visual context
 - **Resource Lifecycle:** Proper dispose() cleanup prevents WebGL leaks
 
+## Gesture Finger Countdown Feature - Phase 1 (2025-12-27)
+
+### Finger Counting & Hand Position Tracking
+**Status:** Complete - Three new utilities added to gesture-detection.js for countdown interaction
+
+#### New Functions Added to `gesture-detection.js`
+
+**1. `countFingers(landmarks)` - Extended finger detection**
+- **Returns:** `{count: number (0-5), confidence: number (0-1)}`
+- **Algorithm:**
+  - Thumb: Extended if tip (landmark 4) is >0.05 units horizontally from index MCP (landmark 5)
+  - Index/Middle/Ring/Pinky: Extended if tip Y-coordinate < PIP Y-coordinate (tip above second joint)
+- **Confidence:** Based on hand size relative to 0.15 unit baseline
+- **Edge cases:** Handles empty/null landmarks with {count: 0, confidence: 0}
+- **Use case:** Input for countdown timer (0=closed fist, 5=open hand)
+
+**2. `getHandCenter(landmarks)` - Palm center position**
+- **Returns:** `{x: number, y: number (-1 to 1), detected: boolean}`
+- **Calculation:** Average of wrist (0), index MCP (5), and pinky MCP (17) landmarks
+- **Normalization:** Scales to -1 to 1 range (viewport-relative coordinates)
+- **Edge cases:** Returns {x: 0, y: 0, detected: false} for invalid input
+- **Use case:** Hand position tracking for gesture control mapping
+
+**3. `getStableFingerCount(rawCount)` - Hysteresis-based debouncing**
+- **Returns:** Stable count (0-5) with 100ms hysteresis window
+- **Mechanism:**
+  - Tracks lastFingerCount and fingerCountStableTime at module scope
+  - On count change: Waits 100ms before accepting new value (prevents flicker)
+  - HYSTERESIS_MS constant: 100ms (tuned for MediaPipe 30fps capture)
+- **State machine:**
+  - Same count → reset timer, return previous
+  - Count change → start timer
+  - Timer expires → accept new count
+- **Use case:** Smooth countdown control despite MediaPipe detection noise
+
+#### Module Scope Variables (Lines 8-11)
+```javascript
+let lastFingerCount = 0;              // Persists across calls
+let fingerCountStableTime = 0;        // Timestamp of last change
+const FINGER_HYSTERESIS_MS = 100;     // 100ms debounce window
+```
+
+#### Test Coverage (`tests/unit/gesture-detection.test.js`)
+**13 new tests (Vitest framework):**
+- `countFingers`: 5 tests (empty, null, 5-finger, 0-finger fist, 2-finger peace sign, 1-finger thumbs up)
+- `getHandCenter`: 4 tests (empty, null, valid normalized position, center at 0,0)
+- `getStableFingerCount`: 4 tests (repeated same value, hysteresis delay acceptance, valid number range, type checks)
+
+#### Integration Ready
+- **No breaking changes:** Existing `processHandGesture()` unmodified
+- **Backward compatible:** Existing gesture control flows unchanged
+- **Import pattern:**
+  ```javascript
+  import { countFingers, getHandCenter, getStableFingerCount } from './gesture-detection.js';
+  ```
+
 ## Maintenance Notes
 
-- **Last Update:** December 27, 2025 (Phase 3: Countdown Manager & Neon Text)
+- **Last Update:** December 27, 2025 (Gesture Finger Countdown Phase 1: Finger counting functions)
 - **Code Stability:** Stable (production-ready, responsive design complete, upload pipeline tested)
 - **Technical Debt:** Minimal (all known issues addressed)
 - **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix, SRI integrity hash)

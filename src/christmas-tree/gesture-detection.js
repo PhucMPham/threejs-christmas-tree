@@ -5,6 +5,11 @@
 
 import { isMobileDevice } from './mobile-detection.js';
 
+// Hysteresis state for stable finger counting
+let lastFingerCount = 0;
+let fingerCountStableTime = 0;
+const FINGER_HYSTERESIS_MS = 100;
+
 // MediaPipe model configuration
 const MEDIAPIPE_CONFIG = {
   modelUrl: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
@@ -106,4 +111,88 @@ export function processHandGesture(landmarks) {
   }
 
   return { detected: true, gesture, handX, handY };
+}
+
+/**
+ * Count extended fingers (0-5) from hand landmarks
+ * @param {Array} landmarks - MediaPipe hand landmarks array
+ * @returns {{count: number, confidence: number}}
+ */
+export function countFingers(landmarks) {
+  if (!landmarks || landmarks.length === 0) {
+    return { count: 0, confidence: 0 };
+  }
+
+  const lm = landmarks[0];
+  let count = 0;
+
+  const wrist = lm[0];
+
+  // Thumb: extended if tip (4) is far from index MCP (5) horizontally
+  const thumbTip = lm[4];
+  const indexMcp = lm[5];
+  const thumbExtended = Math.abs(thumbTip.x - indexMcp.x) > 0.05;
+  if (thumbExtended) count++;
+
+  // Other fingers: extended if tip is above PIP (lower y = higher on screen)
+  if (lm[8].y < lm[6].y) count++;   // Index
+  if (lm[12].y < lm[10].y) count++; // Middle
+  if (lm[16].y < lm[14].y) count++; // Ring
+  if (lm[20].y < lm[18].y) count++; // Pinky
+
+  // Confidence based on hand size
+  const handSize = Math.hypot(lm[9].x - wrist.x, lm[9].y - wrist.y);
+  const confidence = Math.min(1, handSize / 0.15);
+
+  return { count, confidence };
+}
+
+/**
+ * Get normalized hand center position (-1 to 1 range)
+ * @param {Array} landmarks - MediaPipe hand landmarks array
+ * @returns {{x: number, y: number, detected: boolean}}
+ */
+export function getHandCenter(landmarks) {
+  if (!landmarks || landmarks.length === 0) {
+    return { x: 0, y: 0, detected: false };
+  }
+
+  const lm = landmarks[0];
+
+  // Palm center: average of wrist, index MCP, pinky MCP
+  const palmX = (lm[0].x + lm[5].x + lm[17].x) / 3;
+  const palmY = (lm[0].y + lm[5].y + lm[17].y) / 3;
+
+  // Normalize to -1 to 1 range
+  const x = (palmX - 0.5) * 2;
+  const y = (palmY - 0.5) * 2;
+
+  return { x, y, detected: true };
+}
+
+/**
+ * Get stable finger count with hysteresis to prevent flickering
+ * @param {number} rawCount - Current detected finger count
+ * @returns {number} Stable finger count
+ */
+export function getStableFingerCount(rawCount) {
+  const now = performance.now();
+
+  if (rawCount === lastFingerCount) {
+    fingerCountStableTime = 0;
+    return lastFingerCount;
+  }
+
+  // Count changed - check stability
+  if (fingerCountStableTime === 0) {
+    fingerCountStableTime = now;
+  }
+
+  if (now - fingerCountStableTime >= FINGER_HYSTERESIS_MS) {
+    lastFingerCount = rawCount;
+    fingerCountStableTime = 0;
+    return rawCount;
+  }
+
+  return lastFingerCount;
 }
