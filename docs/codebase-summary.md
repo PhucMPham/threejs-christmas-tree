@@ -3,7 +3,7 @@
 Auto-generated comprehensive overview of the Three.js project codebase.
 
 **Generated:** December 27, 2025
-**Last Update:** Phase 3 Countdown Integration with Gesture Control API (setExternalValue, clearExternalValue, isExternallyControlled)
+**Last Update:** Phase 4 Gesture-Countdown Integration with external value control and gesture finale (setGestureState, clearGestureState, triggerGestureFinale)
 **Tool:** repomix v1.9.2
 **Total Files:** 9
 **Total Tokens:** 5,544+ (updated with gesture API docs)
@@ -1530,10 +1530,104 @@ clearGestureState()
 - **Finalization:** Listen to countdown.onFinale for end-of-countdown sequence
 - **Video Element:** Check video.readyState >= HAVE_CURRENT_DATA before calling methods
 
+## Phase 4 Updates - Gesture-Countdown Integration (2025-12-27)
+
+### NewYearMode Gesture Control Methods
+**File:** `src/fireworks/new-year-mode.js` (lines 52-319)
+**Status:** Complete - Gesture state orchestration with fist-hold finale trigger
+
+#### 1. Gesture State Initialization (Lines 52-60)
+Added gesture tracking properties to constructor:
+- `gestureMode` (boolean): Flag for active gesture detection
+- `fingerCount` (0-5): Current stable finger count
+- `tensionCenter` (THREE.Vector3): World position for particle compression center
+- `fistHoldTime` (number): Accumulated time fist held closed
+- `fistHoldThreshold` (0.5s): Duration before triggering finale
+- `gestureFinaleTriggered` (boolean): Prevents duplicate finale triggers
+
+#### 2. `setGestureState(fingerCount, handX, handY, dt)` (Lines 239-276)
+Processes gesture input and updates countdown/firework systems:
+- **Parameters:**
+  - `fingerCount` (0-5): Finger count from gesture-detection
+  - `handX` (-1 to 1): Normalized horizontal hand position
+  - `handY` (-1 to 1): Normalized vertical hand position
+  - `dt` (0.016): Delta time for hold tracking
+- **Behavior:**
+  - Maps screen coordinates to world space (-15 to +15 X, 0-10 Y)
+  - Updates countdown display via `countdown.setExternalValue(fingerCount)`
+  - Applies particle tension via `fireworkSystem.setTensionState(center, compression)`
+  - Tracks closed fist duration: triggers `triggerGestureFinale()` at 0.5s threshold
+- **Physics:** Compression calculated as `1 - (fingerCount / 5)` (0=open, 1=closed fist)
+
+#### 3. `clearGestureState()` (Lines 281-294)
+Releases gesture control when hand lost:
+- Resets `gestureMode = false` and `fistHoldTime = 0`
+- Clears particle tension: `setTensionState(null, 0)`
+- Returns countdown to timer: `clearExternalValue()`
+- Called on video readyState change or hand detection timeout
+
+#### 4. `triggerGestureFinale()` (Lines 299-322)
+8-burst staggered firework sequence when fist held 0.5+ seconds:
+- Spawns fireworks in 5×5×5 cube around tension center
+- 80ms spacing between bursts (prevents overwhelming audio)
+- Cycles through all 5 firework types
+- Sets `gestureFinaleTriggered = true` to prevent duplicates
+
+### Integration Flow
+```
+Hand detected with 5 fingers
+  ↓
+setGestureState(5, handX, handY, dt)
+  ├→ countdown.setExternalValue(5)        [Display shows 5]
+  ├→ setTensionState(center, 0)          [No compression, open hand]
+  └→ fistHoldTime = 0
+
+Hand closed (0 fingers detected)
+  ↓
+setGestureState(0, handX, handY, dt)
+  ├→ countdown.setExternalValue(0)        [Display shows 0]
+  ├→ setTensionState(center, 1)          [Max compression]
+  └→ fistHoldTime += dt
+       ↓
+     If fistHoldTime >= 0.5s
+       └→ triggerGestureFinale()          [8 burst sequence]
+
+Hand removed/camera lost
+  ↓
+clearGestureState()
+  ├→ setTensionState(null, 0)            [Release tension]
+  └→ countdown.clearExternalValue()      [Resume timer]
+```
+
+### Browser Compatibility
+- **Gesture Detection:** Requires MediaPipe Hands (via gesture-detection.js)
+- **Countdown Integration:** Uses existing CountdownManager APIs (Phase 3)
+- **Particle System:** No new dependencies, uses existing FireworkSystem
+
+### Integration Points
+- **Called from:** Main gesture detection loop in index.html (lines 1035-1075)
+- **Requires:** Hand landmarks from `processHandGesture()`
+- **Depends on:** CountdownManager.setExternalValue/clearExternalValue()
+- **Uses:** FireworkSystem.setTensionState()
+
+### No Breaking Changes
+- Phase 1-3 APIs remain unchanged
+- Gesture methods optional (only called when hand detected)
+- Backward compatible with timer-only countdown mode
+
+### Coverage Configuration Fix (vitest.config.js)
+**File:** `vitest.config.js` (lines 8-21)
+**Change:** Updated coverage exclusion list for accuracy
+- **From:** Broad `src/**` inclusion with hardcoded exclusions
+- **To:** Narrowed include paths + specific browser-API exclusions
+- **New excludes:** Mobile detection, camera permissions, audio synthesis, new-year-mode
+- **Rationale:** Excludes browser-specific modules that can't be unit tested in Node environment
+- **Impact:** Coverage reports now accurately reflect testable code (FireworkSystem, types, shaders, tests)
+
 ## Maintenance Notes
 
-- **Last Update:** December 27, 2025 (Phase 2: Tension Effect System - gesture-driven particle compression & finale)
-- **API Additions:** 6 new methods across 3 modules (NewYearMode, FireworkSystem, CountdownManager)
+- **Last Update:** December 27, 2025 (Phase 4: Gesture-Countdown Integration - gesture state orchestration with fist-hold finale)
+- **API Additions:** 3 new methods in NewYearMode (setGestureState, clearGestureState, triggerGestureFinale)
 - **Key Features:** Gesture state tracking, particle tension physics, countdown display override, fist-hold finale
 - **Status:** Complete - Ready for Phase 3 integration with gesture detection loop
 - **Code Stability:** Stable (production-ready, responsive design complete, upload pipeline tested)
