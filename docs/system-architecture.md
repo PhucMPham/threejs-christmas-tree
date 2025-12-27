@@ -73,6 +73,22 @@ High-level architecture and component design for the Three.js application.
 - **State Persistence**: localStorage saves user mute preference
 - **Browser Compatibility**: Webkit prefix (`-webkit-backdrop-filter`) for Safari support
 
+### Upload & File Management Subsystem (Phase 3)
+- **Progress Bar**: Smooth gradient fill animation (green: `#22c55e` → `#4ade80`)
+  - Real-time progress text showing upload count
+  - ARIA progressbar role with aria-valuenow updates for accessibility
+- **Toast Notifications**: Multi-type system (success, error, warning, info)
+  - Fixed positioned at bottom with safe area insets
+  - Auto-dismiss after configurable duration (default 4s)
+  - Stacking support for multiple notifications
+- **Retry Logic**: Manual retry button appears on failed uploads
+  - Retries with exponential backoff (1s, 2s, 4s delays)
+  - Per-file status indicators (compressing, queued, uploading, retrying, done, failed)
+  - Stateful failure tracking for selective retries
+- **Error Handling**: Comprehensive feedback via toast + status indicators
+  - File compression via browser-image-compression library
+  - Parallel upload queue (max 4 concurrent) with cancellation support
+
 ## Data Flow
 
 ### 3D Rendering Pipeline
@@ -110,6 +126,37 @@ Update button icon & CSS class
 Save preference to localStorage
     ↓
 Audio plays with volume = 0.3 (pre-set to prevent burst)
+```
+
+### File Upload Pipeline (Phase 3)
+```
+User selects/drags files
+    ↓
+File validation (image type, size limits)
+    ↓
+Render preview with file metadata
+    ↓
+User clicks "Upload All"
+    ↓
+Image compression (if > 500KB)
+    ├─ Update status → 'compressing'
+    └─ Convert HEIC → JPEG via browser-image-compression
+    ↓
+Queue files for upload (concurrency = 4)
+    ├─ Update status → 'queued'
+    └─ Update progress bar (aria-valuenow)
+    ↓
+Upload with retry logic (max 3 attempts)
+    ├─ Exponential backoff: 1s, 2s, 4s
+    ├─ Update status → 'uploading' / 'retrying' / 'done' / 'failed'
+    └─ Update progress fill & text in real-time
+    ↓
+Handle results
+    ├─ Success → Show toast + update gallery
+    ├─ Partial failure → Show toast + enable "Retry Failed" button
+    └─ Full success → Show success modal
+    ↓
+Cleanup & reset UI
 ```
 
 ## Rendering Pipeline

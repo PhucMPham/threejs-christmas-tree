@@ -431,6 +431,86 @@
     .status-uploading { background: rgba(139,92,246,0.9); }
     .status-queued { background: rgba(100,116,139,0.9); }
 
+    /* Status Bar Buttons */
+    .status-bar-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-retry {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .btn-retry:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    /* Upload Progress Bar */
+    .upload-progress {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+    }
+    .progress-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #4ade80);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .progress-text {
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      bottom: calc(80px + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast {
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      animation: slideUp 0.3s ease;
+      max-width: 320px;
+      text-align: center;
+      pointer-events: auto;
+    }
+    .toast-success { background: #22c55e; }
+    .toast-error { background: #ef4444; }
+    .toast-warning { background: #eab308; color: #1a1a1a; }
+    .toast-info { background: #3b82f6; }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
     /* Audio Control Button */
     #audioControl {
       position: fixed;
@@ -577,7 +657,18 @@
         <div class="count">
           Photos: <span id="uploadedCount">0</span> / <span id="maxPhotos">10</span>
         </div>
-        <button id="uploadBtn" disabled>Upload All</button>
+        <div class="status-bar-buttons">
+          <button id="uploadBtn" disabled>Upload All</button>
+          <button id="retryBtn" class="btn-retry" style="display: none;">Retry Failed</button>
+        </div>
+      </div>
+
+      <!-- Upload Progress Bar -->
+      <div class="upload-progress" id="uploadProgress" style="display: none;">
+        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Preparing...</div>
       </div>
 
       <!-- Gallery of Uploaded Photos -->
@@ -848,13 +939,51 @@
       statusEl.className = `file-status status-${status}`;
     }
 
-    // Show error for failed uploads
-    function showUploadError(failedCount, successCount) {
-      const msg = successCount > 0
-        ? `${successCount} uploaded, ${failedCount} failed. Tap "Upload All" to retry.`
-        : `${failedCount} upload(s) failed. Tap "Upload All" to retry.`;
-      alert(msg);
+    // Toast notification system
+    function showToast(message, type = 'info', duration = 4000) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = 'slideUp 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
     }
+
+    // Retry button
+    const retryBtn = document.getElementById('retryBtn');
+
+    function showRetryButton() {
+      retryBtn.style.display = 'inline-block';
+    }
+
+    function hideRetryButton() {
+      retryBtn.style.display = 'none';
+    }
+
+    retryBtn.addEventListener('click', () => {
+      hideRetryButton();
+      uploadBtn.click();
+    });
+
+    // Show error for failed uploads with toast notifications
+    function showUploadError(failedCount, successCount) {
+      if (successCount > 0) {
+        showToast(`${successCount} photo(s) uploaded successfully`, 'success');
+      }
+      if (failedCount > 0) {
+        showToast(`${failedCount} upload(s) failed. Press "Retry Failed" to try again.`, 'error', 6000);
+        showRetryButton();
+      }
+    }
+
+    // Progress bar elements
+    const progressEl = document.getElementById('uploadProgress');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
 
     // Upload with compression and parallel queue
     uploadBtn.addEventListener('click', async () => {
@@ -862,6 +991,12 @@
 
       const totalFiles = pendingFiles.length;
       uploadBtn.disabled = true;
+      hideRetryButton();
+
+      // Show progress bar
+      progressEl.style.display = 'block';
+      progressFill.style.width = '0%';
+      progressText.textContent = 'Compressing images...';
 
       // Update UI to show compression status
       uploadBtn.innerHTML = '<span class="spinner"></span> Compressing...';
@@ -884,11 +1019,16 @@
         updateFileStatus(index, status, attempt);
         if (status === 'done') {
           completedCount++;
+          const percent = Math.round((completedCount / totalFiles) * 100);
+          progressFill.style.width = percent + '%';
+          progressFill.parentElement.setAttribute('aria-valuenow', percent);
+          progressText.textContent = `Uploading ${completedCount}/${totalFiles}...`;
           uploadBtn.innerHTML = `<span class="spinner"></span> Uploading ${completedCount}/${totalFiles}...`;
         }
       };
 
       // Queue all uploads
+      progressText.textContent = 'Uploading...';
       uploadBtn.innerHTML = '<span class="spinner"></span> Uploading 0/' + totalFiles + '...';
 
       const uploadPromises = compressedFiles.map((file, i) => {
@@ -913,6 +1053,15 @@
           failedIndices.push(i);
         }
       });
+
+      // Update progress bar final state
+      progressFill.style.width = '100%';
+      if (failedIndices.length === 0) {
+        progressText.textContent = 'All uploads complete!';
+        setTimeout(() => progressEl.style.display = 'none', 2000);
+      } else {
+        progressText.textContent = `${successCount} complete, ${failedIndices.length} failed`;
+      }
 
       // Handle failures
       if (failedIndices.length > 0) {
@@ -1088,5 +1237,8 @@
       }
     });
   </script>
+
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toastContainer"></div>
 </body>
 </html>
