@@ -828,9 +828,104 @@ Verification checks:
 - **Hardware-accelerated transitions:** Smooth opacity changes
 - **Paint layers:** Minimal repaints due to fixed positioning
 
+## Phase 2: Backend Reliability - Upload Route Enhancements (2025-12-27)
+
+### Upload Route Reliability Improvements
+**File:** `routes/upload.js` - Production-ready upload handling with retry logic and dynamic timeout
+
+#### Error Code System (Lines 38-49)
+Comprehensive error classification for client feedback:
+- `NO_FILE` - Missing file in request
+- `LIMIT_REACHED` - User hit 10 photo limit
+- `INVALID_TYPE` - File type not allowed (non-image)
+- `CONFIG_ERROR` - Server misconfiguration (missing API key)
+- `RATE_LIMITED` - ImgBB rate limit hit (429)
+- `TIMEOUT` - ImgBB request timed out
+- `UPSTREAM_ERROR` - ImgBB service unavailable (502)
+- `FILE_TOO_LARGE` - Exceeds 32MB limit
+- `INVALID_FILE` - Multer rejection (MIME validation)
+- `INTERNAL_ERROR` - Unexpected server error
+
+#### Retry Logic Function (Lines 51-88)
+**`isRetryableError(err)` & `withRetry(fn, options)`**
+- Detects retryable failures: network errors (ECONNRESET, ETIMEDOUT, ECONNABORTED), 429 rate limit, 5xx server errors
+- Exponential backoff: Base 1000ms, max 8000ms, 3 retry attempts (configurable)
+- Prevents retries for permanent errors (4xx client errors, auth failures)
+- Logs retry attempts with delay for debugging
+
+#### Dynamic Timeout Calculator (Lines 90-98)
+**`calculateTimeout(fileSizeBytes)`**
+- Base timeout: 15 seconds
+- Scales: +5 seconds per MB
+- Maximum: 60 seconds
+- Formula: `Math.min(15000 + (sizeMB * 5000), 60000)`
+- Prevents timeout on large files, quick failure on small ones
+
+#### Upload to ImgBB with Retry (Lines 100-126)
+**`uploadToImgBB(base64Image, fileSizeBytes)`**
+- Wraps axios POST with dynamic timeout calculation
+- Integrates `withRetry()` wrapper for automatic retry logic
+- Validates response success flag, throws on failure
+- 3 retries with exponential backoff on transient errors
+
+#### Upload Endpoint Error Handling (Lines 151-262)
+**POST `/` route with comprehensive validation chain**
+1. File existence check (NO_FILE)
+2. Photo limit validation (LIMIT_REACHED)
+3. File type magic bytes validation (INVALID_TYPE)
+4. API key configuration check (CONFIG_ERROR)
+5. Base64 encoding & retry-wrapped ImgBB upload
+6. Specific error mapping for client:
+   - 429 status → RATE_LIMITED (retryAfter: 60)
+   - ETIMEDOUT/ECONNABORTED → TIMEOUT (504)
+   - Other upstream errors → UPSTREAM_ERROR (502)
+7. Database storage with transaction-safe lastInsertRowid
+8. Success response with photo count & remaining slots
+
+#### Photo Management Endpoints
+- **GET `/photos`** (Lines 265-279) - Lists user photos with count/max/remaining
+- **DELETE `/:id`** (Lines 282-305) - Delete specific photo, updates count
+
+### Configuration from Environment
+- `MAX_PHOTOS` - Default 10 (environment override: MAX_PHOTOS env var)
+- `MAX_FILE_SIZE_MB` - Default 32MB (environment override: MAX_FILE_SIZE_MB env var)
+- `IMGBB_API_KEY` - Required for uploads, checked at request time
+
+### Rate Limiting
+- 15 uploads per minute per session (express-rate-limit middleware)
+- Session ID from `req.sessionId` (must be set upstream)
+- Fallback to 'anonymous' if no session
+
+### Factory Pattern Architecture
+**`createUploadRouter(options = {})`** (Lines 135-308)
+- Dependency injection: `options.db` (default: defaultDb)
+- Optional: `options.rateLimiter` (default: built-in express-rate-limit)
+- Enables testing with mock DB and rate limiters
+- Single export: `export default createUploadRouter()`
+
+### Dependencies
+```
+routes/upload.js
+├── express (Router, req/res)
+├── multer (file parsing, in-memory storage)
+├── axios (HTTP client for ImgBB)
+├── form-data (multipart form encoding)
+├── express-rate-limit (rate limiting middleware)
+├── file-type (magic byte validation)
+└── ../lib/db.js (database layer)
+```
+
+### Technical Patterns
+- **Exponential Backoff:** Prevents hammering external service during transient failures
+- **Magic Byte Validation:** Two-layer validation (MIME type + file-type library)
+- **Dynamic Timeout:** Scales with file size, prevents stuck connections
+- **Error Mapping:** Client-friendly error codes for UI feedback
+- **Resource Cleanup:** No orphaned requests on error (proper error propagation)
+- **Stateless Sessions:** Rate limit keying by sessionId (supports horizontal scaling)
+
 ## Maintenance Notes
 
-- **Last Update:** December 27, 2025 (Phase 4 UI Layout & Positioning)
+- **Last Update:** December 27, 2025 (Phase 2 Backend Reliability)
 - **Code Stability:** Stable (production-ready, responsive design complete)
 - **Technical Debt:** Minimal (all known issues addressed)
 - **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix)
@@ -842,6 +937,8 @@ Verification checks:
   - `camera-permissions.js` → `mobile-detection.js` (with cleanup, error codes)
   - `gesture-detection.js` → `mobile-detection.js`
   - `index.html` → all modules (try-catch, loop guard, readyState check)
+- **Backend Routes:**
+  - `routes/upload.js` → Express, multer, axios, file-type (retry logic, dynamic timeout, error codes)
 - **Asset Inventory:** 2 favicon formats, 6 title variations, 3 description templates
 - **Review Frequency:** After each phase completion
 - **UI Controls:** 2 fixed controls (audio, hide) with safe-area-inset positioning + 48px touch targets
