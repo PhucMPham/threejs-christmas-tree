@@ -38,6 +38,10 @@ export class FireworkSystem {
     this.activeCount = 0;
     this.bursts = []; // Track active burst metadata
 
+    // Tension effect state
+    this.tensionCenter = null;       // THREE.Vector3 or null
+    this.tensionCompression = 0;     // 0 (no tension) to 1 (max tension)
+
     // Create geometry with buffer attributes
     this.geometry = new THREE.BufferGeometry();
     this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
@@ -53,7 +57,8 @@ export class FireworkSystem {
       fragmentShader: fireworkFragmentShader,
       uniforms: {
         uTime: { value: 0 },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) }
+        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uTensionIntensity: { value: 0 }  // 0-1 for glow boost
       },
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -163,6 +168,7 @@ export class FireworkSystem {
 
     const time = performance.now() / 1000;
     this.material.uniforms.uTime.value = time;
+    this.material.uniforms.uTensionIntensity.value = this.tensionCompression;
     this.sparklerMaterial.uniforms.uTime.value = time;
 
     // Update each particle
@@ -183,6 +189,30 @@ export class FireworkSystem {
       this.positions[i3] += this.velocities[i3];
       this.positions[i3 + 1] += this.velocities[i3 + 1];
       this.positions[i3 + 2] += this.velocities[i3 + 2];
+
+      // Apply tension effect - pull particles toward center
+      if (this.tensionCenter && this.tensionCompression > 0) {
+        const currentX = this.positions[i3];
+        const currentY = this.positions[i3 + 1];
+        const currentZ = this.positions[i3 + 2];
+
+        // Calculate direction to tension center
+        const dx = this.tensionCenter.x - currentX;
+        const dy = this.tensionCenter.y - currentY;
+        const dz = this.tensionCenter.z - currentZ;
+
+        // Apply compression force (stronger as compression increases)
+        const pullStrength = this.tensionCompression * 0.15;
+        this.positions[i3] += dx * pullStrength;
+        this.positions[i3 + 1] += dy * pullStrength;
+        this.positions[i3 + 2] += dz * pullStrength;
+
+        // Also dampen velocity more at high compression (particles slow down)
+        const tensionDamping = 1 - (this.tensionCompression * 0.1);
+        this.velocities[i3] *= tensionDamping;
+        this.velocities[i3 + 1] *= tensionDamping;
+        this.velocities[i3 + 2] *= tensionDamping;
+      }
 
       // Update age
       this.ages[i] += dt;
@@ -264,6 +294,16 @@ export class FireworkSystem {
    */
   canSpawn(particleCount = 150) {
     return this.activeCount + particleCount <= MAX_PARTICLES;
+  }
+
+  /**
+   * Set tension state for particle compression
+   * @param {THREE.Vector3|null} center - World position to compress toward
+   * @param {number} compression - 0 (scattered) to 1 (fully compressed)
+   */
+  setTensionState(center, compression) {
+    this.tensionCenter = center;
+    this.tensionCompression = Math.max(0, Math.min(1, compression));
   }
 
   /**

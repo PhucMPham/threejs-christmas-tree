@@ -62,6 +62,9 @@ export class CountdownManager {
     // Callback for grand finale
     this.onFinale = null;
 
+    // External value override (for gesture control)
+    this.externalValue = null;
+
     // Group for all countdown elements
     this.group = new THREE.Group();
     this.group.name = 'countdownGroup';
@@ -296,6 +299,23 @@ export class CountdownManager {
    */
   getValue() {
     return this.countdownValue;
+  }
+
+  /**
+   * Set external value override (from gesture control)
+   * @param {number} value - Value to display (0-10)
+   */
+  setExternalValue(value) {
+    this.externalValue = value;
+    renderCountdownValue(this.countdownCtx, value, this.countdownTexture);
+  }
+
+  /**
+   * Clear external value, return to timer-based countdown
+   */
+  clearExternalValue() {
+    this.externalValue = null;
+    renderCountdownValue(this.countdownCtx, this.countdownValue, this.countdownTexture);
   }
 
   /**

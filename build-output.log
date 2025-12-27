@@ -1,0 +1,14 @@
+
+> threejs-app@1.0.0 build
+> vite build
+
+vite v6.4.1 building for production...
+transforming...
+✓ 10 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/src/christmas-tree/index.html        17.46 kB │ gzip: 4.40 kB
+dist/index.html                           36.08 kB │ gzip: 9.22 kB
+dist/assets/jingle-bells-BD8eEjnT.mp3  3,378.78 kB
+dist/assets/tree-CQpRqfk1.js              20.91 kB │ gzip: 8.01 kB │ map: 78.65 kB
+✓ built in 107ms

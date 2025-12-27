@@ -1,0 +1,1559 @@
+
+> threejs-app@1.0.0 test:run
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90m/Users/phamminhphuc/Projects/threejs[39m
+
+ [32m✓[39m tests/unit/db.test.js [2m([22m[2m19 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2minit()[2m > [22m[2mshould return true on success
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2minit()[2m > [22m[2mshould return true on success
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:489:23
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+ [32m✓[39m tests/unit/fireworks.test.js [2m([22m[2m68 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2minit()[2m > [22m[2mshould load font
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:494:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2minit()[2m > [22m[2mshould create text 2025
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:500:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2minit()[2m > [22m[2mshould create countdown plane
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:506:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2minit()[2m > [22m[2mshould add text to group
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:512:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2minit()[2m > [22m[2mshould add countdown plane to group
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:517:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2minit()[2m > [22m[2mshould handle init errors gracefully
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:524:22
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateText2025()[2m > [22m[2mshould create mesh with text
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:531:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateText2025()[2m > [22m[2mshould have rainbow neon material
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:531:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateText2025()[2m > [22m[2mshould position text above countdown
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:531:7
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mFile Validation Edge Cases[2m > [22m[2mMagic Bytes Validation[2m > [22m[2mrejects PHP content with .jpg extension and JPEG MIME type
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2muploads valid JPEG successfully
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2muploads valid JPEG successfully
+[22m[39mUpload complete: 1 in 1ms
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mFile Validation Edge Cases[2m > [22m[2mMagic Bytes Validation[2m > [22m[2mrejects empty file
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2mstores photo in database after upload
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2mstores photo in database after upload
+[22m[39mUpload complete: 1 in 0ms
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mFile Validation Edge Cases[2m > [22m[2mMagic Bytes Validation[2m > [22m[2mrejects truncated JPEG header
+[22m[39mUpload started: 0.00MB
+
+[90mstderr[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mFile Validation Edge Cases[2m > [22m[2mMagic Bytes Validation[2m > [22m[2mrejects truncated JPEG header
+[22m[39mImgBB upload failed after retries: Cannot read properties of undefined (reading 'data')
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mFile Validation Edge Cases[2m > [22m[2mMagic Bytes Validation[2m > [22m[2mrejects random bytes disguised as image
+[22m[39mUpload started: 0.00MB
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateText2025()[2m > [22m[2mshould have centered geometry
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:531:7
+
+[90mstdout[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2mrejects when photo limit reached (10 photos)
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2mreturns 500 when IMGBB_API_KEY missing
+[22m[39mUpload started: 0.00MB
+
+[90mstderr[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2mreturns 500 when IMGBB_API_KEY missing
+[22m[39mIMGBB_API_KEY not configured
+
+[90mstdout[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2mcalls axios with correct parameters and dynamic timeout
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload.test.js[2m > [22m[2mPOST /api/upload[2m > [22m[2mcalls axios with correct parameters and dynamic timeout
+[22m[39mUpload complete: 1 in 0ms
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mError Response Format[2m > [22m[2mdoes not expose internal paths in error messages
+[22m[39mUpload started: 0.00MB
+
+[90mstderr[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mError Response Format[2m > [22m[2mdoes not expose internal paths in error messages
+[22m[39mIMGBB_API_KEY not configured
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB rate limit (429) with retry exhaustion
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB rate limit (429) with retry exhaustion
+[22m[39mRetry 1/3 after 1000ms: Rate limited
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateCountdownPlane()[2m > [22m[2mshould create mesh plane
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:556:7
+
+ [32m✓[39m tests/integration/upload.test.js [2m([22m[2m15 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateCountdownPlane()[2m > [22m[2mshould have canvas-based material
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:556:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateCountdownPlane()[2m > [22m[2mshould have canvas texture
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:556:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateCountdownPlane()[2m > [22m[2mshould position plane below text
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:556:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateCountdownPlane()[2m > [22m[2mshould have square plane geometry
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:556:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateCountdownPlane()[2m > [22m[2mshould render initial countdown value
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:556:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mcreateCountdownPlane()[2m > [22m[2mshould render initial countdown value
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:583:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstart()[2m > [22m[2mshould set isActive to true
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:591:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstart()[2m > [22m[2mshould reset countdown to 10
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:591:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstart()[2m > [22m[2mshould reset elapsed time
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:591:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstart()[2m > [22m[2mshould reset finale flags
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:591:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstart()[2m > [22m[2mshould show group
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:591:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstart()[2m > [22m[2mshould adjust bloom for neon
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:591:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstop()[2m > [22m[2mshould set isActive to false
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:634:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstop()[2m > [22m[2mshould hide group
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:634:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mstop()[2m > [22m[2mshould restore bloom for tree
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:634:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould update rainbow material when visible
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould increment elapsed time
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould decrement countdown every second
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould not decrement below 1 second
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould update canvas only when countdown changes
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould trigger finale at countdown = 0
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould enter wait state after finale
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould reset countdown after wait time
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould not update when inactive
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mupdate()[2m > [22m[2mshould continue updating material even when not counting
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:657:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mtriggerFinale()[2m > [22m[2mshould set finaleTriggered flag
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:760:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mtriggerFinale()[2m > [22m[2mshould call finale callback if set
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:760:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mtriggerFinale()[2m > [22m[2mshould only trigger once
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:760:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mresetCountdown()[2m > [22m[2mshould reset countdown value to 10
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:790:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mresetCountdown()[2m > [22m[2mshould reset elapsed time
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:790:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mresetCountdown()[2m > [22m[2mshould reset finale flags
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:790:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mresetCountdown()[2m > [22m[2mshould render reset countdown value to canvas
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:790:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mshow() and hide()[2m > [22m[2mshould set group visible on show
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:827:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mshow() and hide()[2m > [22m[2mshould set group invisible on hide
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:827:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2misVisible()[2m > [22m[2mshould return true when group is visible
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:847:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2misVisible()[2m > [22m[2mshould return false when group is invisible
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:847:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2msetFinaleCallback()[2m > [22m[2mshould call callback when finale triggered
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:871:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mgetValue()[2m > [22m[2mshould return updated value after changes
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:886:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mdispose()[2m > [22m[2mshould stop countdown
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:895:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mdispose()[2m > [22m[2mshould remove group from scene
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:895:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mdispose()[2m > [22m[2mshould dispose text geometry
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:895:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mdispose()[2m > [22m[2mshould dispose text material
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:895:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mdispose()[2m > [22m[2mshould dispose countdown plane geometry
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:895:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mdispose()[2m > [22m[2mshould dispose countdown material
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:895:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mdispose()[2m > [22m[2mshould dispose countdown texture
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:895:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mdispose()[2m > [22m[2mshould clear references
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:895:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mIntegration - Full countdown loop[2m > [22m[2mshould complete full countdown cycle
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:959:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mIntegration - Full countdown loop[2m > [22m[2mshould loop countdown after finale
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:959:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mIntegration - Full countdown loop[2m > [22m[2mshould handle multiple start/stop cycles
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:959:7
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mT3 Specification Verification[2m > [22m[2mT3.1: 2025 text centered above fireworks area
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:1010:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mT3 Specification Verification[2m > [22m[2mT3.2: Neon glow via MeshStandardMaterial emissive + bloom
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:1019:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mT3 Specification Verification[2m > [22m[2mT3.3: Canvas texture countdown timer (10...0)
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:1030:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mT3 Specification Verification[2m > [22m[2mT3.4: Update countdown only on value change
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:1038:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mT3 Specification Verification[2m > [22m[2mT3.5: Grand finale trigger at countdown = 0
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:1053:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mT3 Specification Verification[2m > [22m[2mT3.6: Loop: finale → wait 2s → restart countdown
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:1067:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+[90mstderr[2m | tests/unit/countdown-manager.test.js[2m > [22m[2mCountdownManager Class[2m > [22m[2mT3 Specification Verification[2m > [22m[2mT3.7: Text visible only in New Year mode
+[22m[39mCountdownManager init failed: TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Mesh.updateMorphTargets [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11755:23[90m)[39m
+    at new Mesh [90m(file:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4mthree[24m/build/three.module.js:11723:8[90m)[39m
+    at CountdownManager.createText2025 [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:134:21[90m)[39m
+    at CountdownManager.init [90m(/Users/phamminhphuc/Projects/threejs/[39msrc/fireworks/countdown-manager.js:79:12[90m)[39m
+    at [90m/Users/phamminhphuc/Projects/threejs/[39mtests/unit/countdown-manager.test.js:1089:7
+    at [90mfile:///Users/phamminhphuc/Projects/threejs/[39mnode_modules/[4m@vitest[24m/runner/dist/index.js:915:20
+
+ [31m❯[39m tests/unit/countdown-manager.test.js [2m([22m[2m129 tests[22m[2m | [22m[31m78 failed[39m[2m)[22m[33m 800[2mms[22m[39m
+       [32m✓[39m should export neon bloom settings[32m 1[2mms[22m[39m
+       [32m✓[39m should have valid threshold value[32m 0[2mms[22m[39m
+       [32m✓[39m should have valid strength value[32m 0[2mms[22m[39m
+       [32m✓[39m should have valid radius value[32m 0[2mms[22m[39m
+       [32m✓[39m should export tree bloom settings for restoration[32m 0[2mms[22m[39m
+       [32m✓[39m should have different values from neon settings[32m 0[2mms[22m[39m
+       [32m✓[39m should create MeshStandardMaterial[32m 0[2mms[22m[39m
+       [32m✓[39m should have red initial color[32m 0[2mms[22m[39m
+       [32m✓[39m should have red initial emissive[32m 0[2mms[22m[39m
+       [32m✓[39m should have high emissive intensity for glow[32m 0[2mms[22m[39m
+       [32m✓[39m should have metallic properties[32m 0[2mms[22m[39m
+       [32m✓[39m should store hue in userData[32m 0[2mms[22m[39m
+       [32m✓[39m should update hue over time[32m 0[2mms[22m[39m
+       [32m✓[39m should use default speed of 0.1[32m 0[2mms[22m[39m
+       [32m✓[39m should wrap hue around at 1.0[32m 0[2mms[22m[39m
+       [32m✓[39m should update color based on hue[32m 0[2mms[22m[39m
+       [32m✓[39m should update emissive color[32m 0[2mms[22m[39m
+       [32m✓[39m should handle null material gracefully[32m 0[2mms[22m[39m
+       [32m✓[39m should handle missing userData gracefully[32m 0[2mms[22m[39m
+       [32m✓[39m should set bloom threshold to neon value[32m 0[2mms[22m[39m
+       [32m✓[39m should set bloom strength to neon value[32m 0[2mms[22m[39m
+       [32m✓[39m should set bloom radius to neon value[32m 0[2mms[22m[39m
+       [32m✓[39m should handle null bloom pass gracefully[32m 0[2mms[22m[39m
+       [32m✓[39m should restore bloom threshold to tree value[32m 0[2mms[22m[39m
+       [32m✓[39m should restore bloom strength to tree value[32m 0[2mms[22m[39m
+       [32m✓[39m should restore bloom radius to tree value[32m 0[2mms[22m[39m
+       [32m✓[39m should handle null bloom pass gracefully[32m 0[2mms[22m[39m
+[31m       [31m×[31m should create canvas element[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m should create canvas with default size 256[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should create canvas with custom size[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should return canvas 2D context[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should create CanvasTexture[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should create MeshBasicMaterial[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should set material as transparent[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should use DoubleSide for material[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should disable depth write[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should mark texture for update[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should return complete object with all properties[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should clear canvas before rendering[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should render countdown number as string[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should render number at canvas center[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should set golden color for glow[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should set shadow color for glow effect[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should set shadow blur for glow effect[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should draw number multiple times for stronger glow[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should mark texture for update[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should handle texture being null[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should render zero value[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should render large numbers[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should initialize with scene[32m 0[2mms[22m[39m
+       [32m✓[39m should initialize with bloom pass[32m 0[2mms[22m[39m
+       [32m✓[39m should create countdown group[32m 0[2mms[22m[39m
+       [32m✓[39m should start with group invisible[32m 0[2mms[22m[39m
+       [32m✓[39m should add group to scene[32m 1[2mms[22m[39m
+       [32m✓[39m should initialize countdown value to 10[32m 0[2mms[22m[39m
+       [32m✓[39m should initialize as inactive[32m 0[2mms[22m[39m
+       [32m✓[39m should initialize state flags correctly[32m 0[2mms[22m[39m
+       [32m✓[39m should initialize elapsed time to 0[32m 0[2mms[22m[39m
+       [32m✓[39m should initialize finale callback to null[32m 0[2mms[22m[39m
+       [32m✓[39m should be async function[32m 0[2mms[22m[39m
+[31m       [31m×[31m should return true on success[39m[32m 14[2mms[22m[39m
+       [32m✓[39m should load font[32m 12[2mms[22m[39m
+[31m       [31m×[31m should create text 2025[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should create countdown plane[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should add text to group[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should add countdown plane to group[39m[32m 12[2mms[22m[39m
+       [32m✓[39m should handle init errors gracefully[32m 11[2mms[22m[39m
+[31m       [31m×[31m should create mesh with text[39m[32m 10[2mms[22m[39m
+       [32m✓[39m should have rainbow neon material[32m 12[2mms[22m[39m
+[31m       [31m×[31m should position text above countdown[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should have centered geometry[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should create mesh plane[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should have canvas-based material[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should have canvas texture[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should position plane below text[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should have square plane geometry[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should render initial countdown value[39m[32m 21[2mms[22m[39m
+[31m       [31m×[31m should set isActive to true[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should reset countdown to 10[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should reset elapsed time[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should reset finale flags[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should show group[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should adjust bloom for neon[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should set isActive to false[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should hide group[39m[32m 10[2mms[22m[39m
+[31m       [31m×[31m should restore bloom for tree[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should update rainbow material when visible[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should increment elapsed time[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should decrement countdown every second[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should not decrement below 1 second[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should update canvas only when countdown changes[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should trigger finale at countdown = 0[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should enter wait state after finale[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should reset countdown after wait time[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should not update when inactive[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should continue updating material even when not counting[39m[32m 12[2mms[22m[39m
+       [32m✓[39m should set finaleTriggered flag[32m 12[2mms[22m[39m
+       [32m✓[39m should call finale callback if set[32m 12[2mms[22m[39m
+[31m       [31m×[31m should only trigger once[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should reset countdown value to 10[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should reset elapsed time[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should reset finale flags[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should render reset countdown value to canvas[39m[32m 11[2mms[22m[39m
+       [32m✓[39m should set group visible on show[32m 12[2mms[22m[39m
+       [32m✓[39m should set group invisible on hide[32m 12[2mms[22m[39m
+       [32m✓[39m should return true when group is visible[32m 12[2mms[22m[39m
+       [32m✓[39m should return false when group is invisible[32m 12[2mms[22m[39m
+       [32m✓[39m should store callback[32m 0[2mms[22m[39m
+       [32m✓[39m should call callback when finale triggered[32m 12[2mms[22m[39m
+       [32m✓[39m should return current countdown value[32m 0[2mms[22m[39m
+       [32m✓[39m should return updated value after changes[32m 12[2mms[22m[39m
+[31m       [31m×[31m should stop countdown[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should remove group from scene[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should dispose text geometry[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should dispose text material[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should dispose countdown plane geometry[39m[32m 11[2mms[22m[39m
+[31m       [31m×[31m should dispose countdown material[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should dispose countdown texture[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should clear references[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should complete full countdown cycle[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should loop countdown after finale[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m should handle multiple start/stop cycles[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m T3.1: 2025 text centered above fireworks area[39m[32m 10[2mms[22m[39m
+[31m       [31m×[31m T3.2: Neon glow via MeshStandardMaterial emissive + bloom[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m T3.3: Canvas texture countdown timer (10...0)[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m T3.4: Update countdown only on value change[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m T3.5: Grand finale trigger at countdown = 0[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m T3.6: Loop: finale → wait 2s → restart countdown[39m[32m 12[2mms[22m[39m
+[31m       [31m×[31m T3.7: Text visible only in New Year mode[39m[32m 12[2mms[22m[39m
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB rate limit (429) with retry exhaustion
+[22m[39mRetry 2/3 after 2000ms: Rate limited
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB rate limit (429) with retry exhaustion
+[22m[39mRetry 3/3 after 4000ms: Rate limited
+
+[90mstderr[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB rate limit (429) with retry exhaustion
+[22m[39mImgBB upload failed after retries: Rate limited
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB timeout with retry exhaustion
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB timeout with retry exhaustion
+[22m[39mRetry 1/3 after 1000ms: timeout exceeded
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB timeout with retry exhaustion
+[22m[39mRetry 2/3 after 2000ms: timeout exceeded
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB timeout with retry exhaustion
+[22m[39mRetry 3/3 after 4000ms: timeout exceeded
+
+[90mstderr[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB timeout with retry exhaustion
+[22m[39mImgBB upload failed after retries: timeout exceeded
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB failure response as upstream error
+[22m[39mUpload started: 0.00MB
+
+[90mstderr[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles ImgBB failure response as upstream error
+[22m[39mImgBB upload failed after retries: ImgBB upload failed
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles network error as upstream error
+[22m[39mUpload started: 0.00MB
+
+[90mstderr[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mImgBB API Error Handling[2m > [22m[2mhandles network error as upstream error
+[22m[39mImgBB upload failed after retries: Network error
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mRate Limiting Behavior[2m > [22m[2mrate limiter can be configured via factory
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mRate Limiting Behavior[2m > [22m[2mrate limiter can be configured via factory
+[22m[39mUpload complete: 1 in 0ms
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mPhoto Limit Edge Cases[2m > [22m[2mallows upload when at limit minus one
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mPhoto Limit Edge Cases[2m > [22m[2mallows upload when at limit minus one
+[22m[39mUpload complete: 10 in 0ms
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mPhoto Limit Edge Cases[2m > [22m[2mreports correct remaining count after multiple operations
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mPhoto Limit Edge Cases[2m > [22m[2mreports correct remaining count after multiple operations
+[22m[39mUpload complete: 1 in 1ms
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mPhoto Limit Edge Cases[2m > [22m[2mreports correct remaining count after multiple operations
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mPhoto Limit Edge Cases[2m > [22m[2mreports correct remaining count after multiple operations
+[22m[39mUpload complete: 2 in 0ms
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mPhoto Limit Edge Cases[2m > [22m[2mreports correct remaining count after multiple operations
+[22m[39mUpload started: 0.00MB
+
+[90mstdout[2m | tests/integration/upload-edge-cases.test.js[2m > [22m[2mPhoto Limit Edge Cases[2m > [22m[2mreports correct remaining count after multiple operations
+[22m[39mUpload complete: 3 in 0ms
+
+ [32m✓[39m tests/integration/upload-edge-cases.test.js [2m([22m[2m18 tests[22m[2m)[22m[33m 14051[2mms[22m[39m
+     [33m[2m✓[22m[39m handles ImgBB rate limit (429) with retry exhaustion [33m 7007[2mms[22m[39m
+     [33m[2m✓[22m[39m handles ImgBB timeout with retry exhaustion [33m 7005[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 78 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould create canvas element
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m256:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould create canvas with default size 256
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m261:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould create canvas with custom size
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m267:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould return canvas 2D context
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m273:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould create CanvasTexture
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m280:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould create MeshBasicMaterial
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m285:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould set material as transparent
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m290:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould use DoubleSide for material
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m295:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould disable depth write
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m300:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould mark texture for update
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m305:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mcreateCountdownMaterial()[2m > [22mshould return complete object with all properties
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m310:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould clear canvas before rendering
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould render countdown number as string
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould render number at canvas center
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould set golden color for glow
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould set shadow color for glow effect
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould set shadow blur for glow effect
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould draw number multiple times for stronger glow
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould mark texture for update
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould handle texture being null
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould render zero value
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mTextEffects Module[2m > [22mrenderCountdownValue()[2m > [22mshould render large numbers
+[31m[1mReferenceError[22m: document is not defined[39m
+[36m [2m❯[22m Module.createCountdownMaterial src/fireworks/text-effects.js:[2m88:18[22m[39m
+    [90m 86| [39m */[39m
+    [90m 87| [39m[35mexport[39m [35mfunction[39m [34mcreateCountdownMaterial[39m(canvasSize [33m=[39m [34m256[39m) {
+    [90m 88| [39m  [35mconst[39m canvas [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'canvas'[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m  canvas[33m.[39mwidth [33m=[39m canvasSize[33m;[39m
+    [90m 90| [39m  canvas[33m.[39mheight [33m=[39m canvasSize[33m;[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m324:34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22minit()[2m > [22mshould return true on success
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m490:23[22m[39m
+    [90m488| [39m    [34mit[39m([32m'should return true on success'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m489| [39m      [35mconst[39m success [33m=[39m [35mawait[39m manager[33m.[39m[34minit[39m()[33m;[39m
+    [90m490| [39m      [34mexpect[39m(success)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m491| [39m    })[33m;[39m
+    [90m492| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22minit()[2m > [22mshould create text 2025
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'name')[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m502:31[22m[39m
+    [90m500| [39m      [35mawait[39m manager[33m.[39m[34minit[39m()[33m;[39m
+    [90m501| [39m      [34mexpect[39m(manager[33m.[39mtext2025)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m502| [39m      [34mexpect[39m(manager[33m.[39mtext2025[33m.[39mname)[33m.[39m[34mtoBe[39m([32m'text2025'[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m503| [39m    })[33m;[39m
+    [90m504| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22minit()[2m > [22mshould create countdown plane
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'name')[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m508:37[22m[39m
+    [90m506| [39m      [35mawait[39m manager[33m.[39m[34minit[39m()[33m;[39m
+    [90m507| [39m      [34mexpect[39m(manager[33m.[39mcountdownPlane)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m508| [39m      [34mexpect[39m(manager[33m.[39mcountdownPlane[33m.[39mname)[33m.[39m[34mtoBe[39m([32m'countdownPlane'[39m)[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m509| [39m    })[33m;[39m
+    [90m510| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22minit()[2m > [22mshould add text to group
+[31m[1mAssertionError[22m: expected [] to include null[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m513:38[22m[39m
+    [90m511| [39m    [34mit[39m([32m'should add text to group'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m512| [39m      [35mawait[39m manager[33m.[39m[34minit[39m()[33m;[39m
+    [90m513| [39m      [34mexpect[39m(manager[33m.[39mgroup[33m.[39mchildren)[33m.[39m[34mtoContain[39m(manager[33m.[39mtext2025)[33m;[39m
+    [90m   | [39m                                     [31m^[39m
+    [90m514| [39m    })[33m;[39m
+    [90m515| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22minit()[2m > [22mshould add countdown plane to group
+[31m[1mAssertionError[22m: expected [] to include null[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m518:38[22m[39m
+    [90m516| [39m    [34mit[39m([32m'should add countdown plane to group'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m517| [39m      [35mawait[39m manager[33m.[39m[34minit[39m()[33m;[39m
+    [90m518| [39m      [34mexpect[39m(manager[33m.[39mgroup[33m.[39mchildren)[33m.[39m[34mtoContain[39m(manager[33m.[39mcountdownPlane)[33m;[39m
+    [90m   | [39m                                     [31m^[39m
+    [90m519| [39m    })[33m;[39m
+    [90m520| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateText2025()[2m > [22mshould create mesh with text
+[31m[1mAssertionError[22m: expected null to be an instance of Mesh[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m535:32[22m[39m
+    [90m533| [39m
+    [90m534| [39m    [34mit[39m([32m'should create mesh with text'[39m[33m,[39m () [33m=>[39m {
+    [90m535| [39m      [34mexpect[39m(manager[33m.[39mtext2025)[33m.[39m[34mtoBeInstanceOf[39m([33mTHREE[39m[33m.[39m[33mMesh[39m)[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m536| [39m    })[33m;[39m
+    [90m537| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateText2025()[2m > [22mshould position text above countdown
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'position')[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m544:31[22m[39m
+    [90m542| [39m
+    [90m543| [39m    [34mit[39m([32m'should position text above countdown'[39m[33m,[39m () [33m=>[39m {
+    [90m544| [39m      [34mexpect[39m(manager[33m.[39mtext2025[33m.[39mposition[33m.[39my)[33m.[39m[34mtoBe[39m([34m18[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m545| [39m      [34mexpect[39m(manager[33m.[39mtext2025[33m.[39mposition[33m.[39mx)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m546| [39m      [34mexpect[39m(manager[33m.[39mtext2025[33m.[39mposition[33m.[39mz)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateText2025()[2m > [22mshould have centered geometry
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'geometry')[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m550:31[22m[39m
+    [90m548| [39m
+    [90m549| [39m    [34mit[39m([32m'should have centered geometry'[39m[33m,[39m () [33m=>[39m {
+    [90m550| [39m      [34mexpect[39m(manager[33m.[39mtext2025[33m.[39mgeometry[33m.[39mcentered)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m551| [39m    })[33m;[39m
+    [90m552| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateCountdownPlane()[2m > [22mshould create mesh plane
+[31m[1mAssertionError[22m: expected null to be an instance of Mesh[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m560:38[22m[39m
+    [90m558| [39m
+    [90m559| [39m    [34mit[39m([32m'should create mesh plane'[39m[33m,[39m () [33m=>[39m {
+    [90m560| [39m      [34mexpect[39m(manager[33m.[39mcountdownPlane)[33m.[39m[34mtoBeInstanceOf[39m([33mTHREE[39m[33m.[39m[33mMesh[39m)[33m;[39m
+    [90m   | [39m                                     [31m^[39m
+    [90m561| [39m    })[33m;[39m
+    [90m562| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateCountdownPlane()[2m > [22mshould have canvas-based material
+[31m[1mAssertionError[22m: expected null to be an instance of MeshBasicMaterial[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m564:41[22m[39m
+    [90m562| [39m
+    [90m563| [39m    [34mit[39m([32m'should have canvas-based material'[39m[33m,[39m () [33m=>[39m {
+    [90m564| [39m      expect(manager.countdownMaterial).toBeInstanceOf(THREE.MeshBasic…
+    [90m   | [39m                                        [31m^[39m
+    [90m565| [39m    })[33m;[39m
+    [90m566| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateCountdownPlane()[2m > [22mshould have canvas texture
+[31m[1mAssertionError[22m: expected null to be an instance of CanvasTexture[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m568:40[22m[39m
+    [90m566| [39m
+    [90m567| [39m    [34mit[39m([32m'should have canvas texture'[39m[33m,[39m () [33m=>[39m {
+    [90m568| [39m      expect(manager.countdownTexture).toBeInstanceOf(THREE.CanvasText…
+    [90m   | [39m                                       [31m^[39m
+    [90m569| [39m    })[33m;[39m
+    [90m570| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateCountdownPlane()[2m > [22mshould position plane below text
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'position')[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m572:37[22m[39m
+    [90m570| [39m
+    [90m571| [39m    [34mit[39m([32m'should position plane below text'[39m[33m,[39m () [33m=>[39m {
+    [90m572| [39m      [34mexpect[39m(manager[33m.[39mcountdownPlane[33m.[39mposition[33m.[39my)[33m.[39m[34mtoBe[39m([34m12[39m)[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m573| [39m      [34mexpect[39m(manager[33m.[39mcountdownPlane[33m.[39mposition[33m.[39mx)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m574| [39m      [34mexpect[39m(manager[33m.[39mcountdownPlane[33m.[39mposition[33m.[39mz)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateCountdownPlane()[2m > [22mshould have square plane geometry
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'geometry')[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m578:47[22m[39m
+    [90m576| [39m
+    [90m577| [39m    [34mit[39m([32m'should have square plane geometry'[39m[33m,[39m () [33m=>[39m {
+    [90m578| [39m      [35mconst[39m geometry [33m=[39m manager[33m.[39mcountdownPlane[33m.[39mgeometry[33m;[39m
+    [90m   | [39m                                              [31m^[39m
+    [90m579| [39m      [34mexpect[39m(geometry)[33m.[39m[34mtoBeInstanceOf[39m([33mTHREE[39m[33m.[39m[33mPlaneGeometry[39m)[33m;[39m
+    [90m580| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mcreateCountdownPlane()[2m > [22mshould render initial countdown value
+[31m[1mReferenceError[22m: HTMLCanvasElement is not defined[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m585:54[22m[39m
+    [90m583| [39m      [35mawait[39m manager[33m.[39m[34minit[39m()[33m;[39m
+    [90m584| [39m      [90m// Canvas should have been rendered with initial value[39m
+    [90m585| [39m      expect(manager.countdownCanvas).toBeInstanceOf(HTMLCanvasElement…
+    [90m   | [39m                                                     [31m^[39m
+    [90m586| [39m    })[33m;[39m
+    [90m587| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstart()[2m > [22mshould set isActive to true
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m595:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstart()[2m > [22mshould reset countdown to 10
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m601:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstart()[2m > [22mshould reset elapsed time
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m607:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstart()[2m > [22mshould reset finale flags
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m614:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstart()[2m > [22mshould show group
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m621:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstart()[2m > [22mshould adjust bloom for neon
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m626:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstop()[2m > [22mshould set isActive to false
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstop()[2m > [22mshould hide group
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mstop()[2m > [22mshould restore bloom for tree
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m635:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould update rainbow material when visible
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould increment elapsed time
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould decrement countdown every second
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould not decrement below 1 second
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould update canvas only when countdown changes
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould trigger finale at countdown = 0
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould enter wait state after finale
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould reset countdown after wait time
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould not update when inactive
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mupdate()[2m > [22mshould continue updating material even when not counting
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m658:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mtriggerFinale()[2m > [22mshould only trigger once
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called once, but got 2 times[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m784:24[22m[39m
+    [90m782| [39m      manager[33m.[39m[34mtriggerFinale[39m()[33m;[39m
+    [90m783| [39m
+    [90m784| [39m      [34mexpect[39m(callback)[33m.[39m[34mtoHaveBeenCalledOnce[39m()[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m785| [39m    })[33m;[39m
+    [90m786| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mresetCountdown()[2m > [22mshould reset countdown value to 10
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mresetCountdown()[2m > [22mshould reset elapsed time
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mresetCountdown()[2m > [22mshould reset finale flags
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mresetCountdown()[2m > [22mshould render reset countdown value to canvas
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m791:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[36/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mdispose()[2m > [22mshould stop countdown
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mdispose()[2m > [22mshould remove group from scene
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mdispose()[2m > [22mshould dispose text geometry
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mdispose()[2m > [22mshould dispose text material
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mdispose()[2m > [22mshould dispose countdown plane geometry
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mdispose()[2m > [22mshould dispose countdown material
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mdispose()[2m > [22mshould dispose countdown texture
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mdispose()[2m > [22mshould clear references
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m896:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[37/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mIntegration - Full countdown loop[2m > [22mshould complete full countdown cycle
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m965:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[38/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mIntegration - Full countdown loop[2m > [22mshould loop countdown after finale
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m978:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mIntegration - Full countdown loop[2m > [22mshould handle multiple start/stop cycles
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m994:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[40/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mT3 Specification Verification[2m > [22mT3.1: 2025 text centered above fireworks area
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'position')[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m1013:31[22m[39m
+    [90m1011| [39m
+    [90m1012| [39m      [90m// Text should be positioned above countdown[39m
+    [90m1013| [39m      expect(manager.text2025.position.y).toBeGreaterThan(manager.coun…
+    [90m   | [39m                              [31m^[39m
+    [90m1014| [39m      [34mexpect[39m(manager[33m.[39mtext2025[33m.[39mposition[33m.[39mx)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m [90m// centered X[39m
+    [90m1015| [39m      [34mexpect[39m(manager[33m.[39mtext2025[33m.[39mposition[33m.[39mz)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m [90m// centered Z[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[41/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mT3 Specification Verification[2m > [22mT3.2: Neon glow via MeshStandardMaterial emissive + bloom
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m1025:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[42/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mT3 Specification Verification[2m > [22mT3.3: Canvas texture countdown timer (10...0)
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'map')[39m
+[36m [2m❯[22m tests/unit/countdown-manager.test.js:[2m1033:40[22m[39m
+    [90m1031| [39m
+    [90m1032| [39m      [90m// Should have canvas-based material[39m
+    [90m1033| [39m      expect(manager.countdownMaterial.map).toBe(manager.countdownText…
+    [90m   | [39m                                       [31m^[39m
+    [90m1034| [39m      expect(manager.countdownPlane.material).toBe(manager.countdownMa…
+    [90m1035| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[43/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mT3 Specification Verification[2m > [22mT3.4: Update countdown only on value change
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m1039:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[44/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mT3 Specification Verification[2m > [22mT3.5: Grand finale trigger at countdown = 0
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m1056:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[45/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mT3 Specification Verification[2m > [22mT3.6: Loop: finale → wait 2s → restart countdown
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m1069:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[46/78]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/countdown-manager.test.js[2m > [22mCountdownManager Class[2m > [22mT3 Specification Verification[2m > [22mT3.7: Text visible only in New Year mode
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'canvas')[39m
+[36m [2m❯[22m renderCountdownValue src/fireworks/text-effects.js:[2m113:20[22m[39m
+    [90m111| [39m */[39m
+    [90m112| [39m[35mexport[39m [35mfunction[39m [34mrenderCountdownValue[39m(ctx[33m,[39m value[33m,[39m texture) {
+    [90m113| [39m  [35mconst[39m size [33m=[39m ctx[33m.[39mcanvas[33m.[39mwidth[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m114| [39m  [35mconst[39m center [33m=[39m size [33m/[39m [34m2[39m[33m;[39m
+    [90m115| [39m
+[90m [2m❯[22m CountdownManager.start src/fireworks/countdown-manager.js:[2m178:25[22m[39m
+[90m [2m❯[22m tests/unit/countdown-manager.test.js:[2m1095:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[47/78]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m78 failed[39m[22m[2m | [22m[1m[32m171 passed[39m[22m[90m (249)[39m
+[2m   Start at [22m 12:50:14
+[2m   Duration [22m 14.35s[2m (transform 262ms, setup 93ms, import 603ms, tests 14.93s, environment 1ms)[22m
+

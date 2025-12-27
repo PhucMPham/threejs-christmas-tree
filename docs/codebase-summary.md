@@ -1399,9 +1399,142 @@ const FINGER_HYSTERESIS_MS = 100;     // 100ms debounce window
   import { countFingers, getHandCenter, getStableFingerCount } from './gesture-detection.js';
   ```
 
+## Phase 2: Tension Effect System (2025-12-27)
+
+### Gesture-Driven Particle Compression & Finale Trigger
+**Status:** Complete - Tension state integration across NewYearMode, FireworkSystem, and CountdownManager
+
+#### New API Methods
+
+**1. `NewYearMode.setGestureState(fingerCount, handX, handY, dt)` - Gesture state update**
+- **File:** `src/fireworks/new-year-mode.js` (lines 239-276)
+- **Parameters:**
+  - `fingerCount` (0-5): Detected finger count from gesture-detection
+  - `handX` (-1 to 1): Normalized horizontal hand position (screen-relative)
+  - `handY` (-1 to 1): Normalized vertical hand position (screen-relative, inverted)
+  - `dt` (seconds): Delta time for fist hold tracking (default 0.016 for ~60fps)
+- **Behavior:**
+  - Clamps coordinates to ±1 range, maps to world space (-15 to +15 X, 0-10 Y)
+  - Updates countdown display with finger count via `setExternalValue()`
+  - Calculates compression: `1 - (fingerCount / 5)` (0=open hand, 1=closed fist)
+  - Passes tension state to firework system via `setTensionState()`
+  - Tracks fist hold duration: triggers gesture finale at 0.5s threshold
+- **Example:**
+  ```javascript
+  // From gesture detection loop
+  const { count, confidence } = countFingers(landmarks);
+  const { x, y, detected } = getHandCenter(landmarks);
+  if (detected) {
+    newYearMode.setGestureState(count, x, y, deltaTime);
+  }
+  ```
+
+**2. `NewYearMode.clearGestureState()` - Release gesture control**
+- **File:** `src/fireworks/new-year-mode.js` (lines 281-294)
+- **Behavior:**
+  - Sets gestureMode = false, resets fist hold time
+  - Clears tension state: `setTensionState(null, 0)`
+  - Returns countdown to timer-based display: `clearExternalValue()`
+- **Use case:** Call when hand detection lost (video.readyState check or timeout)
+- **Example:**
+  ```javascript
+  if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+    newYearMode.clearGestureState();
+  }
+  ```
+
+**3. `NewYearMode.triggerGestureFinale()` - Fist-hold finale**
+- **File:** `src/fireworks/new-year-mode.js` (lines 299-322)
+- **Trigger:** Automatically called when fingerCount=0 held for 0.5+ seconds
+- **Effect:** 8 staggered firework bursts (80ms spacing) in 5x5x5 cube around tension center
+- **Burst details:**
+  - All 5 firework types used (cycles through FIREWORK_TYPE enum)
+  - Spatial jitter ±2.5 units in all axes
+  - Audio plays for each burst type
+- **No manual call needed:** setGestureState() handles timing automatically
+
+**4. `FireworkSystem.setTensionState(center, compression)` - Physics modifier**
+- **File:** `src/fireworks/firework-system.js` (lines 304-307)
+- **Parameters:**
+  - `center` (THREE.Vector3 | null): World position for particle pull-in effect
+  - `compression` (0-1): Intensity of compression (0=no effect, 1=max pull)
+- **Behavior:**
+  - Stores state for particle update loop
+  - When active: particle shader can use `uTensionIntensity` uniform (0-1)
+  - null center: Disables tension (used by clearGestureState)
+- **Shader Integration:**
+  - Uniform `uTensionIntensity` = compression value
+  - Vertex shader can apply glow boost proportional to tension
+- **Example:**
+  ```javascript
+  // Applied automatically by setGestureState()
+  const compression = 1 - (fingerCount / 5);
+  fireworkSystem.setTensionState(worldPosition, compression);
+  ```
+
+**5. `CountdownManager.setExternalValue(value)` - Gesture countdown override**
+- **File:** `src/fireworks/countdown-manager.js` (lines 308-311)
+- **Parameters:** `value` (0-5): Number to display on countdown canvas
+- **Behavior:**
+  - Stores externalValue property
+  - Immediately renders number to canvas texture (bypasses timer)
+  - Updates GPU texture via renderCountdownValue()
+- **Use case:** Display finger count instead of countdown timer during gesture
+- **Example:**
+  ```javascript
+  // Called by setGestureState()
+  countdown.setExternalValue(fingerCount);
+  ```
+
+**6. `CountdownManager.clearExternalValue()` - Return to timer**
+- **File:** `src/fireworks/countdown-manager.js` (lines 316-319)
+- **Behavior:**
+  - Sets externalValue = null
+  - Renders current countdown value back to canvas
+  - Timer resumes normal operation
+- **Example:**
+  ```javascript
+  // Called by clearGestureState()
+  countdown.clearExternalValue();
+  ```
+
+#### State Machine Integration
+```
+User Gesture Detected
+  ↓
+setGestureState(fingerCount, handX, handY, dt)
+  ├→ Update countdown display (setExternalValue)
+  ├→ Pass tension to particles (setTensionState)
+  └→ Track fist hold (fistHoldTime += dt)
+       ↓
+     If fistHoldTime >= 0.5s && fingerCount=0
+       └→ triggerGestureFinale() (8 burst sequence)
+
+Hand Lost / Timeout
+  ↓
+clearGestureState()
+  ├→ Release tension (setTensionState(null, 0))
+  └→ Return to timer (clearExternalValue())
+```
+
+#### No Breaking Changes
+- Phase 1 gesture utilities (countFingers, getHandCenter, getStableFingerCount) unmodified
+- Existing countdown timer unaffected when gesture not active
+- Backward compatible: gesture methods only called when hand detected
+- Existing firework spawning/physics unchanged
+
+#### Integration Points
+- **Gesture Detection:** Call setGestureState() from predictWebcam() loop
+- **Hand Loss:** Call clearGestureState() on readyState change or timeout
+- **Finalization:** Listen to countdown.onFinale for end-of-countdown sequence
+- **Video Element:** Check video.readyState >= HAVE_CURRENT_DATA before calling methods
+
 ## Maintenance Notes
 
-- **Last Update:** December 27, 2025 (Gesture Finger Countdown Phase 1: Finger counting functions)
+- **Last Update:** December 27, 2025 (Phase 2: Tension Effect System - gesture-driven particle compression & finale)
+- **API Additions:** 6 new methods across 3 modules (NewYearMode, FireworkSystem, CountdownManager)
+- **Key Features:** Gesture state tracking, particle tension physics, countdown display override, fist-hold finale
+- **Status:** Complete - Ready for Phase 3 integration with gesture detection loop
 - **Code Stability:** Stable (production-ready, responsive design complete, upload pipeline tested)
 - **Technical Debt:** Minimal (all known issues addressed)
 - **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix, SRI integrity hash)
