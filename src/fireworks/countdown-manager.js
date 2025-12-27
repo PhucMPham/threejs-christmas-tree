@@ -62,8 +62,9 @@ export class CountdownManager {
     // Callback for grand finale
     this.onFinale = null;
 
-    // External value override (for gesture control)
-    this.externalValue = null;
+    // External control state (for gesture mode)
+    this.externalValueSet = false;  // True when gesture controls value
+    this.lastExternalValue = null;  // Track for change detection
 
     // Group for all countdown elements
     this.group = new THREE.Group();
@@ -176,6 +177,10 @@ export class CountdownManager {
     this.finaleTriggered = false;
     this.waitingAfterFinale = false;
 
+    // Reset external control state
+    this.externalValueSet = false;
+    this.lastExternalValue = null;
+
     // Show group and update display
     this.show();
     renderCountdownValue(this.countdownCtx, this.countdownValue, this.countdownTexture);
@@ -190,6 +195,10 @@ export class CountdownManager {
   stop() {
     this.isActive = false;
     this.hide();
+
+    // Reset external control state
+    this.externalValueSet = false;
+    this.lastExternalValue = null;
 
     // Restore bloom for tree
     restoreBloomForTree(this.bloomPass);
@@ -206,6 +215,13 @@ export class CountdownManager {
     }
 
     if (!this.isActive) return;
+
+    // Skip timer when externally controlled (gesture mode)
+    if (this.externalValueSet) {
+      // External source (gesture) is controlling the value
+      // Just update visuals, don't run timer logic
+      return;
+    }
 
     this.elapsed += dt;
 
@@ -302,20 +318,43 @@ export class CountdownManager {
   }
 
   /**
-   * Set external value override (from gesture control)
-   * @param {number} value - Value to display (0-10)
+   * Set countdown value from external source (gesture)
+   * Overrides timer-based countdown while set
+   * @param {number} value - Countdown value (0-10)
    */
   setExternalValue(value) {
-    this.externalValue = value;
-    renderCountdownValue(this.countdownCtx, value, this.countdownTexture);
+    // Clamp to valid range
+    const clampedValue = Math.max(0, Math.min(10, Math.round(value)));
+
+    // Only update if value changed
+    if (clampedValue !== this.lastExternalValue) {
+      this.countdownValue = clampedValue;
+      this.lastExternalValue = clampedValue;
+      this.externalValueSet = true;
+
+      // Update display
+      renderCountdownValue(this.countdownCtx, this.countdownValue, this.countdownTexture);
+
+      // If value is 0, start tracking for potential finale
+      // (finale triggered by NewYearMode after fist hold threshold)
+    }
   }
 
   /**
-   * Clear external value, return to timer-based countdown
+   * Clear external value, resume timer-based countdown
    */
   clearExternalValue() {
-    this.externalValue = null;
-    renderCountdownValue(this.countdownCtx, this.countdownValue, this.countdownTexture);
+    this.externalValueSet = false;
+    this.lastExternalValue = null;
+    // Timer will resume from current countdownValue
+  }
+
+  /**
+   * Check if external value is controlling countdown
+   * @returns {boolean}
+   */
+  isExternallyControlled() {
+    return this.externalValueSet;
   }
 
   /**

@@ -3,11 +3,11 @@
 Auto-generated comprehensive overview of the Three.js project codebase.
 
 **Generated:** December 27, 2025
-**Last Update:** Phase 3 UI/UX Polish (Progress bar, toast notifications, retry logic)
+**Last Update:** Phase 3 Countdown Integration with Gesture Control API (setExternalValue, clearExternalValue, isExternallyControlled)
 **Tool:** repomix v1.9.2
 **Total Files:** 9
-**Total Tokens:** 5,544 (updated)
-**Total Characters:** 42,847 (updated)
+**Total Tokens:** 5,544+ (updated with gesture API docs)
+**Total Characters:** 42,847+ (updated)
 
 ## File Inventory
 
@@ -70,7 +70,8 @@ threejs/
 │       ├── firework-shaders.js     # GLSL vertex/fragment shaders (119 LOC)
 │       ├── firework-audio.js       # WebAudio synthesis for 5 types, singleton pattern (292 LOC)
 │       ├── text-effects.js         # Rainbow neon material factory, countdown canvas (145 LOC)
-│       └── countdown-manager.js    # Timer logic, 2025 3D text, finale orchestration (332 LOC)
+│       └── countdown-manager.js    # Timer logic, 2025 3D text, finale, gesture control (392 LOC)
+│           └── NEW APIs: setExternalValue(), clearExternalValue(), isExternallyControlled()
 ├── tests/               # Unit tests
 │   └── unit/
 │       └── fireworks.test.js       # Fireworks system & types tests (800 LOC)

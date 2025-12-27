@@ -1070,4 +1070,193 @@ describe('CountdownManager Class', () => {
       expect(manager.isVisible()).toBe(false);
     });
   });
+
+  describe('External Control (Phase 3 - Gesture Integration)', () => {
+    beforeEach(() => {
+      manager.createCountdownPlane();
+      manager.textMaterial = TextEffects.createRainbowNeonMaterial();
+    });
+
+    describe('setExternalValue()', () => {
+      it('should set external value and update countdownValue', () => {
+        manager.start();
+        manager.setExternalValue(5);
+
+        expect(manager.countdownValue).toBe(5);
+        expect(manager.externalValueSet).toBe(true);
+        expect(manager.lastExternalValue).toBe(5);
+      });
+
+      it('should clamp value to 0-10 range', () => {
+        manager.start();
+
+        manager.setExternalValue(15);
+        expect(manager.countdownValue).toBe(10);
+
+        manager.setExternalValue(-5);
+        expect(manager.countdownValue).toBe(0);
+      });
+
+      it('should round decimal values', () => {
+        manager.start();
+        manager.setExternalValue(5.7);
+
+        expect(manager.countdownValue).toBe(6);
+      });
+
+      it('should only update display when value changes', () => {
+        manager.start();
+        const clearSpy = vi.spyOn(manager.countdownCtx, 'clearRect');
+        clearSpy.mockClear();
+
+        manager.setExternalValue(5);
+        expect(clearSpy).toHaveBeenCalledTimes(1);
+
+        clearSpy.mockClear();
+        manager.setExternalValue(5); // Same value
+        expect(clearSpy).not.toHaveBeenCalled();
+
+        clearSpy.mockClear();
+        manager.setExternalValue(3); // Different value
+        expect(clearSpy).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('clearExternalValue()', () => {
+      it('should reset external control flags', () => {
+        manager.start();
+        manager.setExternalValue(5);
+        manager.clearExternalValue();
+
+        expect(manager.externalValueSet).toBe(false);
+        expect(manager.lastExternalValue).toBeNull();
+      });
+
+      it('should keep current countdownValue after clearing', () => {
+        manager.start();
+        manager.setExternalValue(5);
+        manager.clearExternalValue();
+
+        // Value should remain at 5, timer resumes from there
+        expect(manager.countdownValue).toBe(5);
+      });
+    });
+
+    describe('isExternallyControlled()', () => {
+      it('should return false by default', () => {
+        expect(manager.isExternallyControlled()).toBe(false);
+      });
+
+      it('should return true when external value is set', () => {
+        manager.start();
+        manager.setExternalValue(5);
+
+        expect(manager.isExternallyControlled()).toBe(true);
+      });
+
+      it('should return false after clearing external value', () => {
+        manager.start();
+        manager.setExternalValue(5);
+        manager.clearExternalValue();
+
+        expect(manager.isExternallyControlled()).toBe(false);
+      });
+    });
+
+    describe('update() with external control', () => {
+      it('should skip timer when externally controlled', () => {
+        manager.start();
+        manager.setExternalValue(5);
+
+        // Timer should not advance
+        manager.update(1.0);
+        manager.update(1.0);
+        manager.update(1.0);
+
+        // Value should remain at 5 (not decremented by timer)
+        expect(manager.countdownValue).toBe(5);
+      });
+
+      it('should resume timer after clearing external value', () => {
+        manager.start();
+        manager.setExternalValue(5);
+        manager.clearExternalValue();
+
+        // Timer should now advance
+        manager.update(1.0);
+
+        expect(manager.countdownValue).toBe(4);
+      });
+
+      it('should still update rainbow material when externally controlled', () => {
+        manager.start();
+        manager.setExternalValue(5);
+
+        const hueBefore = manager.textMaterial.userData.hue;
+        manager.update(0.5);
+
+        expect(manager.textMaterial.userData.hue).not.toBe(hueBefore);
+      });
+    });
+
+    describe('start() resets external state', () => {
+      it('should reset external control on start', () => {
+        manager.start();
+        manager.setExternalValue(5);
+
+        manager.start(); // Restart
+
+        expect(manager.externalValueSet).toBe(false);
+        expect(manager.lastExternalValue).toBeNull();
+        expect(manager.countdownValue).toBe(10);
+      });
+    });
+
+    describe('stop() resets external state', () => {
+      it('should reset external control on stop', () => {
+        manager.start();
+        manager.setExternalValue(5);
+
+        manager.stop();
+
+        expect(manager.externalValueSet).toBe(false);
+        expect(manager.lastExternalValue).toBeNull();
+      });
+    });
+
+    describe('Phase 3 Validation Sequence', () => {
+      it('should follow expected gesture-to-display flow', () => {
+        manager.start();
+
+        // 1. Enter New Year mode (timer starts at 10)
+        expect(manager.countdownValue).toBe(10);
+
+        // 2. Show hand with 5 fingers → display shows "5"
+        manager.setExternalValue(5);
+        expect(manager.countdownValue).toBe(5);
+        expect(manager.isExternallyControlled()).toBe(true);
+
+        // 3. Show 3 fingers → display shows "3"
+        manager.setExternalValue(3);
+        expect(manager.countdownValue).toBe(3);
+
+        // Timer should be paused
+        manager.update(1.0);
+        expect(manager.countdownValue).toBe(3);
+
+        // 4. Remove hand → display resumes from 3, timer continues
+        manager.clearExternalValue();
+        expect(manager.isExternallyControlled()).toBe(false);
+        expect(manager.countdownValue).toBe(3);
+
+        // Timer should now count down
+        manager.update(1.0);
+        expect(manager.countdownValue).toBe(2);
+
+        // 5. Show hand again → display updates to finger count
+        manager.setExternalValue(7);
+        expect(manager.countdownValue).toBe(7);
+      });
+    });
+  });
 });
