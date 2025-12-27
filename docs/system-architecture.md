@@ -77,15 +77,34 @@ High-level architecture and component design for the Three.js application.
 - **Lifecycle**: spawn → update (gravity/damping) → cull (age-based) → dispose
 - **Memory**: Pre-allocated buffers (~352KB), no runtime allocation, validated zero memory leaks
 
-### Countdown Manager (Phase 3: 2025-12-27)
-- **Purpose**: 10-second countdown timer with rainbow neon "2025" text & finale trigger
+### Countdown Manager (Phase 3: 2025-12-27) - EXTENDED WITH GESTURE CONTROL
+- **File**: `src/fireworks/countdown-manager.js`
+- **Purpose**: 10-second countdown timer with rainbow neon "2025" text, finale trigger, and gesture-driven control
 - **Components**:
   - Rainbow HSL cycling neon material (0.8 emissive intensity, 0.3 metalness)
   - 3D "2025" TextGeometry with bevel effect (size 2, height 0.3, bevel segments 3)
   - Canvas-based countdown plane (256x256, golden glow effect)
   - Bloom parameter switching (neon vs tree mode)
-- **Timer**: 10-second loop with 2s post-finale delay before reset
-- **State Machine**: isActive → countdownValue decrement → finaleTriggered → waitingAfterFinale → reset
+- **Timer-Based Countdown**:
+  - 10-second loop: countdownValue 10→0
+  - Auto-decrement every second (elapsed >= 1.0 check)
+  - 2-second post-finale delay before reset
+  - State Machine: isActive → countdownValue decrement → finaleTriggered → waitingAfterFinale → reset
+- **Gesture Control Integration (Phase 3 NEW)**:
+  - **setExternalValue(value)**: Set countdown from gesture input (0-10, auto-clamped, rounded)
+    - Input validation: clamps to [0, 10], applies Math.round()
+    - Change detection: only updates display on value change (prevents redundant re-renders)
+    - Pauses timer-based countdown while active (externalValueSet=true)
+    - Tracks lastExternalValue to detect changes
+  - **clearExternalValue()**: Resume timer-based countdown
+    - Resets externalValueSet=false and lastExternalValue=null
+    - Countdown resumes from current value (no reset to 10)
+  - **isExternallyControlled()**: Check control state
+    - Returns externalValueSet boolean for UI feedback
+- **State Management**:
+  - externalValueSet: true when gesture controls value, false for timer
+  - lastExternalValue: tracks previous gesture value for change detection
+  - Resets on start()/stop() to ensure clean state transitions
 - **Callback**: setFinaleCallback(fn) fires at countdown=0 for New Year effect trigger
 - **Visibility**: Group-based show/hide for batch control
 - **Resource Management**: Proper Font/Texture/Material disposal on cleanup
@@ -269,6 +288,39 @@ countdown.stop() / countdown.dispose()
     ├─ restoreBloomForTree() → reset bloom to tree settings
     ├─ Dispose geometry, materials, textures
     └─ Clear all references
+```
+
+### Gesture-Driven Countdown Pipeline (Phase 3 Gesture Integration)
+```
+Hand detection (MediaPipe)
+    ↓
+countFingers() → returns 0-5
+    ↓
+countdown.setExternalValue(fingerCount)
+    ├─ Validate input: clamp(0, value, 10), round decimals
+    ├─ Check change: if value !== lastExternalValue
+    │   ├─ Update countdownValue = value
+    │   ├─ renderCountdownValue() → update canvas texture
+    │   ├─ Set externalValueSet = true
+    │   └─ Store lastExternalValue = value
+    └─ Prevent redundant rendering if value unchanged
+    ↓
+countdown.update(dt) called each frame
+    ├─ if externalValueSet === true:
+    │   ├─ Skip timer logic (timer paused)
+    │   └─ Continue rainbow material update
+    └─ if externalValueSet === false:
+        └─ Normal timer countdown (decrement every 1.0s)
+    ↓
+Hand detection lost OR gesture interaction ends
+    ↓
+countdown.clearExternalValue()
+    ├─ Set externalValueSet = false
+    ├─ Clear lastExternalValue = null
+    └─ Timer resumes from current countdownValue
+    ↓
+countdown.isExternallyControlled()
+    └─ Returns boolean for UI state feedback (showing gesture control active)
 ```
 
 ## Rendering Pipeline

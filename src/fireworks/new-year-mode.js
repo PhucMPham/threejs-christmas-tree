@@ -49,6 +49,14 @@ export class NewYearMode {
 
     // Original bloom settings for restoration
     this.originalBloom = null;
+
+    // Gesture tension state
+    this.gestureMode = false;        // True when hand detected
+    this.fingerCount = 5;            // Current stable finger count
+    this.tensionCenter = new THREE.Vector3(0, 5, 0); // World position
+    this.fistHoldTime = 0;           // Tracks how long fist is held
+    this.fistHoldThreshold = 0.5;    // Seconds to trigger finale
+    this.gestureFinaleTriggered = false;
   }
 
   /**
@@ -166,6 +174,12 @@ export class NewYearMode {
 
     // Reset spawn timer
     this.spawnTimer = 0;
+
+    // Reset gesture state
+    this.gestureMode = false;
+    this.fingerCount = 5;
+    this.fistHoldTime = 0;
+    this.gestureFinaleTriggered = false;
   }
 
   /**
@@ -218,6 +232,98 @@ export class NewYearMode {
       this.deactivate();
     } else {
       this.activate();
+    }
+  }
+
+  /**
+   * Update gesture state from finger detection
+   * @param {number} fingerCount - Detected finger count (0-5)
+   * @param {number} handX - Normalized hand X (-1 to 1)
+   * @param {number} handY - Normalized hand Y (-1 to 1)
+   * @param {number} dt - Delta time in seconds (default 0.016 for ~60fps)
+   */
+  setGestureState(fingerCount, handX, handY, dt = 0.016) {
+    if (!this.isActive) return;
+
+    this.gestureMode = true;
+    this.fingerCount = Math.max(0, Math.min(5, Math.round(fingerCount)));
+
+    // Convert screen position to world position
+    // Map to a reasonable 3D region in front of camera
+    const clampedX = Math.max(-1, Math.min(1, handX));
+    const clampedY = Math.max(-1, Math.min(1, handY));
+    this.tensionCenter.set(
+      clampedX * 15,           // X: -15 to +15
+      5 + clampedY * -5,       // Y: 0 to 10 (inverted because screen Y is flipped)
+      0                        // Z: center depth
+    );
+
+    // Update countdown display to show finger count
+    if (this.countdown) {
+      this.countdown.setExternalValue(this.fingerCount);
+    }
+
+    // Pass tension state to firework system
+    if (this.fireworkSystem) {
+      const compression = 1 - (this.fingerCount / 5);
+      this.fireworkSystem.setTensionState(this.tensionCenter, compression);
+    }
+
+    // Track fist hold time
+    if (this.fingerCount === 0) {
+      this.fistHoldTime += dt;
+      if (this.fistHoldTime >= this.fistHoldThreshold && !this.gestureFinaleTriggered) {
+        this.triggerGestureFinale();
+      }
+    } else {
+      this.fistHoldTime = 0;
+      this.gestureFinaleTriggered = false;
+    }
+  }
+
+  /**
+   * Clear gesture state when hand not detected
+   */
+  clearGestureState() {
+    this.gestureMode = false;
+    this.fistHoldTime = 0;
+
+    // Gradually release tension
+    if (this.fireworkSystem) {
+      this.fireworkSystem.setTensionState(null, 0);
+    }
+
+    // Return to timer-based countdown
+    if (this.countdown) {
+      this.countdown.clearExternalValue();
+    }
+  }
+
+  /**
+   * Trigger finale from gesture (fist held)
+   */
+  triggerGestureFinale() {
+    this.gestureFinaleTriggered = true;
+
+    // Spawn concentrated burst at tension center
+    const burstCount = 8;
+    const types = Object.values(FIREWORK_TYPE);
+
+    for (let i = 0; i < burstCount; i++) {
+      setTimeout(() => {
+        const offset = new THREE.Vector3(
+          (Math.random() - 0.5) * 5,
+          (Math.random() - 0.5) * 5,
+          (Math.random() - 0.5) * 5
+        );
+        const spawnPos = this.tensionCenter.clone().add(offset);
+        const type = types[i % types.length];
+
+        if (this.fireworkSystem.canSpawn()) {
+          this.fireworkSystem.spawn(spawnPos, type);
+          this.fireworkAudio?.play(type);
+        }
+      }, i * 80);
     }
   }
 
