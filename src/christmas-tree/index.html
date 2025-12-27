@@ -245,6 +245,16 @@
             padding: 0 10px;
         }
 
+        /* Mobile: shift mode-bar right to avoid audio/hide buttons overlap */
+        @media (max-width: 767px) {
+            #mode-bar {
+                left: auto;
+                right: calc(10px + var(--safe-right));
+                transform: none;
+                bottom: calc(20px + var(--safe-bottom));
+            }
+        }
+
         @media (min-width: 768px) {
             #mode-bar {
                 bottom: calc(30px + var(--safe-bottom));
