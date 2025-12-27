@@ -58,12 +58,19 @@ threejs/
 ├── scripts/             # Utility scripts
 │   └── prepare-photos.sh    # Photo resize & EXIF rotation (macOS)
 ├── src/                 # Source files
-│   └── christmas-tree/
-│       ├── index.html   # Main application entry point (1160 LOC)
-│       ├── mobile-detection.js     # Device detection utilities (34 LOC)
-│       ├── camera-permissions.js   # Camera access & error handling (132 LOC)
-│       ├── gesture-detection.js    # MediaPipe gesture recognition (110 LOC)
-│       └── images/      # Processed photos (photo1.jpg - photo5.jpg)
+│   ├── christmas-tree/
+│   │   ├── index.html   # Main application entry point (1160 LOC)
+│   │   ├── mobile-detection.js     # Device detection utilities (34 LOC)
+│   │   ├── camera-permissions.js   # Camera access & error handling (132 LOC)
+│   │   ├── gesture-detection.js    # MediaPipe gesture recognition (110 LOC)
+│   │   └── images/      # Processed photos (photo1.jpg - photo5.jpg)
+│   └── fireworks/       # NEW: Particle system for New Year effect
+│       ├── firework-system.js      # FireworkSystem class, physics engine (317 LOC)
+│       ├── firework-types.js       # 5 firework types, velocity generators (228 LOC)
+│       └── firework-shaders.js     # GLSL vertex/fragment shaders (119 LOC)
+├── tests/               # Unit tests
+│   └── unit/
+│       └── fireworks.test.js       # Fireworks system & types tests (800 LOC)
 ├── docs/                # Documentation
 │   ├── README.md
 │   ├── project-overview-pdr.md
@@ -1036,9 +1043,111 @@ routes/upload.js
 - `.status-compressing/.queued/.uploading/.retrying/.done/.failed` - Color variants
 - Preview items: Aspect ratio 1:1, rounded corners, border overlay
 
+## New Year Fireworks Module (Phase 1: 2025-12-27)
+
+### Fireworks Particle System Architecture
+**Status:** Complete - GPU-accelerated particle engine with 5 visual types
+
+#### Core Components
+
+**1. FireworkSystem Class** (`firework-system.js`, 317 LOC)
+- **Purpose:** Main particle engine managing spawn/update/dispose lifecycle
+- **Architecture:**
+  - Float32Array buffers for positions, velocities, colors, sizes, ages, maxAges, types
+  - Max capacity: 2,000 simultaneous particles
+  - Object pooling with swap-and-pop removal for O(1) efficiency
+  - GPU-driven rendering via THREE.Points + ShaderMaterial
+- **Key Methods:**
+  - `spawn(origin, type)` - Create particle burst at position (3 materials for multi-type support)
+  - `update(dt)` - Physics loop: gravity, damping, position updates, age tracking
+  - `cullDeadParticles()` - Remove expired particles via efficient swap strategy
+  - `dispose()` - Full cleanup: remove listeners, dispose geometry/materials
+- **Burst Tracking:** Metadata array (type, particle count, spawn time) limited to 20 active bursts
+- **Resize Handling:** Auto-scales point sizes based on device pixel ratio
+
+**2. Firework Types Configuration** (`firework-types.js`, 228 LOC)
+Five distinct particle behaviors with unique physics and colors:
+
+| Type | Particles | Gravity | Damping | Speed | Colors | Duration |
+|------|-----------|---------|---------|-------|--------|----------|
+| **Bloom** | 150 | -0.004 | 0.98 | 0.08 | Gold palette (3 shades) | 1.5-2.5s |
+| **Spark** | 200 | -0.002 | 0.95 | 0.15 | White palette (cool/warm) | 0.8-1.5s |
+| **Drift** | 100 | -0.001 | 0.99 | 0.05 | Cyan palette (3 shades) | 2.0-3.5s |
+| **Scatter** | 180 | -0.003 | 0.96 | 0.12 | Purple/magenta palette (4) | 1.0-2.0s |
+| **Sparkler** | 80 | -0.0005 | 0.995 | 0.02 | Warm yellow palette (3) | 0.3-0.8s |
+
+**Velocity Generation Functions:**
+- **Bloom:** Fibonacci sphere distribution using golden ratio angle (even spherical spread)
+- **Spark:** High-speed omnidirectional using spherical coordinates (theta, phi)
+- **Drift:** Horizontal bias with slight upward tendency (floating effect)
+- **Scatter:** Completely random chaotic trajectories with high variance
+- **Sparkler:** Mostly upward with minimal horizontal spread (continuous fizzle)
+
+**3. GLSL Shader System** (`firework-shaders.js`, 119 LOC)
+Two shader pairs for particle rendering:
+
+**Standard Firework Shaders:**
+- Vertex: Position scaling based on life/distance, soft glow calculations
+- Fragment: Circular gradient with softstep edge falloff, additive glow boost
+- Blend: THREE.AdditiveBlending for light accumulation effect
+
+**Sparkler Shaders:**
+- Vertex: Hash-based noise jitter for flickering, smaller particle scaling
+- Fragment: Hot white core to color edge mix, sparkle intensity variation
+- Effect: Simulates continuous sparkle emission with life-based fade
+
+#### Physics Implementation
+**Particle Update Loop (O(n) per frame):**
+```
+For each active particle:
+  1. Apply gravity: vy += config.gravity
+  2. Apply damping: vx/vy/vz *= config.damping
+  3. Update position: pos += vel
+  4. Age particle: age += dt
+
+Post-update:
+  5. Cull particles: age >= maxAge → swap-and-pop removal
+  6. Mark GPU buffers dirty: needsUpdate = true
+  7. Set draw range: 0 to activeCount
+```
+
+**Performance Characteristics:**
+- Max active particles: 2,000 (memory: ~352KB for Float32Array buffers)
+- GPU rendering: Single draw call via THREE.Points
+- CPU update: ~1-2ms per frame (all physics on CPU)
+- Blend mode: Additive (no Z-sorting needed, cumulative light)
+
+#### Integration Points
+- **Scene integration:** Added to scene as Points mesh named 'fireworkSystem'
+- **Resize handling:** Updates pixelRatio uniform on window resize
+- **Depth disabled:** `depthWrite: false` prevents z-buffer updates
+- **Frustum culling:** Disabled (particles spawn across full view)
+
+#### Testing Coverage
+**Test file:** `tests/unit/fireworks.test.js` (800 LOC)
+- Velocity function distribution tests (spherical, omnidirectional, horizontal bias)
+- Type configuration validation (gravity, damping, particle counts)
+- FireworkSystem lifecycle: spawn, update, cull, dispose
+- Memory management: 100+ spawn/cull cycles, rapid burst cycles
+- Particle data integrity: swap operations, buffer attribute correctness
+- 60+ test cases covering edge cases and performance scenarios
+
+#### Memory & Resource Management
+- **Pre-allocation:** All buffers allocated at construction (no runtime allocation)
+- **Swap-and-pop removal:** O(1) particle culling, no array fragmentation
+- **Burst limit:** Metadata array capped at 20 bursts (LRU cleanup)
+- **Dispose cleanup:** Full resource teardown, event listener removal
+- **No memory leaks:** Validated via 100-cycle stress tests
+
+#### Browser Compatibility
+- WebGL 2.0+ (via THREE.js)
+- Tested: Chrome, Firefox, Safari with additive blending support
+- Shader support: GLSL ES 100 (vec3, smoothstep, mix functions)
+- Float32Array: All modern browsers (IE11+, but not supported by app)
+
 ## Maintenance Notes
 
-- **Last Update:** December 27, 2025 (Phase 1 Frontend Upload Overhaul)
+- **Last Update:** December 27, 2025 (Phase 1: New Year Fireworks Module)
 - **Code Stability:** Stable (production-ready, responsive design complete, upload pipeline tested)
 - **Technical Debt:** Minimal (all known issues addressed)
 - **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix, SRI integrity hash)

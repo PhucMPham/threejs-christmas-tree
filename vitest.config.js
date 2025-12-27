@@ -7,7 +7,7 @@ export default defineConfig({
     include: ['tests/**/*.test.js'],
     coverage: {
       provider: 'v8',
-      include: ['lib/**', 'routes/upload.js'],
+      include: ['lib/**', 'routes/upload.js', 'src/**'],
       reporter: ['text', 'html'],
       thresholds: {
         lines: 80,

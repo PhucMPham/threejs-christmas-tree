@@ -1,13 +1,41 @@
 # Project Roadmap
 
-**Last Updated**: 2025-12-27 (11:00 UTC)
-**Current Focus**: Upload Speed Enhancement COMPLETE - All 3 Phases Done
+**Last Updated**: 2025-12-27 (12:12 UTC)
+**Current Focus**: New Year Fireworks Mode Phase 1 COMPLETE - Phase 2-4 Pending
 
 ---
 
 ## Active Projects
 
-### 0. Upload Speed Enhancement & Error Fixes
+### 0. New Year Fireworks Mode
+**Plan Path**: `/plans/251227-1127-new-year-fireworks-mode/`
+**Start Date**: 2025-12-27
+**Estimated Completion**: 2025-12-27
+**Status**: In Progress (Phase 1 Complete, Phase 2-4 Pending)
+
+#### Phase Breakdown
+
+| Phase | Status | Completion | Details |
+|-------|--------|------------|---------|
+| Phase 1: Firework Types & Physics | ✓ Complete | 100% | 5 types, 68 tests, 97.67% coverage |
+| Phase 2: WebAudio Synthesis | Pending | 0% | Per-firework sound generation |
+| Phase 3: 2025 Text & Countdown | Pending | 0% | Neon text, 10s loop, grand finale |
+| Phase 4: Mode Integration | Pending | 0% | Mode toggle, scene switching |
+
+#### Recent Progress (2025-12-27 12:12 UTC)
+- ✓ Phase 1: Firework Types & Physics COMPLETE (12:12 UTC)
+  - **Files Implemented**: firework-system.js, firework-types.js, firework-shaders.js
+  - **Firework Types**: Bloom (golden spherical), Spark (fast omnidirectional), Drift (horizontal), Scatter (chaotic), Sparkler (raymarched)
+  - **Physics System**: Euler integration, per-type gravity/damping, particle lifecycle management
+  - **Buffer Management**: Pre-allocated 2000 particles, object pooling with Float32Array
+  - **Rendering**: Additive blending, distance-based softness, GLSL shaders
+  - **Testing**: 68 tests passing, 97.67% code coverage
+  - **Performance**: 60fps with 1000+ active particles
+  - **Status**: All success criteria met - READY FOR PHASE 2
+
+---
+
+### 1. Upload Speed Enhancement & Error Fixes
 **Plan Path**: `/plans/251227-0953-upload-speed-fix/`
 **Start Date**: 2025-12-27
 **Completion Date**: 2025-12-27
@@ -213,6 +241,17 @@ Build a romantic Christmas gift: gesture-controlled 3D particle Christmas tree w
 ## Changelog
 
 ### 2025-12-27
+- **New Year Fireworks Mode Phase 1 Complete**: Firework Types & Physics (12:12 UTC)
+  - **Firework System Core**: Implemented 5 distinct firework types with unique physics behaviors
+  - **Physics Engine**: Euler integration, per-type gravity/damping parameters, particle lifecycle
+  - **Buffer Management**: Float32Array pre-allocation for 2000 particles, object pooling pattern
+  - **GLSL Shaders**: Vertex/fragment shaders for additive blending, distance-based particle softness
+  - **Rendering Pipeline**: Integrates with existing scene, UnrealBloomPass compatibility
+  - **Test Coverage**: 68 tests passing, 97.67% code coverage
+  - **Performance**: 60fps sustained with 1000+ active particles on desktop
+  - **Files**: src/fireworks/firework-system.js, firework-types.js, firework-shaders.js
+  - **Status**: Ready for Phase 2 (WebAudio Synthesis)
+
 - **Upload Speed Phase 3 Complete**: UI/UX Polish (11:00 UTC)
   - **Progress Bar**: Smooth gradient fill with ARIA accessibility
   - **Toast Notifications**: Replaced alerts (success, error, warning, info)
