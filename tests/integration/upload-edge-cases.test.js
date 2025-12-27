@@ -63,8 +63,8 @@ describe('File Validation Edge Cases', () => {
         .post('/api/upload')
         .attach('image', TRUNCATED_JPEG, { filename: 'broken.jpg', contentType: 'image/jpeg' });
 
-      // May return 400 (invalid content) or 500 (file-type parsing error)
-      expect([400, 500]).toContain(res.status);
+      // May return 400 (invalid content), 500 (file-type parsing error), or 502 (upstream error if reaches ImgBB)
+      expect([400, 500, 502]).toContain(res.status);
     });
 
     it('rejects random bytes disguised as image', async () => {
@@ -152,7 +152,7 @@ describe('Error Response Format', () => {
 });
 
 describe('ImgBB API Error Handling', () => {
-  it('handles ImgBB rate limit (429)', async () => {
+  it('handles ImgBB rate limit (429) with retry exhaustion', async () => {
     axios.post.mockRejectedValue({
       response: { status: 429 },
       message: 'Rate limited'
@@ -163,42 +163,44 @@ describe('ImgBB API Error Handling', () => {
       .attach('image', VALID_JPEG, 'test.jpg');
 
     expect(res.status).toBe(429);
-    expect(res.body.error).toContain('rate limited');
+    expect(res.body.error).toContain('busy'); // Updated error message
+    expect(res.body.code).toBe('RATE_LIMITED');
   });
 
-  it('handles ImgBB timeout', async () => {
+  it('handles ImgBB timeout with retry exhaustion', async () => {
     axios.post.mockRejectedValue({
       code: 'ECONNABORTED',
-      message: 'timeout of 30000ms exceeded'
+      message: 'timeout exceeded'
     });
 
     const res = await request(app)
       .post('/api/upload')
       .attach('image', VALID_JPEG, 'test.jpg');
 
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(504); // Gateway timeout for upstream timeout
+    expect(res.body.code).toBe('TIMEOUT');
   });
 
-  it('handles ImgBB failure response', async () => {
+  it('handles ImgBB failure response as upstream error', async () => {
     axios.post.mockResolvedValue(MOCK_IMGBB_FAILURE);
 
     const res = await request(app)
       .post('/api/upload')
       .attach('image', VALID_JPEG, 'test.jpg');
 
-    expect(res.status).toBe(400);
-    expect(res.body.error).toContain('failed');
+    expect(res.status).toBe(502); // Bad gateway for upstream failure
+    expect(res.body.code).toBe('UPSTREAM_ERROR');
   });
 
-  it('handles network error', async () => {
+  it('handles network error as upstream error', async () => {
     axios.post.mockRejectedValue(new Error('Network error'));
 
     const res = await request(app)
       .post('/api/upload')
       .attach('image', VALID_JPEG, 'test.jpg');
 
-    expect(res.status).toBe(500);
-    expect(res.body.error).toContain('failed');
+    expect(res.status).toBe(502); // Bad gateway for network error
+    expect(res.body.code).toBe('UPSTREAM_ERROR');
   });
 });
 

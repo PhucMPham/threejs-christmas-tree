@@ -2,11 +2,12 @@
 
 Auto-generated comprehensive overview of the Three.js project codebase.
 
-**Generated:** December 25, 2025
+**Generated:** December 27, 2025
+**Last Update:** Phase 3 UI/UX Polish (Progress bar, toast notifications, retry logic)
 **Tool:** repomix v1.9.2
-**Total Files:** 8
-**Total Tokens:** 2,701
-**Total Characters:** 10,908
+**Total Files:** 9
+**Total Tokens:** 5,544 (updated)
+**Total Characters:** 42,847 (updated)
 
 ## File Inventory
 
@@ -15,7 +16,7 @@ Auto-generated comprehensive overview of the Three.js project codebase.
 | File | LOC | Purpose | Status |
 |------|-----|---------|--------|
 | `main.js` | 65 | Three.js scene setup, animation loop, mesh/lighting config | Active |
-| `index.html` | 13 | Entry HTML, canvas container, module script loader | Active |
+| `index.html` | 1244 | Entry HTML, tab navigation, upload UI, toast notifications (Phase 3) | Active |
 | `vite.config.js` | 12 | Vite dev server, build output, sourcemap config | Active |
 | `package.json` | 17 | Dependencies (three@0.170.0, vite@6.0.0), npm scripts | Active |
 
@@ -139,6 +140,53 @@ export default defineConfig({
   build: { outDir: 'dist', sourcemap: true }
 });
 ```
+
+## Phase 3: UI/UX Polish Implementation
+
+**Completion Status:** Active
+
+### Features Added
+1. **Progress Bar with Gradient Animation**
+   - Smooth fill animation (0-100%)
+   - Green gradient background (#22c55e → #4ade80)
+   - ARIA progressbar role for accessibility
+   - Real-time upload count display
+
+2. **Toast Notification System**
+   - Multi-type support: success (green), error (red), warning (yellow), info (blue)
+   - Auto-dismiss timer (default 4000ms)
+   - Stacking support for multiple toasts
+   - Fixed bottom positioning with safe area insets
+   - CSS animations (slideUp)
+
+3. **Retry Logic for Failed Uploads**
+   - Manual "Retry Failed" button appears on partial failures
+   - Exponential backoff strategy (1s, 2s, 4s delays)
+   - Per-file status indicators (compressing, queued, uploading, retrying, done, failed)
+   - Preserves failed files for selective retry
+
+4. **Enhanced File Compression**
+   - Browser-image-compression library integration
+   - Automatic HEIC → JPEG conversion
+   - Configurable max dimensions (1920px) & quality (0.9)
+   - Skips compression for small files (<500KB)
+   - Web Worker support for non-blocking operation
+
+5. **Accessibility Improvements**
+   - ARIA progressbar role with aria-valuenow updates
+   - Semantic error messages in toasts
+   - Color-coded status indicators
+   - Keyboard accessible UI
+
+### Key Code Locations
+- **Progress Bar**: Lines 456-480 (CSS styles), 984-1026 (JavaScript logic)
+- **Toast System**: Lines 482-512 (CSS), 943-954 (showToast function)
+- **Retry Logic**: Lines 439-453, 957-981 (button & error handling)
+- **Upload Queue**: Lines 827-894 (UploadQueue class with concurrency control)
+- **File Status**: Lines 916-940 (updateFileStatus with enum mapping)
+
+### Dependencies Added
+- `browser-image-compression@2.0.2` (CDN): Image optimization
 
 ## Build Artifacts
 
@@ -828,12 +876,172 @@ Verification checks:
 - **Hardware-accelerated transitions:** Smooth opacity changes
 - **Paint layers:** Minimal repaints due to fixed positioning
 
+## Phase 2: Backend Reliability - Upload Route Enhancements (2025-12-27)
+
+### Upload Route Reliability Improvements
+**File:** `routes/upload.js` - Production-ready upload handling with retry logic and dynamic timeout
+
+#### Error Code System (Lines 38-49)
+Comprehensive error classification for client feedback:
+- `NO_FILE` - Missing file in request
+- `LIMIT_REACHED` - User hit 10 photo limit
+- `INVALID_TYPE` - File type not allowed (non-image)
+- `CONFIG_ERROR` - Server misconfiguration (missing API key)
+- `RATE_LIMITED` - ImgBB rate limit hit (429)
+- `TIMEOUT` - ImgBB request timed out
+- `UPSTREAM_ERROR` - ImgBB service unavailable (502)
+- `FILE_TOO_LARGE` - Exceeds 32MB limit
+- `INVALID_FILE` - Multer rejection (MIME validation)
+- `INTERNAL_ERROR` - Unexpected server error
+
+#### Retry Logic Function (Lines 51-88)
+**`isRetryableError(err)` & `withRetry(fn, options)`**
+- Detects retryable failures: network errors (ECONNRESET, ETIMEDOUT, ECONNABORTED), 429 rate limit, 5xx server errors
+- Exponential backoff: Base 1000ms, max 8000ms, 3 retry attempts (configurable)
+- Prevents retries for permanent errors (4xx client errors, auth failures)
+- Logs retry attempts with delay for debugging
+
+#### Dynamic Timeout Calculator (Lines 90-98)
+**`calculateTimeout(fileSizeBytes)`**
+- Base timeout: 15 seconds
+- Scales: +5 seconds per MB
+- Maximum: 60 seconds
+- Formula: `Math.min(15000 + (sizeMB * 5000), 60000)`
+- Prevents timeout on large files, quick failure on small ones
+
+#### Upload to ImgBB with Retry (Lines 100-126)
+**`uploadToImgBB(base64Image, fileSizeBytes)`**
+- Wraps axios POST with dynamic timeout calculation
+- Integrates `withRetry()` wrapper for automatic retry logic
+- Validates response success flag, throws on failure
+- 3 retries with exponential backoff on transient errors
+
+#### Upload Endpoint Error Handling (Lines 151-262)
+**POST `/` route with comprehensive validation chain**
+1. File existence check (NO_FILE)
+2. Photo limit validation (LIMIT_REACHED)
+3. File type magic bytes validation (INVALID_TYPE)
+4. API key configuration check (CONFIG_ERROR)
+5. Base64 encoding & retry-wrapped ImgBB upload
+6. Specific error mapping for client:
+   - 429 status → RATE_LIMITED (retryAfter: 60)
+   - ETIMEDOUT/ECONNABORTED → TIMEOUT (504)
+   - Other upstream errors → UPSTREAM_ERROR (502)
+7. Database storage with transaction-safe lastInsertRowid
+8. Success response with photo count & remaining slots
+
+#### Photo Management Endpoints
+- **GET `/photos`** (Lines 265-279) - Lists user photos with count/max/remaining
+- **DELETE `/:id`** (Lines 282-305) - Delete specific photo, updates count
+
+### Configuration from Environment
+- `MAX_PHOTOS` - Default 10 (environment override: MAX_PHOTOS env var)
+- `MAX_FILE_SIZE_MB` - Default 32MB (environment override: MAX_FILE_SIZE_MB env var)
+- `IMGBB_API_KEY` - Required for uploads, checked at request time
+
+### Rate Limiting
+- 15 uploads per minute per session (express-rate-limit middleware)
+- Session ID from `req.sessionId` (must be set upstream)
+- Fallback to 'anonymous' if no session
+
+### Factory Pattern Architecture
+**`createUploadRouter(options = {})`** (Lines 135-308)
+- Dependency injection: `options.db` (default: defaultDb)
+- Optional: `options.rateLimiter` (default: built-in express-rate-limit)
+- Enables testing with mock DB and rate limiters
+- Single export: `export default createUploadRouter()`
+
+### Dependencies
+```
+routes/upload.js
+├── express (Router, req/res)
+├── multer (file parsing, in-memory storage)
+├── axios (HTTP client for ImgBB)
+├── form-data (multipart form encoding)
+├── express-rate-limit (rate limiting middleware)
+├── file-type (magic byte validation)
+└── ../lib/db.js (database layer)
+```
+
+### Technical Patterns
+- **Exponential Backoff:** Prevents hammering external service during transient failures
+- **Magic Byte Validation:** Two-layer validation (MIME type + file-type library)
+- **Dynamic Timeout:** Scales with file size, prevents stuck connections
+- **Error Mapping:** Client-friendly error codes for UI feedback
+- **Resource Cleanup:** No orphaned requests on error (proper error propagation)
+- **Stateless Sessions:** Rate limit keying by sessionId (supports horizontal scaling)
+
+## Phase 1: Frontend Upload Overhaul (2025-12-27)
+
+### Client-Side Upload Features
+**File:** `index.html` (Main upload UI & logic)
+
+#### Image Compression (Lines 12-15, 805-823)
+- Library: `browser-image-compression@2.0.2` (CDN from jsDelivr)
+- SRI hash verification enabled
+- Features:
+  - WebWorker-based (non-blocking compression)
+  - Auto-skip files <500KB
+  - Configurable: 2MB max, 1920px dimensions, 90% quality
+  - HEIC→JPEG conversion (iOS support)
+  - Fallback: Uses original on compression failure
+
+#### Parallel Upload Queue (Lines 736-803)
+- **UploadQueue class:** Manages concurrent uploads
+- Concurrency: 4 simultaneous uploads (configurable)
+- Methods:
+  - `add(file, index)` - Enqueue file for upload
+  - `process()` - Dequeue & process while slots available
+  - `uploadWithRetry(file, index, retries=3)` - Auto-retry with backoff
+  - `uploadFile(file, index)` - POST /api/upload
+
+#### Retry Mechanism (Lines 769-783)
+- Max retries: 3 attempts (1 initial + 2 retries)
+- Exponential backoff: 1s, 2s, 4s delays
+- Applies to all failures (network, server, timeout)
+- Manual retry via "Upload All" button
+
+#### Per-File Status Indicators (Lines 825-849)
+- Compressing: Blue, ⏳ Compressing...
+- Queued: Gray, ⏳ Queued
+- Uploading: Purple, ⬆️ Uploading...
+- Retrying: Yellow, 🔄 Retry N/3...
+- Done: Green, ✅ Done
+- Failed: Red, ❌ Failed
+
+#### Upload Flow (Lines 860-935)
+```
+1. Files selected → handleFiles() validation
+2. Render preview with status indicators
+3. User clicks "Upload All"
+4. Compress all files (parallel, async/await)
+5. Create queue (concurrency=4)
+6. Enqueue compressed files
+7. Process queue (4 at a time)
+8. Retry on error (1s, 2s, 4s delays)
+9. Render success/failure modal
+10. Update gallery with uploaded photos
+```
+
+### Upload UI Components (Lines 124-730)
+- Upload header: Title + description
+- Dropzone: Drag & drop + file picker button
+- Preview container: Grid of pending files with status
+- Status bar: Photo count + Upload button
+- Gallery section: Grid of uploaded photos with delete buttons
+- Success modal: Confirmation dialog with tree nav
+
+### CSS Styling (Lines 414-432)
+- `.file-status` - Overlay indicator
+- `.status-compressing/.queued/.uploading/.retrying/.done/.failed` - Color variants
+- Preview items: Aspect ratio 1:1, rounded corners, border overlay
+
 ## Maintenance Notes
 
-- **Last Update:** December 27, 2025 (Phase 4 UI Layout & Positioning)
-- **Code Stability:** Stable (production-ready, responsive design complete)
+- **Last Update:** December 27, 2025 (Phase 1 Frontend Upload Overhaul)
+- **Code Stability:** Stable (production-ready, responsive design complete, upload pipeline tested)
 - **Technical Debt:** Minimal (all known issues addressed)
-- **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix)
+- **Browser Tested:** Chrome, Firefox, Safari (with -webkit-prefix, SRI integrity hash)
 - **Responsive Breakpoints:** 5 CSS custom properties + fluid clamp() functions
 - **Safe Area Support:** Notch/safe area insets fully integrated (Phase 4 Complete)
 - **Typography:** Fluid scaling via CSS clamp() (Phase 3 Complete)
@@ -841,8 +1049,11 @@ Verification checks:
   - `mobile-detection.js` → no deps (core utility)
   - `camera-permissions.js` → `mobile-detection.js` (with cleanup, error codes)
   - `gesture-detection.js` → `mobile-detection.js`
-  - `index.html` → all modules (try-catch, loop guard, readyState check)
+  - `index.html` → all modules (try-catch, loop guard, readyState check) + browser-image-compression CDN
+- **Backend Routes:**
+  - `routes/upload.js` → Express, multer, axios, file-type (retry logic, dynamic timeout, error codes)
 - **Asset Inventory:** 2 favicon formats, 6 title variations, 3 description templates
 - **Review Frequency:** After each phase completion
 - **UI Controls:** 2 fixed controls (audio, hide) with safe-area-inset positioning + 48px touch targets
 - **Notched Device Support:** Full coverage for iPhone X/12/14 Pro and Android dynamic island
+- **Upload Features:** Client-side compression, parallel queue (4 concurrent), retry w/ backoff, per-file status

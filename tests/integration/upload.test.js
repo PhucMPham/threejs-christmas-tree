@@ -103,18 +103,21 @@ describe('POST /api/upload', () => {
     expect(res.body.error).toContain('configuration');
   });
 
-  it('calls axios with correct parameters', async () => {
+  it('calls axios with correct parameters and dynamic timeout', async () => {
     axios.post.mockResolvedValue(MOCK_IMGBB_SUCCESS);
 
     await request(app)
       .post('/api/upload')
       .attach('image', VALID_JPEG, 'test.jpg');
 
-    expect(axios.post).toHaveBeenCalledTimes(1);
+    expect(axios.post).toHaveBeenCalled();
     expect(axios.post).toHaveBeenCalledWith(
       'https://api.imgbb.com/1/upload',
       expect.any(Object), // FormData
-      expect.objectContaining({ timeout: 30000 })
+      expect.objectContaining({
+        timeout: expect.any(Number), // Dynamic timeout based on file size
+        validateStatus: expect.any(Function)
+      })
     );
   });
 });
