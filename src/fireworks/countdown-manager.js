@@ -15,13 +15,13 @@ import {
   restoreBloomForTree
 } from './text-effects.js';
 
-// Configuration
+// Configuration - optimized for better visibility
 const CONFIG = {
-  textSize: 3,
-  textHeight: 0.5,
-  textYPosition: 18,
-  countdownPlaneSize: 4,
-  countdownYPosition: 12,
+  textSize: 2,           // Reduced from 3 for better fit
+  textHeight: 0.3,       // Thinner depth
+  textYPosition: 8,      // Lowered to avoid header overlap
+  countdownPlaneSize: 3, // Smaller countdown display
+  countdownYPosition: 2, // Centered in view
   countdownStart: 10,
   finaleWaitTime: 2,
   fontPath: '/node_modules/three/examples/fonts/helvetiker_regular.typeface.json'

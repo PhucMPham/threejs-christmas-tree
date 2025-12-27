@@ -5,11 +5,11 @@
 
 import * as THREE from 'three';
 
-// Default bloom settings for neon effect
+// Default bloom settings for neon effect - minimal glow
 export const NEON_BLOOM_SETTINGS = {
-  threshold: 0.5,
-  strength: 1.5,
-  radius: 0.6
+  threshold: 0.8,   // High threshold = much less bloom
+  strength: 0.4,    // Very subtle glow
+  radius: 0.2       // Tight radius
 };
 
 // Tree mode bloom settings (restore after)
@@ -27,9 +27,9 @@ export function createRainbowNeonMaterial() {
   const material = new THREE.MeshStandardMaterial({
     color: 0xff0000,
     emissive: 0xff0000,
-    emissiveIntensity: 2.5,
-    metalness: 0.8,
-    roughness: 0.2
+    emissiveIntensity: 0.8,  // Minimal glow, clean text
+    metalness: 0.3,
+    roughness: 0.5
   });
 
   // Store hue for animation
@@ -116,23 +116,22 @@ export function renderCountdownValue(ctx, value, texture) {
   // Clear canvas
   ctx.clearRect(0, 0, size, size);
 
-  // Glow effect - multiple layers
+  // Minimal glow effect
   ctx.save();
 
-  // Outer glow
+  // Subtle outer glow
   ctx.shadowColor = '#ffd700';
-  ctx.shadowBlur = 40;
+  ctx.shadowBlur = 10;  // Reduced from 40
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
 
-  // Text style
+  // Text style - clean and readable
   ctx.fillStyle = '#ffd700';
-  ctx.font = `bold ${Math.floor(size * 0.7)}px Arial, sans-serif`;
+  ctx.font = `bold ${Math.floor(size * 0.6)}px Arial, sans-serif`;  // Slightly smaller
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  // Draw multiple times for stronger glow
-  ctx.fillText(value.toString(), center, center);
+  // Draw once for clean look
   ctx.fillText(value.toString(), center, center);
 
   ctx.restore();

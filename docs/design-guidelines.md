@@ -264,11 +264,68 @@ full-height-container {
 - [ ] Landscape orientation displays correctly
 - [ ] Fallback styles work on older browsers
 
+## Bloom Post-Processing Mode Switching (Phase 4)
+
+### Pattern: Dynamic Bloom Adjustment Between Modes
+
+**Problem:** Christmas tree mode requires subtle bloom for warm, sophisticated look, while New Year fireworks mode needs aggressive bloom for neon glow effect.
+
+**Solution:** Pre-calculated bloom preset switching
+
+**Tree Mode Bloom Settings:**
+```javascript
+{ threshold: 0.85, strength: 0.25, radius: 0.3 }
+```
+- High threshold (0.85) = only very bright elements glow
+- Low strength (0.25) = minimal spread
+- Tight radius (0.3) = sharp glow boundaries
+- Result: Warm, sophisticated lighting on gold/red tree ornaments
+
+**Fireworks Mode Bloom Settings:**
+```javascript
+{ threshold: 0.5, strength: 1.5, radius: 0.6 }
+```
+- Medium threshold (0.5) = moderate brightness triggers glow
+- High strength (1.5) = dramatic bloom spread
+- Wide radius (0.6) = soft, diffuse glow boundaries
+- Result: Neon electric glow on 2025 text and firework particles
+
+**Implementation Pattern:**
+
+```javascript
+// Store original settings on init
+this.originalBloom = {
+  threshold: bloomPass.threshold,
+  strength: bloomPass.strength,
+  radius: bloomPass.radius
+};
+
+// Switch to fireworks mode
+activateNewYearMode() {
+  bloomPass.threshold = BLOOM_SETTINGS.fireworks.threshold;
+  bloomPass.strength = BLOOM_SETTINGS.fireworks.strength;
+  bloomPass.radius = BLOOM_SETTINGS.fireworks.radius;
+}
+
+// Restore to tree mode
+deactivateNewYearMode() {
+  bloomPass.threshold = this.originalBloom.threshold;
+  bloomPass.strength = this.originalBloom.strength;
+  bloomPass.radius = this.originalBloom.radius;
+}
+```
+
+**Key Benefits:**
+- Instant visual mode switching without re-rendering
+- No performance cost (params only, no material/geometry changes)
+- Stored settings survive mode toggles
+- Works with existing UnrealBloomPass (no custom passes)
+
 ## Next Phases
 
-- **Phase 02:** Responsive control layouts and touch interactions
-- **Phase 03:** Adaptive grid layouts for upload interface
-- **Phase 04:** Dynamic typography and spacing based on viewport
+- **Phase 05:** Audio-reactive particle generation based on countdown/finale
+- **Phase 06:** Enhanced mobile gesture interactions for fireworks spawning
+- **Phase 07:** Confetti burst and impact effects on finale trigger
 
 ## Related Files
 

@@ -479,3 +479,295 @@ window.parent.postMessage({ type: 'TOGGLE_UI_FROM_IFRAME' }, window.location.ori
 - Tabs hidden when UI hidden
 - Icon changes correctly (eye/eye-slash)
 - Origin validation prevents XSS
+
+---
+
+## Phase 4: New Year Mode Orchestration Pattern
+
+### Overview
+`NewYearMode` is an orchestration layer that coordinates multiple sub-systems (fireworks, audio, countdown, UI) to implement the New Year celebration experience. This pattern allows clean separation of concerns while maintaining tight synchronization.
+
+### Class Structure
+```javascript
+export class NewYearMode {
+  constructor(scene, camera, mainGroup, bloomPass, snowSystem) {
+    this.scene = scene;
+    this.camera = camera;
+    this.mainGroup = mainGroup;          // Christmas tree to hide/show
+    this.bloomPass = bloomPass;          // Post-processing for bloom switching
+    this.snowSystem = snowSystem;        // Snow particles to hide/show
+
+    // Sub-systems (lazy initialized)
+    this.fireworkSystem = null;
+    this.fireworkAudio = null;
+    this.countdown = null;
+
+    // State tracking
+    this.isActive = false;
+    this.isInitialized = false;
+    this.spawnTimer = 0;
+    this.autoSpawnInterval = 1.5;
+    this.typeIndex = 0;
+
+    // Bloom settings storage
+    this.originalBloom = null;
+  }
+}
+```
+
+### Key Responsibilities
+
+**1. Initialization (async init)**
+- Creates FireworkSystem, FireworkAudio, CountdownManager
+- Loads font for countdown text
+- Stores original bloom settings
+- Checks localStorage preference
+- Returns success status
+
+**2. Mode Activation (activate)**
+- Hides Christmas tree and snow
+- Shows countdown elements
+- Switches bloom to fireworks preset
+- Starts countdown timer
+- Initializes audio on first activation (user gesture required)
+- Updates UI button visual state
+- Saves preference to localStorage
+
+**3. Mode Deactivation (deactivate)**
+- Shows Christmas tree and snow
+- Hides countdown elements
+- Clears firework particles
+- Restores original bloom settings
+- Stops countdown timer
+- Removes UI button active state
+- Saves preference to localStorage
+
+**4. Animation Loop (update)**
+- Updates firework particle physics
+- Updates countdown timer
+- Auto-spawns fireworks on 1.5s interval
+- Called every frame with delta time
+
+### Bloom Switching Pattern
+
+The orchestrator manages two distinct bloom presets:
+
+```javascript
+const BLOOM_SETTINGS = {
+  tree: { threshold: 0.85, strength: 0.25, radius: 0.3 },
+  fireworks: { threshold: 0.5, strength: 1.5, radius: 0.6 }
+};
+```
+
+**During activation:**
+```javascript
+this.bloomPass.threshold = BLOOM_SETTINGS.fireworks.threshold;   // 0.85 → 0.5
+this.bloomPass.strength = BLOOM_SETTINGS.fireworks.strength;     // 0.25 → 1.5
+this.bloomPass.radius = BLOOM_SETTINGS.fireworks.radius;         // 0.3 → 0.6
+```
+
+**During deactivation:**
+```javascript
+this.bloomPass.threshold = this.originalBloom.threshold;
+this.bloomPass.strength = this.originalBloom.strength;
+this.bloomPass.radius = this.originalBloom.radius;
+```
+
+### Interaction Patterns
+
+**Auto-Spawn (Automatic)**
+- Triggers every 1.5 seconds when mode is active
+- Cycles through firework types: BLOOM → SPARK → DRIFT → SCATTER → SPARKLER
+- Calls `spawnRandomFirework()` internally
+- Chooses random position in sky region (x: ±10, y: 5-15, z: ±5)
+- Plays audio effect for each spawn
+
+**Click-to-Spawn (User Input)**
+- Called from HTML click handler on canvas
+- Converts 2D screen coordinates to 3D world position
+- Projects ray from camera through screen point
+- Spawns at ray-cast position (30 units from camera)
+- Cycles through all available types
+- Plays audio effect
+
+**Implementation:**
+```javascript
+spawnAtScreenPosition(screenX, screenY) {
+  // Normalize to device coordinates
+  const mouse = new THREE.Vector2();
+  mouse.x = (screenX / window.innerWidth) * 2 - 1;
+  mouse.y = -(screenY / window.innerHeight) * 2 + 1;
+
+  // Unproject to 3D world space
+  const vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+  vector.unproject(this.camera);
+
+  const dir = vector.sub(this.camera.position).normalize();
+  const distance = 30;
+  const spawnPoint = this.camera.position.clone().add(dir.multiplyScalar(distance));
+
+  // Spawn with cycling type
+  const types = Object.values(FIREWORK_TYPE);
+  const type = types[this.typeIndex % types.length];
+  this.typeIndex++;
+
+  this.fireworkSystem.spawn(spawnPoint, type);
+  this.fireworkAudio?.play(type);
+}
+```
+
+**Finale Trigger (Countdown Callback)**
+- Called when countdown reaches 0
+- Spawns burst sequences of all 5 firework types
+- Staggered timing: 200ms between type bursts
+- Each type spawns 3 bursts (15 total particles × 5 types)
+- Uses setTimeout for animation sequencing
+
+```javascript
+triggerFinale() {
+  const types = [BLOOM, SPARK, DRIFT, SCATTER, SPARKLER];
+  types.forEach((type, i) => {
+    setTimeout(() => {
+      for (let j = 0; j < 3; j++) {
+        const x = (Math.random() - 0.5) * 30;
+        const y = 8 + Math.random() * 8;
+        const z = (Math.random() - 0.5) * 15;
+
+        if (this.fireworkSystem.canSpawn()) {
+          this.fireworkSystem.spawn(new THREE.Vector3(x, y, z), type);
+          this.fireworkAudio?.play(type);
+        }
+      }
+    }, i * 200);  // 0ms, 200ms, 400ms, 600ms, 800ms
+  });
+}
+```
+
+### Audio Integration
+
+**Lazy Initialization Pattern:**
+- Audio context created on first user activation
+- Prevents browser autoplay policy violations
+- Audio state managed by FireworkAudio class
+
+**Resume on Activation:**
+```javascript
+if (this.fireworkAudio && !this.fireworkAudio.isInitialized) {
+  this.fireworkAudio.init();
+}
+this.fireworkAudio?.resume();  // Wake audio context from suspended state
+```
+
+**Per-Spawn Sound:**
+- Each firework spawn triggers a type-specific sound
+- Uses WebAudio synthesis (phase 2 implementation)
+- Synthesized in real-time, no audio files needed
+
+### State Persistence
+
+**localStorage Key:** `newYearModeEnabled`
+
+**Pattern:**
+```javascript
+checkSavedPreference() {
+  const saved = localStorage.getItem('newYearModeEnabled');
+  if (saved === 'true') {
+    // Preference noted but does NOT auto-activate
+    // User must explicitly toggle
+  }
+}
+
+savePreference() {
+  localStorage.setItem('newYearModeEnabled', String(this.isActive));
+}
+```
+
+**Behavior:**
+- Saves current state on every toggle
+- Loaded on init but does NOT auto-activate
+- Gracefully handles localStorage unavailability (try-catch)
+- Allows users to preserve their preferred mode across sessions
+
+### UI Button Integration
+
+**Button Query:** `document.getElementById('newyear-btn')`
+
+**CSS Class Management:**
+- Add `.active` class when activated
+- Remove `.active` class when deactivated
+- CSS defines visual styling for active state
+
+```javascript
+const btn = document.getElementById('newyear-btn');
+if (btn) {
+  btn.classList.add('active');    // on activate
+  btn.classList.remove('active');  // on deactivate
+}
+```
+
+### Resource Cleanup
+
+**Disposal Pattern:**
+```javascript
+dispose() {
+  this.deactivate();  // Ensure clean state
+
+  this.fireworkSystem?.dispose();
+  this.fireworkAudio?.dispose();
+  this.countdown?.dispose();
+
+  // Null out references
+  this.fireworkSystem = null;
+  this.fireworkAudio = null;
+  this.countdown = null;
+  this.isInitialized = false;
+}
+```
+
+### Integration Example
+
+```javascript
+// In main animation initialization
+const newYearMode = new NewYearMode(scene, camera, mainGroup, bloomPass, snowSystem);
+await newYearMode.init();
+
+// In HTML button handler
+window.toggleNewYearMode = () => {
+  newYearMode?.toggle();
+};
+
+// In animation loop
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+
+  newYearMode.update(dt);
+  renderer.render(scene, camera);
+}
+
+// In click handler for fireworks spawning
+canvas.addEventListener('click', (e) => {
+  if (newYearMode?.getIsActive()) {
+    newYearMode.spawnAtScreenPosition(e.clientX, e.clientY);
+  }
+});
+
+// On page unload
+window.addEventListener('beforeunload', () => {
+  newYearMode.dispose();
+});
+```
+
+### Testing Checklist
+- [ ] Mode toggles successfully via button
+- [ ] Tree and snow hide when activated
+- [ ] Countdown displays and counts down
+- [ ] Bloom settings switch correctly
+- [ ] Auto-spawn works with correct intervals
+- [ ] Click-to-spawn creates fireworks at cursor
+- [ ] Audio initializes on first activation
+- [ ] Finale spawns all 5 types with stagger
+- [ ] localStorage preference persists across page reload
+- [ ] Deactivation restores all original state
+- [ ] dispose() cleans up all resources
+- [ ] Mobile: works with touch events

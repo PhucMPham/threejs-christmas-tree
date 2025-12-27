@@ -80,8 +80,8 @@ High-level architecture and component design for the Three.js application.
 ### Countdown Manager (Phase 3: 2025-12-27)
 - **Purpose**: 10-second countdown timer with rainbow neon "2025" text & finale trigger
 - **Components**:
-  - Rainbow HSL cycling neon material (2.5x emissive intensity, 0.8 metalness)
-  - 3D "2025" TextGeometry with bevel effect (size 3, height 0.5, bevel segments 3)
+  - Rainbow HSL cycling neon material (0.8 emissive intensity, 0.3 metalness)
+  - 3D "2025" TextGeometry with bevel effect (size 2, height 0.3, bevel segments 3)
   - Canvas-based countdown plane (256x256, golden glow effect)
   - Bloom parameter switching (neon vs tree mode)
 - **Timer**: 10-second loop with 2s post-finale delay before reset
@@ -89,6 +89,56 @@ High-level architecture and component design for the Three.js application.
 - **Callback**: setFinaleCallback(fn) fires at countdown=0 for New Year effect trigger
 - **Visibility**: Group-based show/hide for batch control
 - **Resource Management**: Proper Font/Texture/Material disposal on cleanup
+
+### New Year Mode Orchestration Layer (Phase 4: 2025-12-27)
+- **Purpose**: Master controller for New Year fireworks mode - coordinates all sub-systems
+- **File**: `src/fireworks/new-year-mode.js`
+- **Key Responsibilities**:
+  - Mode state management (active/inactive with localStorage persistence)
+  - Component lifecycle coordination (fireworks, audio, countdown, UI button)
+  - Scene visibility toggling (hide Christmas tree & snow, show countdown elements)
+  - Bloom parameter management (switch between tree/fireworks post-processing presets)
+- **Components Managed**:
+  - FireworkSystem: Particle engine for effects
+  - FireworkAudio: WebAudio synthesis (lazy initialized on user interaction)
+  - CountdownManager: 10-second timer with 2025 text & finale callback
+  - UI Button: CSS .active class for visual feedback
+- **State Transitions**:
+  ```
+  [Inactive] --activate()--> [Active]
+    ├─ Hide mainGroup & snowSystem
+    ├─ Show countdown group
+    ├─ Switch bloom: threshold 0.85→0.5, strength 0.25→1.5, radius 0.3→0.6
+    ├─ Start countdown timer
+    └─ Save preference to localStorage
+
+  [Active] --deactivate()--> [Inactive]
+    ├─ Show mainGroup & snowSystem
+    ├─ Hide countdown group
+    ├─ Clear firework particles
+    ├─ Restore bloom: threshold 0.5→0.85, strength 1.5→0.25, radius 0.6→0.3
+    ├─ Stop countdown timer
+    └─ Save preference to localStorage
+  ```
+- **Interaction Patterns**:
+  - **Auto-Spawn**: Cycles through firework types every 1.5s (BLOOM→SPARK→DRIFT→SCATTER→SPARKLER)
+  - **Click-to-Spawn**: Converts screen coordinates to 3D world position via camera unprojection
+    - Raycasts from camera through screen point to 30 units distance
+    - Spawns firework at ray-cast position with type cycling
+  - **Finale Trigger**: CountdownManager calls onFinale callback at countdown=0
+    - Spawns 3 bursts of each firework type with 200ms stagger
+    - Creates 15 total particles across 5 types over 1 second
+- **Audio Integration**:
+  - Lazy initialization on first activation (user gesture required)
+  - Audio context resumed on each activate() for browser autoplay policy compliance
+  - Plays sound effect on each firework spawn (type-specific synthesis)
+- **Button State Management**:
+  - querySelector('#newyear-btn') added/removed .active class on toggle
+  - Provides visual feedback for mode state
+- **Preference Persistence**:
+  - Saves isActive state to localStorage['newYearModeEnabled']
+  - Checked on init but does NOT auto-activate (requires explicit user toggle)
+  - Graceful fallback if localStorage unavailable
 
 ### Audio Subsystem (PR#3)
 - **Source**: HTML5 `<audio>` element with local MP3 file
