@@ -24,7 +24,7 @@ const CONFIG = {
   countdownYPosition: 2, // Centered in view
   countdownStart: 10,
   finaleWaitTime: 2,
-  fontPath: '/node_modules/three/examples/fonts/helvetiker_regular.typeface.json'
+  fontPath: '/fonts/helvetiker_regular.typeface.json'
 };
 
 /**
